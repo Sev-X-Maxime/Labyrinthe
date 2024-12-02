@@ -17,7 +17,7 @@ void Tile::InitVector(vector<vector<Object>>& _vector, const u_int& _size)
 	}
 }
 
-void Tile::ChangeOpenDirection(const RotateType& _rotateType)
+void Tile::ChangeOpenDirections(const RotateType& _rotateType)
 {
 	bool _upIsOpen = directionsOpen[DT_UP];
 	switch (_rotateType)
@@ -39,28 +39,40 @@ void Tile::ChangeOpenDirection(const RotateType& _rotateType)
 	}
 }
 
-void Tile::ChangeCases(const RotateType& _rotateType)
+void Tile::RotateCases(const RotateType& _rotateType)
 {
-	vector<vector<Object>> _newVector;
 	const u_int& _size = static_cast<u_int>(cases.size());
-	InitVector(_newVector, _size);
-	Object _objectRightAngle = _newVector[0][2];
-	switch (_rotateType)
+	if (_size == 0) return;
+	for (u_int _rowIndex = 0; _rowIndex < _size; _rowIndex++)
 	{
-	case RT_RIGHT:
-		break;
-	case RT_LEFT:
-
-		break;
-	default:
-		break;
+		for (u_int _columnIndex = _rowIndex + 1; _columnIndex < _size; _columnIndex++)
+		{
+			swap(cases[_rowIndex][_columnIndex], cases[_columnIndex][_rowIndex]);
+		}
+	}
+	if (_rotateType == RT_RIGHT)
+	{
+		for (u_int _index = 0; _index < _size; _index++)
+		{
+			reverse(cases[_index].begin(), cases[_index].end());
+		}
+	}
+	else if (_rotateType == RT_LEFT)
+	{
+		for (u_int _columnIndex = 0; _columnIndex < _size; _columnIndex++)
+		{
+			for (u_int _rowIndex = 0; _rowIndex < _size / 2; _rowIndex++)
+			{
+				swap(cases[_rowIndex][_columnIndex], cases[_size - _rowIndex - 1][_columnIndex]);
+			}
+		}
 	}
 }
 
 void Tile::Rotate(const RotateType& _rotateType)
 {
-	
-	
+	RotateCases(_rotateType);
+	ChangeOpenDirection(_rotateType);
 }
 
 inline ostream& operator<<(ostream& _stream, const Tile& _tile)

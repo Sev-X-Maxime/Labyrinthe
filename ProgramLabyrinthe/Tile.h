@@ -57,8 +57,9 @@ public:
 
 private:
 	void InitVector(vector<vector<Object>>& _vector, const u_int& _size = 3);
-	void ChangeOpenDirection(const RotateType& _rotateType);
-	void ChangeCases(const RotateType& _rotateType);
+	void ChangeOpenDirections(const RotateType& _rotateType);
+	void RotateCases(const RotateType& _rotateType);
+
 public:
 	void Rotate(const RotateType& _rotateType);
 
