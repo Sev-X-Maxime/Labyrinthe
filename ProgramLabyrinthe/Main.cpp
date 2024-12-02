@@ -8,6 +8,5 @@ int main()
 {
     Config();
     
-    DISPLAY("Hello World!", true);
-	return -1;
+	return EXIT_SUCCESS;
 }

@@ -10,9 +10,15 @@ struct Object
 		appearance = _appearance;
 		color = _color;
 	}
+
 	inline string GetAppearance(const bool _withColor = true) const
 	{
 		if (_withColor) return color + appearance;
 		return to_string(appearance);
+	}
+
+	inline bool operator==(Object _other) const
+	{
+		return GetAppearance() == _other.GetAppearance();
 	}
 };

@@ -55,7 +55,7 @@ public:
 	Tile(const map<DirectionType, bool>& _directionsOpen, const bool _isFixed = false);
 
 public:
-	void Rotate
+	void Rotate();
 
 public:
 	inline friend ostream& operator<< (ostream& _stream, const Tile& _tile);
