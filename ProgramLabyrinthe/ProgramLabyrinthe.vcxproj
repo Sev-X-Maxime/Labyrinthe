@@ -141,8 +141,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DirectionType.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Prog1Lib\CharManip.h" />
     <ClInclude Include="Prog1Lib\Color.h" />
@@ -155,6 +157,7 @@
     <ClInclude Include="Prog1Lib\Random.h" />
     <ClInclude Include="Prog1Lib\SaveManager.h" />
     <ClInclude Include="Prog1Lib\UserInteract.h" />
+    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Prog1Lib\Prog1Lib.dll" />
