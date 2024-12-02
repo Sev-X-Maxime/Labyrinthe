@@ -1,0 +1,23 @@
+16 plaques fixes et 34 plaques amovibles (7 * 7)
+
+Certaines cases sont fixes, mais les autres sont placées aléatoirement sur les emplacements restants. Les cartes sont données aléatoirement à chaque joueur de manière équitable. Le joueur ne voit que la première carte de son paquet.
+
+De 2 à 4 joueurs
+
+Le joueur qui commence est choisi aléatoirement entre les joueurs.
+
+Le joueur est obligé de déplacer une couleur mais pas obligé de déplacer son pion.
+
+les joueurs peuvent déplacer le curseur avec :
+-zqsd / ZQSD
+-les flèches directionnelles
+
+Nombre d'objets trouvés (cartes) par joueur = nb objets / nb joueurs
+
+si le joueur est poussé hors de la map, il se place sur la case posée
+
+Résumé : Sur un plateau représentant un labyrinthe, les joueurs doivent atteindre des objets dessinés sur les tuiles. La disposition des tuiles évolue à chaque tour de jeu.
+
+Le plateau de jeu comprend des tuiles fixes, et des rangées de tuiles mobiles. Il y a toujours une tuile hors du plateau. À son tour, le joueur utilise la tuile libre pour pousser une rangée de tuile du plateau, faisant ainsi évoluer le labyrinthe. Il dégage ainsi une tuile pour le joueur suivant, et peut éventuellement faire progresser son pion dans le labyrinthe. Chaque joueur possède des cartes représentant des objets. Ces objets sont également représentés sur les tuiles (fixes ou mobiles) du labyrinthe. Chaque joueur doit atteindre ses objets avec son pion.
+
+Le jeu se termine quand un joueur a atteint tous les objets de sa liste et est revenu à son point de départ.
