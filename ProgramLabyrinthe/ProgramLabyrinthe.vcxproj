@@ -140,12 +140,21 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Card.cpp" />
     <ClCompile Include="Main.cpp" />
+<<<<<<< Updated upstream
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectionType.h" />
+=======
+    <ClCompile Include="Player.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Card.h" />
+>>>>>>> Stashed changes
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Prog1Lib\CharManip.h" />
     <ClInclude Include="Prog1Lib\Color.h" />
     <ClInclude Include="Prog1Lib\DisplaySystem.h" />
