@@ -53,6 +53,9 @@
     <ClInclude Include="Prog1Lib\UserInteract.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Prog1Lib\Prog1Lib.lib" />

@@ -143,6 +143,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Prog1Lib\CharManip.h" />
     <ClInclude Include="Prog1Lib\Color.h" />
     <ClInclude Include="Prog1Lib\DisplaySystem.h" />
