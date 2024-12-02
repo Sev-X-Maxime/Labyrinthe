@@ -52,10 +52,15 @@ public:
 	}
 
 public:
-	Tile(const map<DirectionType, bool>& _directionsOpen, const bool _isFixed = false);
+	Tile(const map<DirectionType, bool>& _directionsOpen, 
+		const bool _isFixed = false, const u_int& _size = 3);
 
+private:
+	void InitVector(vector<vector<Object>>& _vector, const u_int& _size = 3);
+	void ChangeOpenDirection(const RotateType& _rotateType);
+	void ChangeCases(const RotateType& _rotateType);
 public:
-	void Rotate
+	void Rotate(const RotateType& _rotateType);
 
 public:
 	inline friend ostream& operator<< (ostream& _stream, const Tile& _tile);

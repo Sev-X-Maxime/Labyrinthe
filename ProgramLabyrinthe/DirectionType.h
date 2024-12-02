@@ -8,11 +8,9 @@ enum DirectionType
 	DT_COUNT
 };
 
-enum DirectionType
+enum RotateType
 {
-	DT_RIGHT,
-	DT_LEFT,
-	DT_UP,
-	DT_DOWN,
-	DT_COUNT
+	RT_RIGHT,
+	RT_LEFT,
+	RT_COUNT
 };
