@@ -1,24 +1,6 @@
 #include "Grid.h"
 
-ostream& operator<<(ostream& _stream, Grid _grid)
-{
-	const u_int _size = static_cast<u_int>(_grid.tiles.size());
-	for (u_int _row = 0; _row < _size; _row++)
-	{
-		for (u_int _rowCase = 0; _rowCase < 3; _rowCase++)
-		{
-			for (u_int _column = 0; _column < _size; _column++)
-			{
-				_stream << _grid.tiles[_row][_column].ToStringLine(_rowCase);
-			}
-			_stream << '\n';
-		}
-	}
-
-	return _stream;
-}
-
-Tile Grid::PlaceTile(const Tile& _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction)
+Tile Grid::PlaceTile(Tile _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction)
 {
 	switch (_direction)
 	{
@@ -35,7 +17,7 @@ Tile Grid::PlaceTile(const Tile& _tile, const pair<u_int, u_int>& _position, con
 	}
 }
 
-Tile Grid::PlaceAtRight(const Tile& _tile, const pair<u_int, u_int>& _position)
+Tile Grid::PlaceAtRight(Tile _tile, const pair<u_int, u_int>& _position)
 {
 	Tile _firstTile = tiles[_position.first][0];
 	tiles[_position.first].erase(tiles[_position.first].begin());
@@ -43,7 +25,7 @@ Tile Grid::PlaceAtRight(const Tile& _tile, const pair<u_int, u_int>& _position)
 	return _firstTile;
 }
 
-Tile Grid::PlaceAtLeft(const Tile& _tile, const pair<u_int, u_int>& _position)
+Tile Grid::PlaceAtLeft(Tile _tile, const pair<u_int, u_int>& _position)
 {
 	u_int _size = static_cast<u_int>(tiles.size() - 1);
 	Tile _lastTile = tiles[_position.first][_size];
@@ -52,7 +34,7 @@ Tile Grid::PlaceAtLeft(const Tile& _tile, const pair<u_int, u_int>& _position)
 	return _lastTile;
 }
 
-Tile Grid::PlaceAtTop(const Tile& _tile, const pair<u_int, u_int>& _position)
+Tile Grid::PlaceAtTop(Tile _tile, const pair<u_int, u_int>& _position)
 {
 	u_int _size = static_cast<u_int>(tiles.size());
 	Tile _lastTile = tiles[_size - 1][_position.second];
@@ -64,7 +46,7 @@ Tile Grid::PlaceAtTop(const Tile& _tile, const pair<u_int, u_int>& _position)
 	return _lastTile;
 }
 
-Tile Grid::PlaceAtBotom(const Tile& _tile, const pair<u_int, u_int>& _position)
+Tile Grid::PlaceAtBotom(Tile _tile, const pair<u_int, u_int>& _position)
 {
 	u_int _size = static_cast<u_int>(tiles.size());
 	Tile _lastTile = tiles[0][_position.second];
@@ -74,4 +56,21 @@ Tile Grid::PlaceAtBotom(const Tile& _tile, const pair<u_int, u_int>& _position)
 	}
 	tiles[0][_position.second] = _tile;
 	return _lastTile;
+}
+
+ostream& operator<<(ostream& _stream, Grid _grid)
+{
+	const u_int _size = static_cast<u_int>(_grid.tiles.size());
+	for (u_int _row = 0; _row < _size; _row++)
+	{
+		for (u_int _rowCase = 0; _rowCase < 3; _rowCase++)
+		{
+			for (u_int _column = 0; _column < _size; _column++)
+			{
+				_stream << _grid.tiles[_row][_column].ToStringLine(_rowCase);
+			}
+			_stream << '\n';
+		}
+	}
+	return _stream;
 }

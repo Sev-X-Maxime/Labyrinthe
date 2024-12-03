@@ -1,18 +1,19 @@
 #pragma once
 #include "Object.h"
-#include "Tile.h"
 
-class Card
+struct Card
 {
 	Object treasure;
 
-	Card();
-
-	void Display() const;
-
-	bool operator==(Tile _tile)
+	Card()
 	{
-		return treasure == _tile.GetTreasure();
+
 	}
+
+	void Display() const
+	{
+		cout << treasure.GetAppearance() << RESET;
+	}
+
 };
 

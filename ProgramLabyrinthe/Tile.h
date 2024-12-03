@@ -1,5 +1,4 @@
 #pragma once
-#include "Object.h"
 #include "DirectionType.h"
 #include "Player.h"
 #include <set>
@@ -13,7 +12,7 @@ class Tile
 	bool fixed;
 
 public:
-	inline string ToString() const
+	inline string ToString()
 	{
 		string _text;
 		const u_int& _size = static_cast<u_int>(cases.size());
@@ -28,12 +27,14 @@ public:
 				}
 				else
 					_text += cases[_rowIndex][_columnIndex].GetAppearance();
+				if (_columnIndex < _size - 1)
+					_text += " ";
 			}
 			_text += "\n";
 		}
-		return _text;
+		return _text + RESET;
 	}
-	inline string ToStringLine(const u_int& _lineIndex) const
+	inline string ToStringLine(const u_int& _lineIndex)
 	{
 		string _text;
 		const u_int& _size = static_cast<u_int>(cases[_lineIndex].size());
@@ -68,19 +69,18 @@ public:
 public:
 	Tile(const map<DirectionType, bool>& _directionsOpen, 
 		const bool _isFixed = false, const u_int& _size = 3);
-
 private:
-	void InitCases( const u_int& _size = 3);
+	void InitCases(const u_int& _size = 3);
 	void UpdateVectorWithDirections();
 	void ChangeOpenDirections(const RotateType& _rotateType);
 
 public:
 	void Rotate(const RotateType& _rotateType);
-	void AddPlayer(const Player& _player);
-	void RemovePlayer(const Player& _player);
+	void AddPlayer(Player _player);
+	void RemovePlayer(Player _player);
 
 public:
-	inline friend ostream& operator<< (ostream& _stream, const Tile& _tile);
-
+	inline friend ostream& operator<< (ostream& _stream, Tile _tile);
+	inline bool operator == (const Card& _card) const;
 };
 
