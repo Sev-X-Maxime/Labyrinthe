@@ -3,7 +3,6 @@
 
 class Grid
 {
-private:
 	vector<vector<Tile>> tiles;
 
 protected:
@@ -15,19 +14,19 @@ public:
 	}
 
 public:
-	
+	Grid() = default;
 
 public:
-	Tile PlaceTile(const Tile& _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction);
-	Tile PlaceAtRight(const Tile& _tile, const pair<u_int, u_int>& _position);
-	Tile PlaceAtLeft(const Tile& _tile, const pair<u_int, u_int>& _position);
-	Tile PlaceAtTop(const Tile& _tile, const pair<u_int, u_int>& _position);
-	Tile PlaceAtBotom(const Tile& _tile, const pair<u_int, u_int>& _position);
+	Tile PlaceTile(Tile _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction);
+	Tile PlaceAtRight(Tile _tile, const pair<u_int, u_int>& _position);
+	Tile PlaceAtLeft(Tile _tile, const pair<u_int, u_int>& _position);
+	Tile PlaceAtTop(Tile _tile, const pair<u_int, u_int>& _position);
+	Tile PlaceAtBotom(Tile _tile, const pair<u_int, u_int>& _position);
 protected:
 
 private:
 
 public:
-		friend ostream& operator<< (ostream& _stream, Grid _grid);
+	friend ostream& operator<< (ostream& _stream, Grid _grid);
 };
 

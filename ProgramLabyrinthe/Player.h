@@ -5,7 +5,7 @@ class Player
 {
 	string name;
 	Object pawn;
-	vector<Card> card;
+	vector<Card> cards;
 public:
 	inline Object GetPawn() const
 	{
@@ -17,21 +17,21 @@ public:
 	}
 	inline bool HasCard() const
 	{
-		return card.empty();
+		return cards.size() > 0;
 	}
 	inline Card GetCurrentCard() const
 	{
 		if (!HasCard()) throw exception("No card left !");
-		return card[0];
+		return cards[0];
 	}
 	inline void NextCard()
 	{
 		if (!HasCard()) throw exception("No card left !");
-		card.erase(card.begin());
+		cards.erase(cards.begin());
 	}
 
 public:
-	Player(const string& _name, const Object& _pawn, const vector<Card>& _card);
-
+	Player() = default;
+	Player(const string& _name, const Object& _pawn, const vector<Card>& _cards);
 };
 

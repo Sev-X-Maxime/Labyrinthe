@@ -8,6 +8,7 @@ Tile::Tile(const map<DirectionType, bool>& _directionsOpen, const bool _isFixed,
 	InitCases(_size);
 }
 
+
 void Tile::InitCases( const u_int& _size)
 {
 	cases = vector<vector<Object>>();
@@ -16,10 +17,10 @@ void Tile::InitCases( const u_int& _size)
 		cases.push_back(vector<Object>());
 		for (u_int _columnIndex = 0; _columnIndex < _size; _columnIndex++)
 		{
-			cases[_rowIndex].push_back('#');
+			cases[_rowIndex].push_back(Object());
 		}
 	}
-	cases[1][1] = ' ';
+	cases[1][1] = Object(' ',"");
 	UpdateVectorWithDirections();
 }
 
@@ -29,7 +30,7 @@ void Tile::UpdateVectorWithDirections()
 	{
 		make_pair(DT_RIGHT, make_pair(1,2)),
 		make_pair(DT_LEFT, make_pair(1, 0)),
-		make_pair(DT_DOWN, make_pair(1, 1)),
+		make_pair(DT_DOWN, make_pair(2, 1)),
 		make_pair(DT_UP, make_pair(0,1))
 	};
 	pair<u_int, u_int> _coordinatesDirection;
@@ -38,7 +39,7 @@ void Tile::UpdateVectorWithDirections()
 		_coordinatesDirection =
 			_directionCoordinates[_currentDirection.first];
 		cases[_coordinatesDirection.first][_coordinatesDirection.second] =
-			 _currentDirection.second ? ' ' : '#';
+			 _currentDirection.second ? Object(' ',"") : Object();
 	}
 }
 
@@ -70,8 +71,21 @@ void Tile::Rotate(const RotateType& _rotateType)
 	UpdateVectorWithDirections();
 }
 
-inline ostream& operator<<(ostream& _stream, const Tile& _tile)
+void Tile::AddPlayer(Player _player)
+{
+}
+
+void Tile::RemovePlayer(Player _player)
+{
+}
+
+inline ostream& operator<<(ostream& _stream, Tile _tile)
 {
 	_stream << _tile.ToString();
 	return _stream;
+}
+
+inline bool Tile::operator==(const Card& _card) const
+{
+	return GetTreasure() == _card.treasure;
 }
