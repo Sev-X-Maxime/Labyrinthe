@@ -1,13 +1,14 @@
 #pragma once
 #include "Object.h"
 #include "DirectionType.h"
+#include "Player.h"
 #include <set>
 #include <map>
 
 class Tile
 {
 	vector<vector<Object>> cases;
-	//set<Player> playersInCase;
+	vector<Player> playersInCase;
 	map<DirectionType, bool> directionsOpen;
 	bool fixed;
 
@@ -20,7 +21,13 @@ public:
 		{
 			for (u_int _columnIndex = 0; _columnIndex < _size; _columnIndex++)
 			{
-				_text += cases[_rowIndex][_columnIndex].GetAppearance() + " ";
+				if (!playersInCase.empty() && (_rowIndex == 1 && _columnIndex == 1))
+				{
+					_text += playersInCase[0].GetPawn().GetAppearance();
+					rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
+				}
+				else
+					_text += cases[_rowIndex][_columnIndex].GetAppearance();
 			}
 			_text += "\n";
 		}
@@ -32,7 +39,14 @@ public:
 		const u_int& _size = static_cast<u_int>(cases[_lineIndex].size());
 		for (u_int _index = 0; _index < _size; _index++)
 		{
+			if (!playersInCase.empty() && (_lineIndex == 1 && _index == 1))
+			{
+				_text += playersInCase[0].GetPawn().GetAppearance();
+				rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
+			}
+			else
 			_text += cases[_lineIndex][_index].GetAppearance();
+
 			if (_index < _size - 1)
 				_text += " ";
 		}
@@ -52,10 +66,18 @@ public:
 	}
 
 public:
-	Tile(const map<DirectionType, bool>& _directionsOpen, const bool _isFixed = false);
+	Tile(const map<DirectionType, bool>& _directionsOpen, 
+		const bool _isFixed = false, const u_int& _size = 3);
+
+private:
+	void InitCases( const u_int& _size = 3);
+	void UpdateVectorWithDirections();
+	void ChangeOpenDirections(const RotateType& _rotateType);
 
 public:
-	void Rotate();
+	void Rotate(const RotateType& _rotateType);
+	void AddPlayer(const Player& _player);
+	void RemovePlayer(const Player& _player);
 
 public:
 	inline friend ostream& operator<< (ostream& _stream, const Tile& _tile);
