@@ -18,8 +18,11 @@ public:
 	
 
 public:
-	void PlaceTile(const vector<Tile>& _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction);
-	void GridChange(const pair<u_int, u_int>& _position);
+	Tile PlaceTile(const Tile& _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction);
+	Tile PlaceAtRight(const Tile& _tile, const pair<u_int, u_int>& _position);
+	Tile PlaceAtLeft(const Tile& _tile, const pair<u_int, u_int>& _position);
+	Tile PlaceAtTop(const Tile& _tile, const pair<u_int, u_int>& _position);
+	Tile PlaceAtBotom(const Tile& _tile, const pair<u_int, u_int>& _position);
 protected:
 
 private:
