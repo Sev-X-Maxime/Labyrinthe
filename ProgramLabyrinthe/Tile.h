@@ -22,7 +22,7 @@ public:
 			{
 				if (!playersInCase.empty() && (_rowIndex == 1 && _columnIndex == 1))
 				{
-					_text += playersInCase[0].GetPawn().GetAppearance();
+					_text += BLINK_TEXT + playersInCase[0].GetPawn().GetAppearance() + RESET;
 					rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
 				}
 				else
@@ -80,7 +80,10 @@ public:
 	void RemovePlayer(Player _player);
 
 public:
-	inline friend ostream& operator<< (ostream& _stream, Tile _tile);
+	friend inline ostream& operator << (ostream& _stream, Tile _tile)
+	{
+		return _stream << _tile.ToString();
+	}
 	inline bool operator == (const Card& _card) const;
 };
 

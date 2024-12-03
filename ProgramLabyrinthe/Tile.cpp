@@ -79,12 +79,6 @@ void Tile::RemovePlayer(Player _player)
 {
 }
 
-inline ostream& operator<<(ostream& _stream, Tile _tile)
-{
-	_stream << _tile.ToString();
-	return _stream;
-}
-
 inline bool Tile::operator==(const Card& _card) const
 {
 	return GetTreasure() == _card.treasure;

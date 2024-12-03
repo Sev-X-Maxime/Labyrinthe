@@ -14,7 +14,7 @@ int main()
     while (!_kbhit())
     {
         system("cls");
-        cout << _tile.ToString()<< endl;
+        cout << _tile << endl;
            _tile.Rotate(RT_LEFT);
         sleep_for(1000ms);
     }
