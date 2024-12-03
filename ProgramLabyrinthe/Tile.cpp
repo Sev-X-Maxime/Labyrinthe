@@ -79,7 +79,7 @@ void Tile::RemovePlayer(Player _player)
 {
 }
 
-inline ostream& operator<<(ostream& _stream, Tile _tile)
+ostream& operator<<(ostream& _stream, Tile _tile)
 {
 	_stream << _tile.ToString();
 	return _stream;

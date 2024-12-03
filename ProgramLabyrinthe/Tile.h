@@ -67,6 +67,7 @@ public:
 	}
 
 public:
+	Tile() = default;
 	Tile(const map<DirectionType, bool>& _directionsOpen, 
 		const bool _isFixed = false, const u_int& _size = 3);
 private:
@@ -80,7 +81,7 @@ public:
 	void RemovePlayer(Player _player);
 
 public:
-	inline friend ostream& operator<< (ostream& _stream, Tile _tile);
+	friend ostream& operator<< (ostream& _stream, Tile _tile);
 	inline bool operator == (const Card& _card) const;
 };
 

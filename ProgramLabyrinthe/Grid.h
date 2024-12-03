@@ -14,7 +14,7 @@ public:
 	}
 
 public:
-	Grid() = default;
+	Grid(const u_int& _size = 7);
 
 public:
 	Tile PlaceTile(Tile _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction);
