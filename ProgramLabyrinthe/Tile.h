@@ -21,7 +21,13 @@ public:
 		{
 			for (u_int _columnIndex = 0; _columnIndex < _size; _columnIndex++)
 			{
-				_text += cases[_rowIndex][_columnIndex].GetAppearance() + " ";
+				if (!playersInCase.empty() && (_rowIndex == 1 && _columnIndex == 1))
+				{
+					_text += playersInCase[0].GetPawn().GetAppearance();
+					rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
+				}
+				else
+					_text += cases[_rowIndex][_columnIndex].GetAppearance();
 			}
 			_text += "\n";
 		}
@@ -33,11 +39,14 @@ public:
 		const u_int& _size = static_cast<u_int>(cases[_lineIndex].size());
 		for (u_int _index = 0; _index < _size; _index++)
 		{
-			_text += cases[_lineIndex][_index].GetAppearance();
 			if (!playersInCase.empty() && (_lineIndex == 1 && _index == 1))
 			{
-				_text += playersInCase[0].
+				_text += playersInCase[0].GetPawn().GetAppearance();
+				rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
 			}
+			else
+			_text += cases[_lineIndex][_index].GetAppearance();
+
 			if (_index < _size - 1)
 				_text += " ";
 		}
@@ -67,6 +76,8 @@ private:
 
 public:
 	void Rotate(const RotateType& _rotateType);
+	void AddPlayer(const Player& _player);
+	void RemovePlayer(const Player& _player);
 
 public:
 	inline friend ostream& operator<< (ostream& _stream, const Tile& _tile);
