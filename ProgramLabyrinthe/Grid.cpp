@@ -95,6 +95,17 @@ ostream& operator<<(ostream& _stream, Grid _grid)
 						_stream << _grid.tiles[_row][_column].ToStringLine(_rowCase) << endl << "^" << endl;
 					}
 				}
+				else
+				{
+					if (_grid.selector.first == 0 || _grid.selector.first == _size)
+					{
+						_stream << " " << endl;
+					}
+					else
+					{
+						_stream << "\n";
+					}
+				}
 				_stream << _grid.tiles[_row][_column].ToStringLine(_rowCase);
 			}
 			_stream << '\n';
