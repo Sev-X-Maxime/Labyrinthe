@@ -18,30 +18,60 @@ ostream& operator<<(ostream& _stream, Grid _grid)
 	return _stream;
 }
 
-void Grid::PlaceTile(const vector<Tile>& _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction)
+Tile Grid::PlaceTile(const Tile& _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction)
 {
 	switch (_direction)
 	{
 	case DT_RIGHT:
-		GridChange(_position);
-		break;
+		return PlaceAtRight(_tile, _position);
 	case DT_LEFT:
-		break;
+		return PlaceAtLeft(_tile, _position);
 	case DT_UP:
-		break;
+		return PlaceAtTop(_tile, _position);
 	case DT_DOWN:
-		break;
+		return PlaceAtBotom(_tile, _position);
 	default:
-		break;
+		throw exception("Default PlaceTile() !");
 	}
 }
 
-void Grid::GridChange(const pair<u_int, u_int>& _position)
+Tile Grid::PlaceAtRight(const Tile& _tile, const pair<u_int, u_int>& _position)
 {
-	u_int _size = tiles.size();
-	for (u_int _index = 0; _index < _size; _index++)
-	{
-		tiles[_position.first][_size - _index] = tiles[_position.first][_size - _index - 1];
-	}
+	Tile _firstTile = tiles[_position.first][0];
+	tiles[_position.first].erase(tiles[_position.first].begin());
+	tiles[_position.first].push_back(_tile);
+	return _firstTile;
 }
 
+Tile Grid::PlaceAtLeft(const Tile& _tile, const pair<u_int, u_int>& _position)
+{
+	u_int _size = static_cast<u_int>(tiles.size() - 1);
+	Tile _lastTile = tiles[_position.first][_size];
+	tiles[_position.first].pop_back();
+	tiles[_position.first].emplace(tiles[_position.first].begin(), _tile);
+	return _lastTile;
+}
+
+Tile Grid::PlaceAtTop(const Tile& _tile, const pair<u_int, u_int>& _position)
+{
+	u_int _size = static_cast<u_int>(tiles.size());
+	Tile _lastTile = tiles[_size - 1][_position.second];
+	for (u_int _index = 1; _index < _size; _index++)
+	{
+		tiles[_index][_position.second] = tiles[_index - 1][_position.second];
+	}
+	tiles[0][_position.second] = _tile;
+	return _lastTile;
+}
+
+Tile Grid::PlaceAtBotom(const Tile& _tile, const pair<u_int, u_int>& _position)
+{
+	u_int _size = static_cast<u_int>(tiles.size());
+	Tile _lastTile = tiles[0][_position.second];
+	for (u_int _index = 0; _index < _size - 1; _index++)
+	{
+		tiles[_index][_position.second] = tiles[_index + 1][_position.second];
+	}
+	tiles[0][_position.second] = _tile;
+	return _lastTile;
+}
