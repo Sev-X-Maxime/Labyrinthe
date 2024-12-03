@@ -1,5 +1,13 @@
 #include "Grid.h"
 
+Grid::Grid(const u_int& _size)
+{
+	for (u_int _index = 0; _index < _size; _index++)
+	{
+		tiles.push_back(vector<Tile>());
+	}
+}
+
 Tile Grid::PlaceTile(Tile _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction)
 {
 	switch (_direction)
