@@ -1,8 +1,11 @@
 #pragma once
 #include "DirectionType.h"
 #include "Player.h"
+#include "Random.h"
 #include <set>
 #include <map>
+
+using namespace Tools;
 
 class Tile
 {
@@ -10,7 +13,15 @@ class Tile
 	vector<Player> playersInCase;
 	map<DirectionType, bool> directionsOpen;
 	bool fixed;
-
+private:
+	inline bool HasAllSameOpenDirections(const bool _compareBool) const
+	{
+		for (const pair<DirectionType, bool> _currentDirection : directionsOpen)
+		{
+			if (_currentDirection.second != _compareBool) return true;
+		}
+		return false;
+	}
 public:
 	inline string ToString()
 	{
@@ -67,12 +78,16 @@ public:
 	}
 
 public:
+	Tile();
 	Tile(const map<DirectionType, bool>& _directionsOpen, 
 		const bool _isFixed = false, const u_int& _size = 3);
 private:
 	void InitCases(const u_int& _size = 3);
 	void UpdateVectorWithDirections();
 	void ChangeOpenDirections(const RotateType& _rotateType);
+	void SetOneDirectionOpen(const bool _isOpen);
+	void CheckAndFixDirectionsOpen();
+
 
 public:
 	void Rotate(const RotateType& _rotateType);

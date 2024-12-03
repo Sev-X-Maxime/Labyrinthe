@@ -1,5 +1,19 @@
 #include "Tile.h"
 
+Tile::Tile()
+{
+	bool _currentBool;
+	for (u_int _index = 0; _index < DT_COUNT; _index++)
+	{
+		_currentBool = RandomInt(0, 1);
+		directionsOpen[static_cast<DirectionType>(_index)] = _currentBool;
+	}
+	playersInCase = vector<Player>();
+	fixed = false;
+	CheckAndFixDirectionsOpen();
+	InitCases();
+}
+
 Tile::Tile(const map<DirectionType, bool>& _directionsOpen, const bool _isFixed, const u_int& _size)
 {
 	playersInCase = vector<Player>();
@@ -9,7 +23,7 @@ Tile::Tile(const map<DirectionType, bool>& _directionsOpen, const bool _isFixed,
 }
 
 
-void Tile::InitCases( const u_int& _size)
+void Tile::InitCases(const u_int& _size)
 {
 	cases = vector<vector<Object>>();
 	for (u_int _rowIndex = 0; _rowIndex < _size; _rowIndex++)
@@ -63,6 +77,19 @@ void Tile::ChangeOpenDirections(const RotateType& _rotateType)
 	default:
 		break;
 	}
+}
+
+
+void Tile::SetOneDirectionOpen(const bool _isOpen)
+{
+	const int _randomIndex = RandomInt(0, 4);
+	directionsOpen[static_cast<DirectionType>(_randomIndex)] = _isOpen;
+}
+
+void Tile::CheckAndFixDirectionsOpen()
+{
+	if (HasAllSameOpenDirections(false)) SetOneDirectionOpen(true);
+	if (HasAllSameOpenDirections(true)) SetOneDirectionOpen(false);
 }
 
 void Tile::Rotate(const RotateType& _rotateType)

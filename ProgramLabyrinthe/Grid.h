@@ -8,6 +8,10 @@ class Grid
 protected:
 
 public:
+	inline vector<vector<Tile>>& GetTiles()
+	{
+		return tiles;
+	}
 	inline Tile GetTile(pair<u_int,u_int> _position) const
 	{
 		return tiles[_position.first][_position.second];

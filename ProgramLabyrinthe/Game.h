@@ -1,11 +1,13 @@
 #pragma once
+#include "UserInteract.h"
 #include "Grid.h"
+
+using namespace UserInteraction;
 
 class Game
 {
 	vector<Player*> players;
-	u_int playersCount;
-	Grid* grid;
+	Grid grid;
 	map<pair<u_int, u_int>, Tile> staticTiles;
 	vector<Object> treasures;
 	vector<Card> cards;
@@ -13,11 +15,17 @@ class Game
 public:
 	Game();
 
-	void InitPlayers(const u_int& _playersCount);
+private:
+	void DeletePlayers();
+	void InitPlayers();
 	void InitStaticTiles();
-	void InitGrid();
-	void InitTreasure();
+	void InitStaticTilesTreasure();
+	void InitGrid(const u_int& _gridSize = 7);
+	void InitTreasures();
 	void InitCards();
-	void DistributeCards();
+	vector<vector<Card>> DistributeCards(const int _playerCount);
+
+public:
+	void Display();
 };
 
