@@ -11,6 +11,11 @@ Game::Game()
 	InitGrid();
 }
 
+Game::~Game()
+{
+	DeletePlayers();
+}
+
 void Game::DeletePlayers()
 {
 	const u_int& _playersCount = static_cast<u_int>(players.size());
@@ -25,8 +30,11 @@ void Game::DeletePlayers()
 void Game::InitPlayers()
 {
 	DeletePlayers();
-	cout << "Combien de joueur vont jouer aux jeux ?" << endl;
-	const int _playerCount = GetInt();
+	int _playerCount;
+	do
+	{
+		_playerCount = GetInput<int>("Combien de joueur vont jouer aux jeux ?", "");
+	} while (!(_playerCount >= 2 && _playerCount <= 4));
 	const vector<vector<Card>>& _cardsPlayer = DistributeCards(_playerCount);
 	string _currentPlayerName;
 	const vector<Object>& _pawns =
@@ -38,10 +46,10 @@ void Game::InitPlayers()
 	};
 	for (int _index = 0; _index < _playerCount; _index++)
 	{
-		cout << "Combien de joueur vont jouer aux jeux ?" << endl;
 		_currentPlayerName = 
-			GetLine("Quel est le nom du " + to_string(_index + 1) + " joueur ?");
+			GetLine("Quel est le nom du  joueur  n°" + to_string(_index + 1) +"?");
 		players.push_back(new Player(_currentPlayerName, _pawns[_index], _cardsPlayer[_index]));
+		system("cls");
 	}
 }
 
@@ -133,6 +141,7 @@ void Game::InitGrid(const u_int& _gridSize)
 			_tiles[_rowIndex].push_back(_currentTile);
 		}
 	}
+	grid.SetTiles(_tiles);
 }
 
 void Game::InitTreasures()

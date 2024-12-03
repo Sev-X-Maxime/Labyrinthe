@@ -14,14 +14,21 @@ class Tile
 	map<DirectionType, bool> directionsOpen;
 	bool fixed;
 private:
-	inline bool HasAllSameOpenDirections(const bool _compareBool) const
+	inline bool GoodCountDirectionsOpen() const
 	{
-		for (const pair<DirectionType, bool> _currentDirection : directionsOpen)
-		{
-			if (_currentDirection.second != _compareBool) return true;
-		}
-		return false;
+		const u_int& _directionsOpenCount = DirectionsOpenCount();
+		return _directionsOpenCount < 4 && _directionsOpenCount > 1;;
 	}
+	inline u_int DirectionsOpenCount() const
+	{
+		u_int _openDirections = 0;
+		for (const pair<DirectionType, bool>& _currentDirection : directionsOpen)
+		{
+			if (_currentDirection.second == true) ++_openDirections;
+		}
+		return _openDirections;
+	}
+
 public:
 	inline string ToString()
 	{
@@ -49,11 +56,12 @@ public:
 	{
 		string _text;
 		const u_int& _size = static_cast<u_int>(cases[_lineIndex].size());
+		
 		for (u_int _index = 0; _index < _size; _index++)
 		{
 			if (!playersInCase.empty() && (_lineIndex == 1 && _index == 1))
 			{
-				_text += playersInCase[0].GetPawn().GetAppearance();
+				_text += playersInCase[0].GetPawn().GetAppearance() + RESET;
 				rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
 			}
 			else
@@ -85,8 +93,6 @@ private:
 	void InitCases(const u_int& _size = 3);
 	void UpdateVectorWithDirections();
 	void ChangeOpenDirections(const RotateType& _rotateType);
-	void SetOneDirectionOpen(const bool _isOpen);
-	void CheckAndFixDirectionsOpen();
 
 
 public:

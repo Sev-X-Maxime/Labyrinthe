@@ -12,17 +12,17 @@ struct Object
 	}
 	inline string GetAppearance(const bool _withColor = true) const
 	{
-		if (_withColor) return color + appearance;
+		if (_withColor) return color + appearance + RESET;
 		return to_string(appearance);
 	}
 
 	inline bool operator == (const Object& _other) const
 	{
 		return GetAppearance() == _other.GetAppearance();
-	}
+	}/*
 	inline void operator = (const Object& _other)
 	{
 		appearance = _other.appearance;
 		color = _other.color;
-	}
+	}*/
 };

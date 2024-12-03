@@ -145,6 +145,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="UnderMacro.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Prog1Lib\SaveManager.h" />
     <ClInclude Include="Prog1Lib\UserInteract.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="UnderMacro.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Prog1Lib\Prog1Lib.dll" />

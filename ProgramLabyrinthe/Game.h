@@ -1,8 +1,6 @@
 #pragma once
-#include "UserInteract.h"
 #include "Grid.h"
-
-using namespace UserInteraction;
+#include "UnderMacro.h"
 
 class Game
 {
@@ -14,7 +12,7 @@ class Game
 
 public:
 	Game();
-
+	~Game();
 private:
 	void DeletePlayers();
 	void InitPlayers();
