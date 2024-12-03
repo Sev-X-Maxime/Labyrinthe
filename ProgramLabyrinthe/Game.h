@@ -3,7 +3,7 @@
 
 class Game
 {
-	vector<Player*> players;
+	vector<Player> players;
 	u_int playersCount;
 	Grid* grid;
 	map<pair<u_int, u_int>, Tile> staticTiles;

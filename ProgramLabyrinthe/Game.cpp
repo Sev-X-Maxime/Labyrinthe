@@ -1,5 +1,14 @@
 #include "Game.h"
 
+Game::Game()
+{
+}
+
+void Game::InitPlayers(const u_int& _playersCount)
+{
+	
+}
+
 void Game::InitStaticTiles()
 {
 	staticTiles[make_pair(0, 0)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, false),
@@ -49,4 +58,20 @@ void Game::InitStaticTiles()
 
 	staticTiles[make_pair(6, 6)] = Tile({ make_pair(DT_RIGHT, false), make_pair(DT_LEFT, true),
 										  make_pair(DT_UP, true) , make_pair(DT_DOWN, false) });
+}
+
+void Game::InitGrid()
+{
+}
+
+void Game::InitTreasure()
+{
+}
+
+void Game::InitCards()
+{
+}
+
+void Game::DistributeCards()
+{
 }

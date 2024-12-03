@@ -6,6 +6,7 @@ Grid::Grid(const u_int& _size)
 	{
 		tiles.push_back(vector<Tile>());
 	}
+	selector = { 0, 0 };
 }
 
 Tile Grid::PlaceTile(Tile _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction)
@@ -75,6 +76,25 @@ ostream& operator<<(ostream& _stream, Grid _grid)
 		{
 			for (u_int _column = 0; _column < _size; _column++)
 			{
+				if (_column % 2 == 1 && _row % 2 == 1)
+				{
+					if (_grid.selector.first == 0)
+					{
+						_stream << "V" << endl << _grid.tiles[_row][_column].ToStringLine(_rowCase);
+					}
+					else if (_grid.selector.first > 0 && _grid.selector.second == 0)
+					{
+						_stream << _grid.tiles[_row][_column].ToStringLine(_rowCase) << ">" << endl;
+					}
+					else if (_grid.selector.first > 0 && _grid.selector.second == _size)
+					{
+						_stream << "<" << endl << _grid.tiles[_row][_column].ToStringLine(_rowCase);
+					}
+					else
+					{
+						_stream << _grid.tiles[_row][_column].ToStringLine(_rowCase) << endl << "^" << endl;
+					}
+				}
 				_stream << _grid.tiles[_row][_column].ToStringLine(_rowCase);
 			}
 			_stream << '\n';

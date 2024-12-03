@@ -4,6 +4,7 @@
 class Grid
 {
 	vector<vector<Tile>> tiles;
+	pair<u_int, u_int> selector;
 
 protected:
 
@@ -22,6 +23,7 @@ public:
 	Tile PlaceAtLeft(Tile _tile, const pair<u_int, u_int>& _position);
 	Tile PlaceAtTop(Tile _tile, const pair<u_int, u_int>& _position);
 	Tile PlaceAtBotom(Tile _tile, const pair<u_int, u_int>& _position);
+	void Display() const;
 protected:
 
 private:
