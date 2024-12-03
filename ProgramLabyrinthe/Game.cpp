@@ -177,16 +177,15 @@ void Game::InitCards()
 
 vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 {
-	vector<Card> _cardsToDistrib = vector<Card>();
+	vector<Card> _cardsToDistrib = cards;
 	vector<vector<Card>> _playersCards = vector<vector<Card>>();
 	for (int _index = 0; _index < _playerCount; _index++)
 	{
 		_playersCards.push_back(vector<Card>());
 	}
-	copy(cards.begin(), cards.end(), _cardsToDistrib.begin());
 	const int _cardSize = static_cast<int>(_cardsToDistrib.size());
 	int _randomIndex;
-	for (int _index = _cardSize; _index > 0 ; _index--)
+	for (int _index = _cardSize - 1; _index > 0 ; _index--)
 	{
 		_randomIndex = RandomInt(0, _index);
 		_playersCards[_index % _playerCount].push_back(_cardsToDistrib[_randomIndex]);
