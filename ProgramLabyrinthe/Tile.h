@@ -1,13 +1,14 @@
 #pragma once
 #include "Object.h"
 #include "DirectionType.h"
+#include "Player.h"
 #include <set>
 #include <map>
 
 class Tile
 {
 	vector<vector<Object>> cases;
-	//set<Player> playersInCase;
+	vector<Player> playersInCase;
 	map<DirectionType, bool> directionsOpen;
 	bool fixed;
 
@@ -33,6 +34,10 @@ public:
 		for (u_int _index = 0; _index < _size; _index++)
 		{
 			_text += cases[_lineIndex][_index].GetAppearance();
+			if (!playersInCase.empty() && (_lineIndex == 1 && _index == 1))
+			{
+				_text += playersInCase[0].
+			}
 			if (_index < _size - 1)
 				_text += " ";
 		}
@@ -56,9 +61,9 @@ public:
 		const bool _isFixed = false, const u_int& _size = 3);
 
 private:
-	void InitVector(vector<vector<Object>>& _vector, const u_int& _size = 3);
+	void InitCases( const u_int& _size = 3);
+	void UpdateVectorWithDirections();
 	void ChangeOpenDirections(const RotateType& _rotateType);
-	void RotateCases(const RotateType& _rotateType);
 
 public:
 	void Rotate(const RotateType& _rotateType);
