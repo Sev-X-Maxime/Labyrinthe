@@ -5,6 +5,11 @@ Game::Game()
 	InitTreasures();
 	InitStaticTiles();
 	InitCards();
+
+	options["Nombre d'IA"] = { 0,1,2,3,4 };
+	options["Nombre de joueurs"] = { 2,3,4 };
+	currentOptions["Nombre d'IA"] = 0;
+	currentOptions["Nombre de joueurs"] = 0;
 }
 
 Game::~Game()
@@ -217,13 +222,14 @@ void Game::Launch()
 	u_int _actionIndex;
 	do
 	{
+		SetCursorPosition(0, 0, false);
 		_actionIndex = ChooseAction(_options);
 		system("cls");
 		DoAction(_actionIndex);
 	} while (_actionIndex != 2);
 }
 
-int Game::ChooseAction(vector<string> _options)
+int Game::ChooseAction(const vector<string>& _options)
 {
 	int _sizeOption = static_cast<int>(_options.size());
 	int _key;
@@ -258,7 +264,7 @@ int Game::ChooseAction(vector<string> _options)
 	}
 }
 
-void Game::DoAction(u_int _indexAction)
+void Game::DoAction(const u_int& _indexAction)
 {
 	switch (_indexAction)
 	{
@@ -279,25 +285,31 @@ void Game::DoAction(u_int _indexAction)
 }
 void Game::Option()
 {
-	vector<vector<string>> _options = { {"2", "3", "4"} ,{"0", "1", "2", "3", "4"} };
-	vector<string> _texts = { "Combien de joueur joue au jeu ?","Combien de bot souhaites-tu ?" };
-	pair<u_int, u_int> _actionIndex;
+	vector<pair<string, vector<u_int>>> _options;
+	for (const pair<string, vector<u_int>>& _currentOptions : options)
+	{
+		_options.push_back(_currentOptions);
+	}
+	pair<string, pair<u_int, u_int>> _actionIndex;
 	do
 	{
-		_actionIndex = OptionAction(_options, _texts);
+		_actionIndex = OptionAction(_options, true, _actionIndex.second);
 		system("cls");
+		if (_actionIndex.first == "Quitter") break;
 		DoOptionAction(_actionIndex);
 	} while (true);
 }
-pair<u_int, u_int> Game::OptionAction(vector<vector<string>> _options, vector<string> _texts)
+pair<string, pair<u_int, u_int>> Game::OptionAction(const vector<pair<string, vector<u_int>>>& _options,
+	const bool _hasQuitOptions, const pair<u_int,u_int>& _selector)
 {
 	int _sizeOptions = static_cast<int>(_options.size());
-	pair<int, int> _selector = { 0,0 };
-	Selector(_selector, _texts, _options, _sizeOptions);
-	return _selector;
+	pair<string, pair<u_int, u_int>> _returnValue =
+		Selector(_selector, _options, _sizeOptions, _hasQuitOptions);
+	return _returnValue;
 }
-void Game::DoOptionAction(pair<u_int, u_int> _actionIndex)
+void Game::DoOptionAction(const pair<string,pair<u_int, u_int>>& _actionIndex)
 {
+	currentOptions[_actionIndex.first] = _actionIndex.second.second;
 }
 
 void Game::Display()
@@ -306,54 +318,89 @@ void Game::Display()
 	cout << grid << endl;
 }
 
-void Game::Display(vector<vector<string>> _options, vector<string> _texts, int _sizeOptions, pair<int, int> _selector)
+void Game::Display(const vector<pair<string, vector<u_int>>>& _options,const u_int& _sizeOptions,
+	const pair<u_int, u_int>& _selector, 
+	const bool _hasQuitOptions)
 {
-	int _sizeCurrentOption;
-	for (int _row = 0; _row < _sizeOptions; _row++)
+	u_int _sizeCurrentOption;
+	for (u_int _row = 0; _row < _sizeOptions + _hasQuitOptions; _row++)
 	{
-		cout << _texts[_row] << endl;
-		_sizeCurrentOption = static_cast<u_int>(_options[_row].size());
-		for (int _column = 0; _column < _sizeCurrentOption; _column++)
+		if (_row == _sizeOptions)
+		{
+			if (_selector.first == _row)
+			cout << WHITE_INTENSE_TEXT "[" RESET << "Quitter" << WHITE_INTENSE_TEXT "] " RESET;
+			else
+			cout << " " << "Quitter" << "  ";
+			continue;
+		}
+		cout << _options[_row].first + " :" << endl;
+		_sizeCurrentOption = static_cast<u_int>(_options[_row].second.size());
+		for (u_int _column = 0; _column < _sizeCurrentOption; _column++)
 		{
 			if (_selector.first == _row && _selector.second == _column)
 			{
-				cout << "[" << _options[_row][_column] << "] ";
+				cout << WHITE_INTENSE_TEXT "[" RESET << _options[_row].second[_column] 
+					 << WHITE_INTENSE_TEXT "] " RESET;
 				continue;
 			}
-			cout << " " << _options[_row][_column] << "  ";
+			else if (currentOptions[_options[_row].first] == _column)
+			{
+				cout << PINK "["  RESET << _options[_row].second[_column] 
+					 << PINK "] " RESET;
+				continue;
+			}
+			cout << " " << _options[_row].second[_column] << "  ";
 		}
 		cout << endl << endl;
 	}
 }
 
-pair<int, int> Game::Selector(pair<int, int> _selector, vector<string> _texts, vector<vector<string>> _options, int _sizeOptions)
+pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector, 
+	const vector<pair<string,vector<u_int>>>& _options, const u_int& _sizeOptions, 
+	const bool _hasQuitOptions)
 {
 	while (true)
 	{
-		Display(_options, _texts, _sizeOptions, _selector);
+		Display(_options, _sizeOptions, _selector, _hasQuitOptions);
 		int _key = _getch();
 		if (_key == 72) // ↑
 		{
-			_selector.first = _selector.first - 1 < 0 ? _sizeOptions - 1 : _selector.first - 1;
-			if (_selector.second > static_cast<int>(_options[_selector.first].size() - 1)) _selector.first = _selector.first + 1;
+			_selector.first = _selector.first == 0 ? _sizeOptions - 1 + _hasQuitOptions : _selector.first - 1;
+			
+			if (_selector.first == _sizeOptions)
+				_selector.second = 0;
+			else if (_selector.second >
+				static_cast<u_int>(_options[_selector.first].second.size() - 1))
+				_selector.first = _selector.first + 1;
 		}
 		else if (_key == 75) // gauche
 		{
-			_selector.second = _selector.second == 0 ? static_cast<int>(_options[_selector.first].size() - 1) : _selector.second - 1;
+			if (_selector.first != _sizeOptions)
+			_selector.second = 
+				_selector.second == 0 ? static_cast<u_int>(_options[_selector.first].second.size() - 1) 
+				: _selector.second - 1;
 		}
 		else if (_key == 77) // droite
 		{
-			_selector.second = _selector.second == static_cast<int>(_options[_selector.first].size() - 1) ? 0 : _selector.second + 1;
+			if (_selector.first != _sizeOptions)
+			_selector.second =
+				_selector.second == static_cast<u_int>(_options[_selector.first].second.size() - 1) ? 0 
+				: _selector.second + 1;
 		}
 		else if (_key == 80) // ↓
 		{
-			_selector.first = (_selector.first + 1) % _sizeOptions;
-			// toto check if the next exists at the same column
-			if (_selector.second > static_cast<int>(_options[_selector.first].size() - 1)) _selector.first = _selector.first + 1;
+			_selector.first = _selector.first == _sizeOptions - 1 + _hasQuitOptions ? 0 : _selector.first + 1;
+
+			if (_selector.first == _sizeOptions)
+				_selector.second = 0;
+			else if (_selector.second >
+				static_cast<u_int>(_options[_selector.first].second.size() - 1)) 
+				_selector.first = _selector.first - 1;
 		}
 		else if (_key == 13) // Enter
 		{
-			return _selector;
+			if(_selector.first == _sizeOptions) return make_pair("Quitter", make_pair(0,0));
+			return make_pair(_options[_selector.first].first,_selector);
 		}
 		system("cls");
 	}
