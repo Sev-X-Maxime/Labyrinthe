@@ -5,9 +5,9 @@ struct Card
 {
 	Object treasure;
 
-	Card()
+	Card(const Object& _treasure)
 	{
-
+		treasure = _treasure;
 	}
 
 	void Display() const

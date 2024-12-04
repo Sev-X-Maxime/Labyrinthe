@@ -1,5 +1,22 @@
 #include "Tile.h"
 
+Tile::Tile()
+{
+	bool _currentBool;
+	do
+	{
+		for (u_int _index = 0; _index < DT_COUNT; _index++)
+		{
+			_currentBool = RandomInt(0, 1);
+			directionsOpen[static_cast<DirectionType>(_index)] = _currentBool;
+		}
+	} while (!GoodCountDirectionsOpen());
+
+	playersInCase = vector<Player>();
+	fixed = false;
+	InitCases();
+}
+
 Tile::Tile(const map<DirectionType, bool>& _directionsOpen, const bool _isFixed, const u_int& _size)
 {
 	playersInCase = vector<Player>();
@@ -9,7 +26,7 @@ Tile::Tile(const map<DirectionType, bool>& _directionsOpen, const bool _isFixed,
 }
 
 
-void Tile::InitCases( const u_int& _size)
+void Tile::InitCases(const u_int& _size)
 {
 	cases = vector<vector<Object>>();
 	for (u_int _rowIndex = 0; _rowIndex < _size; _rowIndex++)
@@ -77,12 +94,6 @@ void Tile::AddPlayer(Player _player)
 
 void Tile::RemovePlayer(Player _player)
 {
-}
-
-ostream& operator<<(ostream& _stream, Tile _tile)
-{
-	_stream << _tile.ToString();
-	return _stream;
 }
 
 inline bool Tile::operator==(const Card& _card) const
