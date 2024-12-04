@@ -1,14 +1,10 @@
-#include "Game.h"
+﻿#include "Game.h"
 
 Game::Game()
 {
 	InitTreasures();
 	InitStaticTiles();
 	InitCards();
-
-	//deplacer dans le start
-	InitPlayers();
-	InitGrid();
 }
 
 Game::~Game()
@@ -47,7 +43,7 @@ void Game::InitPlayers()
 	for (int _index = 0; _index < _playerCount; _index++)
 	{
 		_currentPlayerName = 
-			GetLine("Quel est le nom du  joueur  n�" + to_string(_index + 1) +"?");
+			GetLine("Quel est le nom du  joueur  n°" + to_string(_index + 1) +"?");
 		players.push_back(new Player(_currentPlayerName, _pawns[_index], _cardsPlayer[_index]));
 		system("cls");
 	}
@@ -215,8 +211,150 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 	return _playersCards;
 }
 
+void Game::Launch()
+{
+	vector<string> _options = { "Play", "Option", "Leave" };
+	u_int _actionIndex;
+	do
+	{
+		_actionIndex = ChooseAction(_options);
+		system("cls");
+		DoAction(_actionIndex);
+	} while (_actionIndex != 2);
+}
+
+int Game::ChooseAction(vector<string> _options)
+{
+	int _sizeOption = static_cast<int>(_options.size());
+	int _key;
+	int _selector = 0;
+	while (true)
+	{
+		int _index = 0;
+		for (; _index < _sizeOption; _index++)
+		{
+			if (_selector == _index)
+			{
+				cout << BOLD_TEXT << BLINK_TEXT << WHITE_INTENSE_TEXT << _options[_index] << RESET << endl;
+				continue;
+			}
+			cout << WHITE_INTENSE_TEXT << _options[_index] << RESET << endl;
+		}
+		cout << endl;
+		_key = _getch();
+		if (_key == 72) // ↑
+		{
+			_selector = _selector > 0 ? _selector - 1 : _sizeOption - 1;
+		}
+		else if (_key == 80) // ↓
+		{
+			_selector = _selector < _sizeOption - 1 ? _selector + 1 : 0;
+		}
+		else if (_key == 13) // Enter
+		{
+			return _selector;
+		}
+		system("cls");
+	}
+}
+
+void Game::DoAction(u_int _indexAction)
+{
+	switch (_indexAction)
+	{
+	case 0:
+		InitPlayers();
+		InitGrid();
+		Display();
+		break;
+
+	case 1:
+		Option();
+		break;
+
+	case 2:
+	default:
+		break;
+	}
+}
+void Game::Option()
+{
+	vector<vector<string>> _options = { {"2", "3", "4"} ,{"0", "1", "2", "3", "4"} };
+	vector<string> _texts = { "Combien de joueur joue au jeu ?","Combien de bot souhaites-tu ?" };
+	pair<u_int, u_int> _actionIndex;
+	do
+	{
+		_actionIndex = OptionAction(_options, _texts);
+		system("cls");
+		DoOptionAction(_actionIndex);
+	} while (true);
+}
+pair<u_int, u_int> Game::OptionAction(vector<vector<string>> _options, vector<string> _texts)
+{
+	int _sizeOptions = static_cast<int>(_options.size());
+	pair<int, int> _selector = { 0,0 };
+	Selector(_selector, _texts, _options, _sizeOptions);
+	return _selector;
+}
+void Game::DoOptionAction(pair<u_int, u_int> _actionIndex)
+{
+}
+
 void Game::Display()
 {
 	SetCursorPosition(0, 0, false);
 	cout << grid << endl;
+}
+
+void Game::Display(vector<vector<string>> _options, vector<string> _texts, int _sizeOptions, pair<int, int> _selector)
+{
+	int _sizeCurrentOption;
+	for (int _row = 0; _row < _sizeOptions; _row++)
+	{
+		cout << _texts[_row] << endl;
+		_sizeCurrentOption = static_cast<u_int>(_options[_row].size());
+		for (int _column = 0; _column < _sizeCurrentOption; _column++)
+		{
+			if (_selector.first == _row && _selector.second == _column)
+			{
+				cout << "[" << _options[_row][_column] << "] ";
+				continue;
+			}
+			cout << " " << _options[_row][_column] << "  ";
+		}
+		cout << endl << endl;
+	}
+}
+
+pair<int, int> Game::Selector(pair<int, int> _selector, vector<string> _texts, vector<vector<string>> _options, int _sizeOptions)
+{
+	while (true)
+	{
+		Display(_options, _texts, _sizeOptions, _selector);
+		int _key = _getch();
+		if (_key == 72) // ↑
+		{
+			_selector.first = _selector.first - 1 < 0 ? _sizeOptions - 1 : _selector.first - 1;
+			if (_selector.second > static_cast<int>(_options[_selector.first].size() - 1)) _selector.first = _selector.first + 1;
+		}
+		else if (_key == 75) // gauche
+		{
+			_selector.second = _selector.second == 0 ? static_cast<int>(_options[_selector.first].size() - 1) : _selector.second - 1;
+		}
+		else if (_key == 77) // droite
+		{
+			_selector.second = _selector.second == static_cast<int>(_options[_selector.first].size() - 1) ? 0 : _selector.second + 1;
+		}
+		else if (_key == 80) // ↓
+		{
+			_selector.first = (_selector.first + 1) % _sizeOptions;
+			// toto check if the next exists at the same column
+			if (_selector.second > static_cast<int>(_options[_selector.first].size() - 1)) _selector.first = _selector.first + 1;
+		}
+		else if (_key == 13) // Enter
+		{
+			return _selector;
+		}
+		system("cls");
+	}
 }
