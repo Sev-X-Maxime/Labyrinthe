@@ -8,17 +8,17 @@ Grid::Grid(const u_int& _size)
 	}
 }
 
-Tile Grid::PlaceTile(Tile _tile, const pair<u_int, u_int>& _position, const DirectionType& _direction)
+Tile Grid::PlaceTile(Tile _tile, const pair<u_int, u_int>& _position, const MyDirectionType& _direction)
 {
 	switch (_direction)
 	{
-	case DT_RIGHT:
+	case MDT_RIGHT:
 		return PlaceAtRight(_tile, _position);
-	case DT_LEFT:
+	case MDT_LEFT:
 		return PlaceAtLeft(_tile, _position);
-	case DT_UP:
+	case MDT_UP:
 		return PlaceAtTop(_tile, _position);
-	case DT_DOWN:
+	case MDT_DOWN:
 		return PlaceAtBotom(_tile, _position);
 	default:
 		throw exception("Default PlaceTile() !");

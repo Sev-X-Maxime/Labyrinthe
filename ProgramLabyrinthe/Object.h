@@ -19,10 +19,9 @@ struct Object
 	inline bool operator == (const Object& _other) const
 	{
 		return GetAppearance() == _other.GetAppearance();
-	}/*
-	inline void operator = (const Object& _other)
+	}
+	inline bool operator == (const char _appearance) const
 	{
-		appearance = _other.appearance;
-		color = _other.color;
-	}*/
+		return appearance == _appearance;
+	}
 };

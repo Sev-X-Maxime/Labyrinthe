@@ -11,7 +11,7 @@ class Tile
 {
 	vector<vector<Object>> cases;
 	vector<Player> playersInCase;
-	map<DirectionType, bool> directionsOpen;
+	map<MyDirectionType, bool> directionsOpen;
 	bool fixed;
 private:
 	inline bool GoodCountDirectionsOpen() const
@@ -22,7 +22,7 @@ private:
 	inline u_int DirectionsOpenCount() const
 	{
 		u_int _openDirections = 0;
-		for (const pair<DirectionType, bool>& _currentDirection : directionsOpen)
+		for (const pair<MyDirectionType, bool>& _currentDirection : directionsOpen)
 		{
 			if (_currentDirection.second == true) ++_openDirections;
 		}
@@ -54,21 +54,28 @@ public:
 	}
 	inline string ToStringLine(const u_int& _lineIndex)
 	{
-		string _text;
+		string _text, _currentAppearance, _midAppearance;
 		const u_int& _size = static_cast<u_int>(cases[_lineIndex].size());
 		
 		for (u_int _index = 0; _index < _size; _index++)
 		{
+			_currentAppearance = cases[_lineIndex][_index].GetAppearance();
 			if (!playersInCase.empty() && (_lineIndex == 1 && _index == 1))
 			{
-				_text += playersInCase[0].GetPawn().GetAppearance() + RESET;
+				_text += BLINK_TEXT + playersInCase[0].GetPawn().GetAppearance() + RESET;
 				rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
+				continue;
 			}
 			else
-			_text += cases[_lineIndex][_index].GetAppearance();
-
+			_text += _currentAppearance;
 			if (_index < _size - 1)
+			{
+				_midAppearance = cases[_lineIndex][1].GetAppearance();
+				if (_lineIndex != 1)
+				_text += _midAppearance;
+				else
 				_text += " ";
+			}
 		}
 		return _text;
 	}
@@ -87,7 +94,7 @@ public:
 
 public:
 	Tile();
-	Tile(const map<DirectionType, bool>& _directionsOpen, 
+	Tile(const map<MyDirectionType, bool>& _directionsOpen, 
 		const bool _isFixed = false, const u_int& _size = 3);
 private:
 	void InitCases(const u_int& _size = 3);

@@ -57,53 +57,53 @@ void Game::InitStaticTiles()
 {
 	staticTiles = map<pair<u_int, u_int>, Tile>();
 
-	staticTiles[make_pair(0, 0)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, false),
-										  make_pair(DT_UP, false) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(0, 0)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, false),
+										  make_pair(MDT_UP, false) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(0, 2)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, false) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(0, 2)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, true),
+										  make_pair(MDT_UP, false) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(0, 4)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, false) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(0, 4)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, true),
+										  make_pair(MDT_UP, false) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(0, 6)] = Tile({ make_pair(DT_RIGHT, false), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, false) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(0, 6)] = Tile({ make_pair(MDT_RIGHT, false), make_pair(MDT_LEFT, true),
+										  make_pair(MDT_UP, false) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(2, 0)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, false),
-										  make_pair(DT_UP, true) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(2, 0)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, false),
+										  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(2, 2)] = Tile({ make_pair(DT_RIGHT, false), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, true) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(2, 2)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, false),
+										  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(2, 4)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, false) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(2, 4)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, true),
+										  make_pair(MDT_UP, false) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(2, 6)] = Tile({ make_pair(DT_RIGHT, false), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, true) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(2, 6)] = Tile({ make_pair(MDT_RIGHT, false), make_pair(MDT_LEFT, true),
+										  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(4, 0)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, false),
-										  make_pair(DT_UP, true) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(4, 0)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, false),
+										  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(4, 2)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, true) , make_pair(DT_DOWN, false) }, true);
+	staticTiles[make_pair(4, 2)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, true),
+										  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, false) }, true);
 
-	staticTiles[make_pair(4, 4)] = Tile({ make_pair(DT_RIGHT, false), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, true) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(4, 4)] = Tile({ make_pair(MDT_RIGHT, false), make_pair(MDT_LEFT, true),
+										  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(4, 6)] = Tile({ make_pair(DT_RIGHT, false), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, true) , make_pair(DT_DOWN, true) }, true);
+	staticTiles[make_pair(4, 6)] = Tile({ make_pair(MDT_RIGHT, false), make_pair(MDT_LEFT, true),
+										  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, true) }, true);
 
-	staticTiles[make_pair(6, 0)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, false),
-										  make_pair(DT_UP, true) , make_pair(DT_DOWN, false) }, true);
+	staticTiles[make_pair(6, 0)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, false),
+										  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, false) }, true);
 
-	staticTiles[make_pair(6, 2)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, true) , make_pair(DT_DOWN, false) }, true);
+	staticTiles[make_pair(6, 2)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, true),
+										  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, false) }, true);
 
-	staticTiles[make_pair(6, 4)] = Tile({ make_pair(DT_RIGHT, true), make_pair(DT_LEFT, true),
-										  make_pair(DT_UP, true) , make_pair(DT_DOWN, false) }, true);
+	staticTiles[make_pair(6, 4)] = Tile({ make_pair(MDT_RIGHT, true), make_pair(MDT_LEFT, true),
+										  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, false) }, true);
 
-	staticTiles[make_pair(6, 6)] = Tile({ make_pair(DT_RIGHT, false), make_pair(DT_LEFT, true),
-									  make_pair(DT_UP, true) , make_pair(DT_DOWN, false) }, true);
+	staticTiles[make_pair(6, 6)] = Tile({ make_pair(MDT_RIGHT, false), make_pair(MDT_LEFT, true),
+									  make_pair(MDT_UP, true) , make_pair(MDT_DOWN, false) }, true);
 
 	InitStaticTilesTreasure();
 }
@@ -113,16 +113,13 @@ void Game::InitStaticTilesTreasure()
 	u_int _currentTreasureIndex = 0;
 	for (pair<pair<u_int, u_int>, Tile> _currentTiles : staticTiles)
 	{
-		if (!(_currentTiles.first.first % 6 && _currentTiles.first.second % 6))
-		{
-			_currentTiles.second.SetTreasure(_currentTreasureIndex++);
-			continue;
-		}
-		staticTiles[make_pair(0, 0)].SetTreasure(Object('@', HIDDEN_TEXT BG_RED));
-		staticTiles[make_pair(0, 6)].SetTreasure(Object('@', HIDDEN_TEXT BG_YELLOW));
-		staticTiles[make_pair(6, 0)].SetTreasure(Object('@', HIDDEN_TEXT BG_GREEN));
-		staticTiles[make_pair(6, 6)].SetTreasure(Object('@', HIDDEN_TEXT BG_BLUE));
+		if (!(_currentTiles.first.first % 6 == 0 && _currentTiles.first.second % 6 == 0))
+			staticTiles[_currentTiles.first].SetTreasure(treasures[_currentTreasureIndex++]);
 	}
+	staticTiles[make_pair(0, 0)].SetTreasure(Object('@', HIDDEN_TEXT BG_RED));
+	staticTiles[make_pair(0, 6)].SetTreasure(Object('@', HIDDEN_TEXT BG_YELLOW));
+	staticTiles[make_pair(6, 0)].SetTreasure(Object('@', HIDDEN_TEXT BG_GREEN));
+	staticTiles[make_pair(6, 6)].SetTreasure(Object('@', HIDDEN_TEXT BG_BLUE));
 }
 
 void Game::InitGrid(const u_int& _gridSize)
@@ -142,6 +139,21 @@ void Game::InitGrid(const u_int& _gridSize)
 		}
 	}
 	grid.SetTiles(_tiles);
+	u_int _indexTreasure = 13;
+	int _randomIndexX, _randomIndexY;
+	const u_int& _treasuresCount = static_cast<u_int>(treasures.size());
+	pair<u_int, u_int> _currentRandomCoordinates;
+	while (_indexTreasure < _treasuresCount)
+	{
+		_randomIndexX = RandomInt(0, _gridSize - 1);
+		_randomIndexY = RandomInt(0, _gridSize - 1);
+		_currentRandomCoordinates = 
+			make_pair(static_cast<u_int>(_randomIndexX), 
+				static_cast<u_int>(_randomIndexY));
+		if (grid.GetTile(_currentRandomCoordinates).GetTreasure() == ' ')
+			grid.SetTileTreasure(_currentRandomCoordinates,
+				treasures[_indexTreasure++]);
+	}
 }
 
 void Game::InitTreasures()
@@ -149,30 +161,30 @@ void Game::InitTreasures()
 	treasures = vector<Object>();
 	treasures =
 	{
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
-		Object('#',RED),
+		Object('A',RED),
+		Object('B',RED),
+		Object('C',RED),
+		Object('D',RED),
+		Object('E',RED),
+		Object('F',RED),
+		Object('G',RED),
+		Object('H',RED),
+		Object('I',RED),
+		Object('J',RED),
+		Object('K',RED),
+		Object('L',RED),
+		Object('M',RED),
+		Object('N',RED),
+		Object('O',RED),
+		Object('P',RED),
+		Object('Q',RED),
+		Object('R',RED),
+		Object('S',RED),
+		Object('T',RED),
+		Object('U',RED),
+		Object('V',RED),
+		Object('W',RED),
+		Object('X',RED),
 	};
 }
 
@@ -205,5 +217,6 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 
 void Game::Display()
 {
+	SetCursorPosition(0, 0, false);
 	cout << grid << endl;
 }

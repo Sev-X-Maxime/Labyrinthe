@@ -1,11 +1,11 @@
 #pragma once
-enum DirectionType
+enum MyDirectionType
 {
-	DT_RIGHT,
-	DT_LEFT,
-	DT_UP,
-	DT_DOWN,
-	DT_COUNT
+	MDT_RIGHT,
+	MDT_LEFT,
+	MDT_UP,
+	MDT_DOWN,
+	MDT_COUNT
 };
 
 enum RotateType

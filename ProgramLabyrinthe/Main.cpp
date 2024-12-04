@@ -10,7 +10,10 @@ int main()
 {
     Config();
 	Game _game;
-	_game.Display();
+	while (!_kbhit())
+	{
+		_game.Display();
+	}
 
 	return EXIT_SUCCESS;
 }
