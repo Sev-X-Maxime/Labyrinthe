@@ -5,7 +5,6 @@
 #include <set>
 #include <map>
 
-using namespace Tools;
 
 class Tile
 {

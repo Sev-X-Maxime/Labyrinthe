@@ -266,6 +266,12 @@ void Game::DoAction(u_int _indexAction)
 		InitPlayers();
 		InitGrid();
 		Display();
+		system("cls");
+		for (u_int _index = 0; _index < cards.size(); _index++)
+		{
+			cards[_index].Display();
+			cout << endl << endl;
+		}
 		break;
 
 	case 1:
