@@ -10,6 +10,7 @@ int main()
 {
     Config();
 	Game _game;
+	_game.Launch();
 	_game.Display();
 
 	return EXIT_SUCCESS;
