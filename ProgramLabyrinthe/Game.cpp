@@ -267,6 +267,47 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 	return _playersCards;
 }
 
+void Game::PlacePawnInSpawn()
+{
+	u_int playersCount = static_cast<u_int>(players.size());
+	for (u_int _row = 0; _row < 7; _row++)
+	{
+		for (u_int _column = 0; _column < 7; _column++)
+		{
+			if (grid.GetTile(make_pair(_row, _column)).GetTreasure().appearance == '@')
+			{
+				for (u_int _index = 0; _index < playersCount; _index++)
+				{
+					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_RED
+						&& players[_index]->GetPawn().color == RED)
+					{
+						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
+						break;
+					}
+					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_YELLOW
+						&& players[_index]->GetPawn().color == YELLOW)
+					{
+						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
+						break;
+					}
+					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_GREEN
+						&& players[_index]->GetPawn().color == GREEN)
+					{
+						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
+						break;
+					}
+					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_BLUE
+						&& players[_index]->GetPawn().color == BLUE)
+					{
+						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
 
 
 
@@ -455,14 +496,7 @@ void Game::Start()
 {
 	InitPlayers();
 	InitGrid();
-	u_int playerCount = static_cast<u_int>(players.size());
-	currentTile = grid.PlaceTile(currentTile, 0, MDT_LEFT);
-	currentTile = grid.PlaceTile(currentTile, 0, MDT_RIGHT);
-	/*do
-	{
-	} while (!IsOver());*/
-	currentTile = grid.PlaceTile(currentTile, 6, MDT_UP);
-	currentTile = grid.PlaceTile(currentTile, 6, MDT_DOWN);
+	PlacePawnInSpawn();
 	Display();
 }
 

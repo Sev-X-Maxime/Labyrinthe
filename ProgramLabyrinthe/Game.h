@@ -27,6 +27,7 @@ private:
 	void InitTreasures();
 	void InitCards();
 	vector<vector<Card>> DistributeCards(const int _playerCount);
+	void PlacePawnInSpawn();
 	int ChooseAction(const vector<string>& _options);
 	void DoAction(const u_int& _indexAction);
 	pair<string, pair<u_int, u_int>> OptionAction(const vector<pair<string, vector<u_int>>>& _options,

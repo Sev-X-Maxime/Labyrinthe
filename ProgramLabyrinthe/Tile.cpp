@@ -90,10 +90,21 @@ void Tile::Rotate(const RotateType& _rotateType)
 
 void Tile::AddPlayer(Player _player)
 {
+	playersInCase.push_back(_player);
 }
 
 void Tile::RemovePlayer(Player _player)
 {
+	int _indexPlayer = 0;
+	u_int _nbPlayersInCase = static_cast<u_int>(playersInCase.size());
+	for (u_int _index = 0; _index < _nbPlayersInCase; _index++)
+	{
+		if (playersInCase[_index].GetName() == _player.GetName())
+		{
+			_indexPlayer = _index;
+		}
+	}
+	playersInCase.erase(playersInCase.begin() + _indexPlayer);
 }
 
 inline bool Tile::operator==(const Card& _card) const
