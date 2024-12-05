@@ -4,21 +4,24 @@
 using namespace Console;
 #define SEPARATOR BLACK_INTENSE_TEXT "#" RESET
 #define SEPARATOR_IN_STREAM _stream << SEPARATOR
-#define SEPARATOR_LINE for (u_int _index = 0; _index < _size * 3 * 2; _index++) \
-				{\
-					SEPARATOR_IN_STREAM;\
-				}
-
 class Grid
 {
 	vector<vector<Tile>> tiles;
 	pair<u_int, u_int> selector;
 	map < u_int, pair<u_int, u_int>> pushableCoordinates;
 	u_int arrowSelector;
-
+	vector<MyDirectionType> directionArrowPlacement;
 protected:
 
 public:
+	inline u_int GetArrowSelector() const
+	{
+		return arrowSelector;
+	}
+	inline pair<u_int, u_int> GetPushCoordinates()
+	{
+		return pushableCoordinates[arrowSelector];
+	}
 	inline vector<vector<Tile>> GetTiles() const
 	{
 		return tiles;
@@ -35,16 +38,20 @@ public:
 	{
 		return tiles[_position.first][_position.second];
 	}
+	
 public:
 	Grid(const u_int& _size = 7);
-
+private:
+	void InitArrowsSelector();
 public:
+	void PlaceTile(Tile _tile);
 	Tile PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& _direction);
 	Tile PlaceAtRight(Tile _tile, const u_int& _position);
 	Tile PlaceAtLeft(Tile _tile, const u_int& _position);
 	Tile PlaceAtTop(Tile _tile, const u_int& _position);
 	Tile PlaceAtBotom(Tile _tile, const u_int& _position);
-	void Display() const;
+
+	void SelectorMove(const MyDirectionType& _direction);
 protected:
 
 private:

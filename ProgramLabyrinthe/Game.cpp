@@ -5,7 +5,6 @@ Game::Game()
 	InitTreasures();
 	InitStaticTiles();
 	InitCards();
-
 	options["Nombre d'IA"] = { 0,1,2,3,4 };
 	options["Nombre de joueurs"] = { 2,3,4 };
 	currentOptions["Nombre d'IA"] = 0;
@@ -31,11 +30,7 @@ void Game::DeletePlayers()
 void Game::InitPlayers()
 {
 	DeletePlayers();
-	int _playerCount;
-	do
-	{
-		_playerCount = GetInput<int>("Combien de joueur vont jouer aux jeux ?", "");
-	} while (!(_playerCount >= 2 && _playerCount <= 4));
+	const int _playerCount = options["Nombre de joueurs"][currentOptions["Nombre de joueurs"]];
 	const vector<vector<Card>>& _cardsPlayer = DistributeCards(_playerCount);
 	string _currentPlayerName;
 	const vector<Object>& _pawns =
@@ -405,19 +400,18 @@ void Game::Start()
 	InitPlayers();
 	InitGrid();
 	u_int playerCount = static_cast<u_int>(players.size());
-	currentTile = grid.PlaceTile(currentTile, 0, MDT_LEFT);
-	currentTile = grid.PlaceTile(currentTile, 0, MDT_RIGHT);
-	/*do
-	{
-	} while (!IsOver());*/
-	currentTile = grid.PlaceTile(currentTile, 6, MDT_UP);
-	currentTile = grid.PlaceTile(currentTile, 6, MDT_DOWN);
 	Display();
+	system("pause");
 }
 
 bool Game::IsOver()
 {
 	return false;
+}
+
+void Game::PlacementTile()
+{
+
 }
 
 void Game::Launch()
