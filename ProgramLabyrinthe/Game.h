@@ -11,7 +11,9 @@ class Game
 	vector<Card> cards;
 	map<string, vector<u_int>> options;
 	map<string, u_int> currentOptions;
+	
 	Tile currentTile;
+	u_int currentPlayerIndex;
 
 public:
 	Game();
@@ -39,6 +41,7 @@ private:
 	void Option();
 	void Start();
 	bool IsOver();
+	void PlacementTile();
 public:
 	void Launch();
 };

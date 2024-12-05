@@ -7,19 +7,36 @@ Grid::Grid(const u_int& _size)
 		tiles.push_back(vector<Tile>());
 	}
 	arrowSelector = 0;
-	pushableCoordinates[0] = make_pair(1,1);
-	pushableCoordinates[1] = make_pair(1,3);
-	pushableCoordinates[2] = make_pair(1,5);
-	pushableCoordinates[3] = make_pair(0,0);
-	pushableCoordinates[4] = make_pair(0,6);
-	pushableCoordinates[5] = make_pair(2,0);
-	pushableCoordinates[6] = make_pair(2,6);
-	pushableCoordinates[7] = make_pair(4,0);
-	pushableCoordinates[8] = make_pair(4,6);
-	pushableCoordinates[9] = make_pair(6,1);
-	pushableCoordinates[10] = make_pair(6,3);
-	pushableCoordinates[11] = make_pair(6,5);
+	InitArrowsSelector();
+}
 
+void Grid::InitArrowsSelector()
+{
+	pushableCoordinates[0] = make_pair(1, 1);
+	pushableCoordinates[1] = make_pair(1, 3);
+	pushableCoordinates[2] = make_pair(1, 5);
+	pushableCoordinates[3] = make_pair(0, 0);
+	pushableCoordinates[4] = make_pair(0, 6);
+	pushableCoordinates[5] = make_pair(2, 0);
+	pushableCoordinates[6] = make_pair(2, 6);
+	pushableCoordinates[7] = make_pair(4, 0);
+	pushableCoordinates[8] = make_pair(4, 6);
+	pushableCoordinates[9] = make_pair(6, 1);
+	pushableCoordinates[10] = make_pair(6, 3);
+	pushableCoordinates[11] = make_pair(6, 5);
+}
+
+void Grid::PlaceTile(Tile _tile)
+{
+	const pair<u_int, u_int>& _currentPlaceCoordinates = GetPushCoordinates();
+	if (_currentPlaceCoordinates.second == 0)
+		PlaceTile(_tile, _currentPlaceCoordinates.second, MDT_LEFT);
+	else if (_currentPlaceCoordinates.second == 6)
+		PlaceTile(_tile, _currentPlaceCoordinates.second, MDT_RIGHT);
+	else if (_currentPlaceCoordinates.first == 1)
+		PlaceTile(_tile, _currentPlaceCoordinates.first, MDT_UP);
+	else if (_currentPlaceCoordinates.first == 6)
+		PlaceTile(_tile, _currentPlaceCoordinates.first, MDT_DOWN);
 }
 
 Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& _direction)
@@ -78,6 +95,57 @@ Tile Grid::PlaceAtBotom(Tile _tile, const u_int& _position)
 	}
 	tiles[_size - 1][_position] = _tile;
 	return _lastTile;
+}
+
+
+
+void Grid::SelectorMove(const MyDirectionType& _direction)
+{
+	int _changerValue;
+	if (_direction == MDT_RIGHT || _direction == MDT_LEFT)
+	{
+		if (arrowSelector >= 3 && arrowSelector <= 8)
+			if (arrowSelector % 2 == 1)
+				_changerValue = 1;
+			else
+				_changerValue = -1;
+		else
+			if (_direction == MDT_RIGHT)
+				if (arrowSelector == 2)
+					_changerValue = 2;
+				else if (arrowSelector == 11)
+					_changerValue = -3;
+				else
+					_changerValue = 1;
+			else if (_direction == MDT_LEFT)
+				if (arrowSelector == 0)
+					_changerValue = 3;
+				else if (arrowSelector == 9)
+					_changerValue = -2;
+				else
+					_changerValue = -1;
+	}
+	else if (_direction == MDT_UP || _direction == MDT_DOWN)
+	{
+		if (arrowSelector >= 0 && arrowSelector <= 2)
+			_changerValue = 9;
+		else if (arrowSelector >= 9 && arrowSelector <= 11)
+			_changerValue = -9;
+		else
+			if (_direction == MDT_UP)
+				if (arrowSelector == 3)
+					_changerValue = -3;
+				else if (arrowSelector == 4)
+					_changerValue = -2;
+				else
+					_changerValue = 1;
+			else if (_direction == MDT_DOWN)
+				if (arrowSelector == 8)
+					_changerValue = 3;
+				else
+					_changerValue = 2;
+	}
+	arrowSelector += _changerValue;
 }
 
 	

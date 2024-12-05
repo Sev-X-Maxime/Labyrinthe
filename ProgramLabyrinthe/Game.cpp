@@ -5,7 +5,6 @@ Game::Game()
 	InitTreasures();
 	InitStaticTiles();
 	InitCards();
-
 	options["Nombre d'IA"] = { 0,1,2,3,4 };
 	options["Nombre de joueurs"] = { 2,3,4 };
 	currentOptions["Nombre d'IA"] = 0;
@@ -30,45 +29,10 @@ void Game::DeletePlayers()
 
 void Game::InitPlayers()
 {
-	map<u_int, bool> _isPawnIndexColorTaken;
-	for (u_int _index = 0; _index < 4; _index++)
-	{
-		_isPawnIndexColorTaken[_index] = false;
-	}
 	DeletePlayers();
-	int _playerCount;
-	do
-	{
-		_playerCount = GetInput<int>("Combien de joueur vont jouer aux jeux ?", "");
-	} while (!(_playerCount >= 2 && _playerCount <= 4));
+	const int _playerCount = options["Nombre de joueurs"][currentOptions["Nombre de joueurs"]];
 	const vector<vector<Card>>& _cardsPlayer = DistributeCards(_playerCount);
 	string _currentPlayerName;
-	for (int _index = 0; _index < _playerCount; _index++)
-	{
-		_currentPlayerName = 
-			GetLine("Quel est le nom du  joueur  n°" + to_string(_index + 1) +"?");
-		players.push_back(new Player(_currentPlayerName, ChoosePawn(_index, _isPawnIndexColorTaken), _cardsPlayer[_index]));
-		system("cls");
-	}
-}
-
-void Game::DisplayPawn(const vector<Object>& _pawns, int _pawnsCount, int _selector, const vector<string>& _separator, map<u_int, bool> _isPawnIndexColorTaken)
-{
-	for (int _index = 0; _index < _pawnsCount; _index++)
-	{
-		if (_selector == _index)
-			cout << BLINK_TEXT;
-		if (_isPawnIndexColorTaken[_index])
-		{
-			cout << GRAY << _pawns[_index].appearance << RESET " ";
-			continue;
-		}
-		cout << _pawns[_index].GetAppearance() << RESET " ";
-	}
-}
-
-Object Game::ChoosePawn(u_int _indexPlayer, map<u_int, bool>& _isPawnIndexColorTaken)
-{
 	const vector<Object>& _pawns =
 	{
 		Object('&', RED),
@@ -76,31 +40,11 @@ Object Game::ChoosePawn(u_int _indexPlayer, map<u_int, bool>& _isPawnIndexColorT
 		Object('&', BLUE),
 		Object('&', GREEN)
 	};
-
-	int _pawnsCount = static_cast<int>(_pawns.size());
-	int _key;
-	int _selector = 0;
-	const vector<string>& _separator = {BLINK_TEXT, RESET};
-	while (true)
+	for (int _index = 0; _index < _playerCount; _index++)
 	{
-		DisplayPawn(_pawns, _pawnsCount, _selector, _separator, _isPawnIndexColorTaken);
-		_key = _getch();
-		if (_key == 75)
-		{
-			_selector = _selector > 0 ? _selector - 1 : _pawnsCount - 1;
-		}
-		else if (_key == 77)
-		{
-			_selector = _selector < _pawnsCount - 1 ? _selector + 1 : 0;
-		}
-		else if (_key == 13)
-		{
-			if (!_isPawnIndexColorTaken[_selector])
-			{
-				_isPawnIndexColorTaken[_selector] = true;
-				return _pawns[_selector];
-			}
-		}
+		_currentPlayerName = 
+			GetLine("Quel est le nom du  joueur  n°" + to_string(_index + 1) +"?");
+		players.push_back(new Player(_currentPlayerName, _pawns[_index], _cardsPlayer[_index]));
 		system("cls");
 	}
 }
@@ -265,47 +209,6 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 		_cardsToDistrib.erase(_cardsToDistrib.begin() + _randomIndex);
 	}
 	return _playersCards;
-}
-
-void Game::PlacePawnInSpawn()
-{
-	u_int playersCount = static_cast<u_int>(players.size());
-	for (u_int _row = 0; _row < 7; _row++)
-	{
-		for (u_int _column = 0; _column < 7; _column++)
-		{
-			if (grid.GetTile(make_pair(_row, _column)).GetTreasure().appearance == '@')
-			{
-				for (u_int _index = 0; _index < playersCount; _index++)
-				{
-					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_RED
-						&& players[_index]->GetPawn().color == RED)
-					{
-						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
-						break;
-					}
-					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_YELLOW
-						&& players[_index]->GetPawn().color == YELLOW)
-					{
-						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
-						break;
-					}
-					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_GREEN
-						&& players[_index]->GetPawn().color == GREEN)
-					{
-						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
-						break;
-					}
-					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_BLUE
-						&& players[_index]->GetPawn().color == BLUE)
-					{
-						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
-						break;
-					}
-				}
-			}
-		}
-	}
 }
 
 
@@ -496,13 +399,19 @@ void Game::Start()
 {
 	InitPlayers();
 	InitGrid();
-	PlacePawnInSpawn();
+	u_int playerCount = static_cast<u_int>(players.size());
 	Display();
+	system("pause");
 }
 
 bool Game::IsOver()
 {
 	return false;
+}
+
+void Game::PlacementTile()
+{
+
 }
 
 void Game::Launch()
@@ -515,6 +424,5 @@ void Game::Launch()
 		_actionIndex = ChooseAction(_options);
 		system("cls");
 		DoAction(_actionIndex);
-		break; // TODO Remove
 	} while (_actionIndex != 2);
 }
