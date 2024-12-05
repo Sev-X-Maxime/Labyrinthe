@@ -44,12 +44,16 @@ Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& 
 	{
 	case MDT_RIGHT:
 		_returnTile = PlaceAtRight(_tile, _position);
+		break;
 	case MDT_LEFT:
 		_returnTile = PlaceAtLeft(_tile, _position);
+		break;
 	case MDT_UP:
 		_returnTile = PlaceAtTop(_tile, _position);
+		break;
 	case MDT_DOWN:
 		_returnTile = PlaceAtBotom(_tile, _position);
+		break;
 	default:
 		break;
 	}
