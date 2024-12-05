@@ -285,19 +285,19 @@ void Game::DoOptionAction(const pair<string,pair<u_int, u_int>>& _actionIndex)
 void Game::Display()
 {
 	SetCursorPosition(0, 0, false);
-	cout << grid << endl << endl;
+	cout << grid << endl;
+
 	const Card& _currentCard = players[currentPlayerIndex]->GetCurrentCard();
 	const u_int& _cardSize = _currentCard.GetSize();
-	const u_int& _middleIndex = _cardSize / 2;
+	const u_int& _middleIndex = 17 / 2;
 	u_int _currentTileIndex = 0;
-	for (u_int _index = 0; _index < _cardSize; _index++)
+	for (u_int _index = 0; _index < 17; _index++)
 	{
-		cout << _currentCard.ToStringLine(_index);
-		if (_currentTileIndex < 3)
-		{
-			cout << currentTile.ToStringLine(_currentTileIndex++);
-		}
-		cout << endl;
+		cout << _currentCard.ToStringLine(_index) << endl;
+	}
+	for (u_int _index = 0; _index < 3; _index++)
+	{
+		cout << currentTile.ToStringLine(_index) << endl;
 	}
 }
 
@@ -446,8 +446,6 @@ void Game::PlacementTile()
 		else if (_key == 13) // Enter
 		{
 			currentTile = grid.PlaceTile(currentTile);
-			Display();
-			system("pause");
 			return;
 		}
 		//system("cls");
