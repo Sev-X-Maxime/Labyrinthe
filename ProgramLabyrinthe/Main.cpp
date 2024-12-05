@@ -10,13 +10,6 @@ int main()
 {
     Config();
 	Game _game;
-	_game.Launch();/*
-	int _key;
-	do
-	{
-		_key = _getch();
-		system("cls");
-		cout << "Key :" << _key << endl;
-	}while (_key != 13);*/
+	_game.Launch();
 	return EXIT_SUCCESS;
 }

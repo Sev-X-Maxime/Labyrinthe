@@ -313,11 +313,11 @@ int Game::ChooseAction(const vector<string>& _options)
 		}
 		cout << endl;
 		_key = _getch();
-		if (_key == 72) // ↑
+		if (_key == 72 || _key == 122 || _key == 90) // ↑
 		{
 			_selector = _selector > 0 ? _selector - 1 : _sizeOption - 1;
 		}
-		else if (_key == 80) // ↓
+		else if (_key == 80 || _key == 115 || _key == 83) // ↓
 		{
 			_selector = _selector < _sizeOption - 1 ? _selector + 1 : 0;
 		}
@@ -454,7 +454,7 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 	{
 		Display(_options, _sizeOptions, _selector, _hasQuitOptions);
 		int _key = _getch();
-		if (_key == 72) // ↑
+		if (_key == 72 || _key == 122 || _key == 90) // ↑
 		{
 			_selector.first = _selector.first == 0 ? _sizeOptions - 1 + _hasQuitOptions : _selector.first - 1;
 			
@@ -464,21 +464,21 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 				static_cast<u_int>(_options[_selector.first].second.size() - 1))
 				_selector.first = _selector.first + 1;
 		}
-		else if (_key == 75) // gauche
+		else if (_key == 75 || _key == 113 || _key == 81) // gauche
 		{
 			if (_selector.first != _sizeOptions)
 			_selector.second = 
 				_selector.second == 0 ? static_cast<u_int>(_options[_selector.first].second.size() - 1) 
 				: _selector.second - 1;
 		}
-		else if (_key == 77) // droite
+		else if (_key == 77 || _key == 100 || _key == 68) // droite
 		{
 			if (_selector.first != _sizeOptions)
 			_selector.second =
 				_selector.second == static_cast<u_int>(_options[_selector.first].second.size() - 1) ? 0 
 				: _selector.second + 1;
 		}
-		else if (_key == 80) // ↓
+		else if (_key == 80 || _key == 115 || _key == 83) // ↓
 		{
 			_selector.first = _selector.first == _sizeOptions - 1 + _hasQuitOptions ? 0 : _selector.first + 1;
 
@@ -553,17 +553,17 @@ void Game::PlacementTile()
 	{
 		Display();
 		int _key = _getch();
-		if (_key == 72) // ↑
+		if (_key == 72 || _key == 122 || _key == 90) // ↑
 			grid.SelectorMove(MDT_UP);
-		else if (_key == 75) // gauche
+		else if (_key == 75 || _key == 113 || _key == 81) // gauche
 			grid.SelectorMove(MDT_LEFT);
-		else if (_key == 77) // droite
+		else if (_key == 77 || _key == 100 || _key == 68) // droite
 			grid.SelectorMove(MDT_RIGHT);
-		else if (_key == 80) // ↓
+		else if (_key == 80 || _key == 115 || _key == 83) // ↓
 			grid.SelectorMove(MDT_DOWN);
-		else if (_key == 115) // ↓
+		else if (_key == 115 || _key == 17) // 
 			currentTile.Rotate(RT_LEFT);
-		else if (_key == 116) // ↓
+		else if (_key == 116 || _key == 4) // 
 			currentTile.Rotate(RT_RIGHT);
 		else if (_key == 13) // Enter
 		{
