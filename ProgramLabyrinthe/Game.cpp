@@ -535,9 +535,10 @@ void Game::Start()
 		MouvementPlayer();
 		_isFinish = IsOver();
 		++currentPlayerIndex %= static_cast<u_int>(players.size());
-	} while (_isFinish);
-	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
+	} while (!_isFinish);
+	system("cls");
 	Display();
+	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
 	system("pause");
 }
 
