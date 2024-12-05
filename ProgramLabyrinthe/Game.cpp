@@ -216,18 +216,6 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 	return _playersCards;
 }
 
-void Game::Launch()
-{
-	vector<string> _options = { "Play", "Option", "Leave" };
-	u_int _actionIndex;
-	do
-	{
-		SetCursorPosition(0, 0, false);
-		_actionIndex = ChooseAction(_options);
-		system("cls");
-		DoAction(_actionIndex);
-	} while (_actionIndex != 2);
-}
 
 int Game::ChooseAction(const vector<string>& _options)
 {
@@ -404,4 +392,17 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 		}
 		system("cls");
 	}
+}
+
+void Game::Launch()
+{
+	vector<string> _options = { "Play", "Option", "Leave" };
+	u_int _actionIndex;
+	do
+	{
+		SetCursorPosition(0, 0, false);
+		_actionIndex = ChooseAction(_options);
+		system("cls");
+		DoAction(_actionIndex);
+	} while (_actionIndex != 2);
 }
