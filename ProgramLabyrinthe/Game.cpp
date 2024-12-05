@@ -292,7 +292,7 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 	}
 	const int _cardSize = static_cast<int>(_cardsToDistrib.size());
 	int _randomIndex;
-	for (int _index = _cardSize - 1; _index >= 0 ; _index--)
+	for (int _index = /*_cardSize - 1*/ 2; _index >= 0 ; _index--)
 	{
 		_randomIndex = RandomInt(0, _index);
 		_playersCards[_index % _playerCount].push_back(_cardsToDistrib[_randomIndex]);
@@ -380,18 +380,11 @@ void Game::Display()
 {
 	SetCursorPosition(0, 0, false);
 	cout << grid << endl;
-
-	const Card& _currentCard = players[currentPlayerIndex]->GetCurrentCard();
 	u_int _currentTileIndex = 0;
 	SetCursorPosition(47, 2);
-	cout << WHITE_INTENSE_TEXT << "C'est à " << players[currentPlayerIndex]->GetName() << " de jouer !" << endl;
+	cout << WHITE_INTENSE_TEXT << "C'est à " << players[currentPlayerIndex]->GetName() << " (" << players[currentPlayerIndex]->GetPawn().GetAppearance() << ")" << " de jouer !" << endl;
 	SetCursorPosition(47, 3);
 	cout << "Et il te reste " << players[currentPlayerIndex]->GetCardLeft() << " objets à trouver !";
-	for (u_int _index = 0; _index < 15; _index++)
-	{
-		SetCursorPosition(47, 8 + _index);
-		cout << _currentCard.ToStringLine(_index) << endl;
-	}
 	SetCursorPosition(53, 24);
 	for (u_int _index = 0; _index < 7; _index++)
 	{
@@ -406,6 +399,15 @@ void Game::Display()
 	for (u_int _index = 0; _index < 7; _index++)
 	{
 		cout << GRAY << "#";
+	}
+	if (players[currentPlayerIndex]->HasCard())
+	{
+		const Card& _currentCard = players[currentPlayerIndex]->GetCurrentCard();
+		for (u_int _index = 0; _index < 15; _index++)
+		{
+			SetCursorPosition(47, 8 + _index);
+			cout << _currentCard.ToStringLine(_index) << endl;
+		}
 	}
 }
 
@@ -548,7 +550,6 @@ void Game::Start()
 	InitPlayers();
 	InitGrid();
 	PlacePawnInSpawn();
-	bool _isFinish;
 	while(true)
 	{
 		SetCursorPosition(47, 5);
@@ -559,8 +560,7 @@ void Game::Start()
 			<<"Deplacement du pion...  " << RESET;
 		MovementPlayer(players[currentPlayerIndex]);
 		UpdateIfOnGoodCase();
-		_isFinish = IsOver();
-		if (IsOver()) return;
+		if (IsOver()) break;
 		++currentPlayerIndex %= static_cast<u_int>(players.size());
 	}
 	system("cls");
@@ -571,7 +571,17 @@ void Game::Start()
 
 bool Game::IsOver()
 {
-	return false;
+	Player* _currentPlayer = players[currentPlayerIndex];
+	string _currentColor = grid.GetTile(_currentPlayer->GetPosition()).GetTreasure().color;
+	return (!_currentPlayer->HasCard()
+		&& ((_currentPlayer->GetPawn().color == RED
+			&& _currentColor == HIDDEN_TEXT BG_RED)
+			|| _currentPlayer->GetPawn().color == YELLOW
+			&& _currentColor == HIDDEN_TEXT BG_YELLOW
+			|| _currentPlayer->GetPawn().color == GREEN
+			&& _currentColor == HIDDEN_TEXT BG_GREEN
+			|| _currentPlayer->GetPawn().color == BLUE
+			&& _currentColor == HIDDEN_TEXT BG_BLUE));
 }
 
 void Game::PlacementTile()
@@ -608,7 +618,6 @@ void Game::UpdateIfOnGoodCase()
 	if (_currentPlayer->HasCard() && grid.GetTile(_coordinates) == _currentPlayer->GetCurrentCard())
 	{
 		_currentPlayer->NextCard();
-		Display();
 	}
 }
 
