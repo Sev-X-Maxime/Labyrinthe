@@ -38,13 +38,13 @@ private:
 	void Display(const vector<pair<string, vector<u_int>>>& _options,const u_int& _sizeOptions, const pair<u_int, u_int>& _selector, const bool _hasQuitOptions = true);
 	void DisplayPawn(const vector<Object>& _pawns, int _pawnsCount, int _selector, const vector<string>& _separator, map<u_int, bool> _isPawnIndexColorTaken);
 	pair<string, pair<u_int, u_int>> Selector(pair<u_int, u_int> _selector, const vector<pair<string, vector<u_int>>>& _options,const u_int& _sizeOptions, const bool _hasQuitOptions = true);
-	void MouvementPlayer();
 	void Option();
 	void Start();
 	bool IsOver();
 	void PlacementTile();
 
-	void MovementPlayer();
+	void UpdateIfOnGoodCase();
+	void MovementPlayer(Player* _currentPlayer);
 public:
 	void Launch();
 };

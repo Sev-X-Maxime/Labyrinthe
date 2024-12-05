@@ -38,19 +38,50 @@ Tile Grid::PlaceTile(Tile _tile)
 
 Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& _direction)
 {
+	vector<Player*> _playersInCurrenTile;
+	Tile _returnTile;
 	switch (_direction)
 	{
 	case MDT_RIGHT:
-		return PlaceAtRight(_tile, _position);
+		_returnTile = PlaceAtRight(_tile, _position);
+		break;
 	case MDT_LEFT:
-		return PlaceAtLeft(_tile, _position);
+		_returnTile = PlaceAtLeft(_tile, _position);
+		break;
 	case MDT_UP:
-		return PlaceAtTop(_tile, _position);
+		_returnTile = PlaceAtTop(_tile, _position);
+		break;
 	case MDT_DOWN:
-		return PlaceAtBotom(_tile, _position);
+		_returnTile = PlaceAtBotom(_tile, _position);
+		break;
 	default:
-		throw exception("Default PlaceTile() !");
+		break;
 	}
+	if (_direction == MDT_RIGHT || _direction == MDT_LEFT)
+	{
+		for (u_int _index = 0; _index < 7; _index++)
+		{
+			_playersInCurrenTile = tiles[_position][_index].GetPlayersInTile();
+			if (_playersInCurrenTile.size() <= 0) continue;
+			for (Player* _currentPlayerInTile : _playersInCurrenTile)
+			{
+				_currentPlayerInTile->SetPosition(make_pair(_position, _index));
+			}
+		}
+	}
+	else if (_direction == MDT_UP || _direction == MDT_DOWN)
+	{
+		for (u_int _index = 0; _index < 7; _index++)
+		{
+			_playersInCurrenTile = tiles[_index][_position].GetPlayersInTile();
+			if (_playersInCurrenTile.size() <= 0) continue;
+			for (Player* _currentPlayerInTile : _playersInCurrenTile)
+			{
+				_currentPlayerInTile->SetPosition(make_pair(_position, _index));
+			}
+		}
+	}
+	return _returnTile;
 }
 
 Tile Grid::PlaceAtRight(Tile _tile, const u_int& _position)
