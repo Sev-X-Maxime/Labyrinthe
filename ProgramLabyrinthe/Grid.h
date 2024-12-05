@@ -38,7 +38,14 @@ public:
 	{
 		return tiles[_position.first][_position.second];
 	}
-	
+	inline void AddPlayerInTile(pair<u_int, u_int> _position, Player _player)
+	{
+		tiles[_position.first][_position.second].AddPlayer(_player);
+	}
+	inline void RemovePlayerInTile(pair<u_int, u_int> _position, Player _player)
+	{
+		tiles[_position.first][_position.second].RemovePlayer(_player);
+	}
 public:
 	Grid(const u_int& _size = 7);
 private:

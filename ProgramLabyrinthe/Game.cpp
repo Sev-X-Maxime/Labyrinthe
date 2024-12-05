@@ -29,6 +29,11 @@ void Game::DeletePlayers()
 
 void Game::InitPlayers()
 {
+	map<u_int, bool> _isPawnIndexColorTaken;
+	for (u_int _index = 0; _index < 4; _index++)
+	{
+		_isPawnIndexColorTaken[_index] = false;
+	}
 	DeletePlayers();
 	const int _playerCount = options["Nombre de joueurs"][currentOptions["Nombre de joueurs"]];
 	const vector<vector<Card>>& _cardsPlayer = DistributeCards(_playerCount);
@@ -42,12 +47,51 @@ void Game::InitPlayers()
 	};
 	for (int _index = 0; _index < _playerCount; _index++)
 	{
-		_currentPlayerName = 
-			GetLine("Quel est le nom du  joueur  n°" + to_string(_index + 1) +"?");
-		players.push_back(new Player(_currentPlayerName, _pawns[_index], _cardsPlayer[_index]));
+		_currentPlayerName =
+			GetLine("Quel est le nom du  joueur  n°" + to_string(_index + 1) + "?");
+		players.push_back(new Player(_currentPlayerName, ChoosePawn(_isPawnIndexColorTaken), _cardsPlayer[_index]));
 		system("cls");
 	}
 }
+
+Object Game::ChoosePawn(map<u_int, bool>& _isPawnIndexColorTaken)
+{
+	const vector<Object>& _pawns =
+	{
+		Object('&', RED),
+		Object('&', YELLOW),
+		Object('&', BLUE),
+		Object('&', GREEN)
+	};
+	int _pawnsCount = static_cast<int>(_pawns.size());
+	int _key;
+	int _selector = 0;
+	const vector<string>& _separator = { BLINK_TEXT, RESET };
+	while (true)
+	{
+		DisplayPawn(_pawns, _pawnsCount, _selector, _separator, _isPawnIndexColorTaken);
+		_key = _getch();
+		if (_key == 75)
+		{
+			_selector = _selector > 0 ? _selector - 1 : _pawnsCount - 1;
+		}
+		else if (_key == 77)
+		{
+			_selector = _selector < _pawnsCount - 1 ? _selector + 1 : 0;
+		}
+		else if (_key == 13)
+		{
+			if (!_isPawnIndexColorTaken[_selector])
+			{
+				_isPawnIndexColorTaken[_selector] = true;
+				return _pawns[_selector];
+			}
+		}
+		system("cls");
+	}
+}
+
+
 
 void Game::InitStaticTiles()
 {
@@ -190,6 +234,47 @@ void Game::InitCards()
 	for (const Object& _currentTreasure : treasures)
 	{
 		cards.emplace_back(Card(_currentTreasure));
+	}
+}
+
+void Game::PlacePawnInSpawn()
+{
+	const u_int& playersCount = static_cast<u_int>(players.size());
+	for (u_int _row = 0; _row < 7; _row++)
+	{
+		for (u_int _column = 0; _column < 7; _column++)
+		{
+			if (grid.GetTile(make_pair(_row, _column)).GetTreasure().appearance == '@')
+			{
+				for (u_int _index = 0; _index < playersCount; _index++)
+				{
+					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_RED
+						&& players[_index]->GetPawn().color == RED)
+					{
+						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
+						break;
+					}
+					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_YELLOW
+						&& players[_index]->GetPawn().color == YELLOW)
+					{
+						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
+						break;
+					}
+					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_GREEN
+						&& players[_index]->GetPawn().color == GREEN)
+					{
+						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
+						break;
+					}
+					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_BLUE
+						&& players[_index]->GetPawn().color == BLUE)
+					{
+						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
+						break;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -338,6 +423,21 @@ void Game::Display(const vector<pair<string, vector<u_int>>>& _options,const u_i
 	}
 }
 
+void Game::DisplayPawn(const vector<Object>& _pawns, int _pawnsCount, int _selector, const vector<string>& _separator, map<u_int, bool> _isPawnIndexColorTaken)
+{
+	for (int _index = 0; _index < _pawnsCount; _index++)
+	{
+		if (_selector == _index)
+			cout << BLINK_TEXT;
+		if (_isPawnIndexColorTaken[_index])
+		{
+			cout << GRAY << _pawns[_index].appearance << RESET " ";
+			continue;
+		}
+		cout << _pawns[_index].GetAppearance() << RESET " ";
+	}
+}
+
 pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector, 
 	const vector<pair<string,vector<u_int>>>& _options, const u_int& _sizeOptions, 
 	const bool _hasQuitOptions)
@@ -413,10 +513,12 @@ void Game::Start()
 {
 	InitPlayers();
 	InitGrid();
+	PlacePawnInSpawn();
 	while (true)
 	{
 		PlacementTile();
 	}
+
 	system("pause");
 }
 
