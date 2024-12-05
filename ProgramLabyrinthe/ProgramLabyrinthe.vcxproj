@@ -140,9 +140,20 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="UnderMacro.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Card.h" />
+    <ClInclude Include="DirectionType.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Prog1Lib\CharManip.h" />
     <ClInclude Include="Prog1Lib\Color.h" />
     <ClInclude Include="Prog1Lib\DisplaySystem.h" />
@@ -154,12 +165,21 @@
     <ClInclude Include="Prog1Lib\Random.h" />
     <ClInclude Include="Prog1Lib\SaveManager.h" />
     <ClInclude Include="Prog1Lib\UserInteract.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Tile.h" />
+    <ClInclude Include="UnderMacro.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Prog1Lib\Prog1Lib.dll" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Prog1Lib\Prog1Lib.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ProgramLabyrinthe.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="LabyrintheIcon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
