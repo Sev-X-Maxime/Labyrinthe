@@ -9,7 +9,7 @@
 class Tile
 {
 	vector<vector<Object>> cases;
-	vector<Player> playersInCase;
+	vector<Player*> playersInCase;
 	map<MyDirectionType, bool> directionsOpen;
 	bool fixed;
 private:
@@ -39,7 +39,7 @@ public:
 			{
 				if (playersInCase.size() > 0 && (_rowIndex == 1 && _columnIndex == 1))
 				{
-					_text += RESET BLINK_TEXT + playersInCase[0].GetPawn().GetAppearance() + RESET;
+					_text += RESET BLINK_TEXT + playersInCase[0]->GetPawn().GetAppearance() + RESET;
 					rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
 				}
 				else
@@ -61,7 +61,7 @@ public:
 			_currentAppearance = cases[_lineIndex][_index].GetAppearance();
 			if (playersInCase.size() > 0 && (_lineIndex == 1 && _index == 1))
 			{
-				_text += RESET BOLD_TEXT + playersInCase[0].GetPawn().GetAppearance() + RESET;
+				_text += RESET BOLD_TEXT + playersInCase[0]->GetPawn().GetAppearance() + RESET;
 				rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
 				_text += " ";
 				continue;
@@ -91,7 +91,14 @@ public:
 	{
 		return fixed;
 	}
-
+	inline map<MyDirectionType, bool> GetDirectionsOpen() const
+	{
+		return directionsOpen;
+	}
+	inline vector<Player*> GetPlayersInTile() const
+	{
+		return playersInCase;
+	}
 public:
 	Tile();
 	Tile(const map<MyDirectionType, bool>& _directionsOpen, 
@@ -104,14 +111,17 @@ private:
 
 public:
 	void Rotate(const RotateType& _rotateType);
-	void AddPlayer(Player _player);
-	void RemovePlayer(Player _player);
+	void AddPlayer(Player* _player);
+	void RemovePlayer(Player* _player);
 
 public:
 	friend inline ostream& operator << (ostream& _stream, Tile _tile)
 	{
 		return _stream << _tile.ToString();
 	}
-	inline bool operator == (const Card& _card) const;
+	inline bool operator == (const Card& _card) const
+	{
+		return GetTreasure() == _card.treasure;
+	}
 };
 

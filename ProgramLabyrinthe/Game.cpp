@@ -211,7 +211,7 @@ void Game::InitTreasures()
 		Object('I',LIGHT_BLUE),
 		Object('P',ORANGE),
 		Object('~',BLUE_INTENSE_TEXT),
-		Object('§',GREEN),
+		Object('?',GREEN),
 		Object('%',CYAN),
 		Object('+',LIME),
 		Object('(',LIGHT_BLUE),
@@ -263,7 +263,8 @@ void Game::PlacePawnInSpawn()
 						|| (_currentTile.GetTreasure().color == HIDDEN_TEXT BG_BLUE
 						&& _currentPlayer->GetPawn().color == BLUE))
 					{
-						grid.AddPlayerInTile(_currentCoordinates, *_currentPlayer);
+						grid.AddPlayerInTile(_currentCoordinates, _currentPlayer);
+						_currentPlayer->SetPosition(_currentCoordinates);
 						break;
 					}
 				}
@@ -501,9 +502,6 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 
 
 
-void Game::MouvementPlayer()
-{
-}
 
 void Game::Option()
 {
@@ -532,7 +530,7 @@ void Game::Start()
 	{
 
 		PlacementTile();
-		MouvementPlayer();
+		MovementPlayer(players[currentPlayerIndex]);
 		_isFinish = IsOver();
 		++currentPlayerIndex %= static_cast<u_int>(players.size());
 	} while (!_isFinish);
@@ -574,9 +572,77 @@ void Game::PlacementTile()
 	}
 }
 
-void Game::MovementPlayer()
+void Game::UpdateIfOnGoodCase()
 {
+	Player* _currentPlayer = players[currentPlayerIndex];
+	const pair<u_int,u_int>& _coordinates = _currentPlayer->GetPosition();
+	if (_currentPlayer->HasCard() && grid.GetTile(_coordinates) == _currentPlayer->GetCurrentCard())
+	{
+		_currentPlayer->NextCard();
+		Display();
+	}
+}
 
+void Game::MovementPlayer(Player* _currentPlayer)
+{
+	int _key;
+	while (true)
+	{
+		Display();
+		_key = _getch();
+		const pair<u_int, u_int>& _position = _currentPlayer->GetPosition();
+		pair<u_int, u_int> _newPosition = _position;
+		pair<u_int, u_int> _tempPosition = _position;
+		map<MyDirectionType, bool> _open = grid.GetTile(_position).GetDirectionsOpen();
+		map<MyDirectionType, bool> _open1;
+		if (_key == 72) // ↑
+		{
+			if (_tempPosition.first-- == 0)
+			{
+				continue;
+			}
+			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
+			if (_open[MDT_UP] && _open1[MDT_DOWN])
+				--_newPosition.first;
+		}
+		else if (_key == 75) // gauche
+		{
+			if (_tempPosition.second-- == 0)
+			{
+				continue;
+			}
+			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
+			if (_open[MDT_LEFT] && _open1[MDT_RIGHT])
+				--_newPosition.second;
+		}
+		else if (_key == 77) // droite
+		{
+			if (_tempPosition.second++ == grid.GetTiles().size() - 1)
+			{
+				continue;
+			}
+			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
+			if (_open[MDT_RIGHT] && _open1[MDT_LEFT])
+				++_newPosition.second;
+		}
+		else if (_key == 80) // ↓
+		{
+			if (_tempPosition.first++ == grid.GetTiles().size() - 1)
+			{
+				continue;
+			}
+			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
+			if (_open[MDT_DOWN] && _open1[MDT_UP])
+				++_newPosition.first;
+		}
+		else if (_key == 13) // Enter
+		{
+			return;
+		}
+		_currentPlayer->SetPosition(_newPosition);
+		grid.RemovePlayerInTile(_position, _currentPlayer);
+		grid.AddPlayerInTile(_newPosition, _currentPlayer);
+	}
 }
 
 void Game::Launch()
