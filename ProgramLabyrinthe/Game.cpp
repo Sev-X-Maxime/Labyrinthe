@@ -48,7 +48,7 @@ void Game::InitPlayers()
 	for (int _index = 0; _index < _playerCount; _index++)
 	{
 		_currentPlayerName =
-			GetLine("Quel est le nom du  joueur  n°" + to_string(_index + 1) + "?");
+			GetLine("Quel est le nom du joueur n°" + to_string(_index + 1) + "?");
 		players.push_back(new Player(_currentPlayerName, ChoosePawn(_isPawnIndexColorTaken), _cardsPlayer[_index]));
 		system("cls");
 	}
@@ -282,7 +282,7 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 	}
 	const int _cardSize = static_cast<int>(_cardsToDistrib.size());
 	int _randomIndex;
-	for (int _index = _cardSize - 1; _index > 0 ; _index--)
+	for (int _index = _cardSize - 1; _index >= 0 ; _index--)
 	{
 		_randomIndex = RandomInt(0, _index);
 		_playersCards[_index % _playerCount].push_back(_cardsToDistrib[_randomIndex]);
@@ -367,16 +367,30 @@ void Game::Display()
 	cout << grid << endl;
 
 	const Card& _currentCard = players[currentPlayerIndex]->GetCurrentCard();
-	const u_int& _cardSize = _currentCard.GetSize();
-	const u_int& _middleIndex = 17 / 2;
 	u_int _currentTileIndex = 0;
-	for (u_int _index = 0; _index < 17; _index++)
+	SetCursorPosition(47, 2);
+	cout << WHITE_INTENSE_TEXT << "C'est à " << players[currentPlayerIndex]->GetName() << " de jouer !" << endl;
+	SetCursorPosition(47, 3);
+	cout << "Et il te reste " << players[currentPlayerIndex]->GetCardLeft() << " objets à trouver !";
+	for (u_int _index = 0; _index < 15; _index++)
 	{
+		SetCursorPosition(47, 8 + _index);
 		cout << _currentCard.ToStringLine(_index) << endl;
+	}
+	SetCursorPosition(53, 24);
+	for (u_int _index = 0; _index < 7; _index++)
+	{
+		cout << GRAY << "#";
 	}
 	for (u_int _index = 0; _index < 3; _index++)
 	{
-		cout << currentTile.ToStringLine(_index) << endl;
+		SetCursorPosition(53, 25 + _index);
+		cout << GRAY << "#" << currentTile.ToStringLine(_index) << GRAY << "#" << endl;
+	}
+	SetCursorPosition(53, 28);
+	for (u_int _index = 0; _index < 7; _index++)
+	{
+		cout << GRAY << "#";
 	}
 }
 
@@ -557,6 +571,11 @@ void Game::PlacementTile()
 		}
 		//system("cls");
 	}
+}
+
+void Game::MovementPlayer()
+{
+
 }
 
 void Game::Launch()
