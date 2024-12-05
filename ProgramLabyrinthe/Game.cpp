@@ -30,6 +30,11 @@ void Game::DeletePlayers()
 
 void Game::InitPlayers()
 {
+	map<u_int, bool> _isPawnIndexColorTaken;
+	for (u_int _index = 0; _index < 4; _index++)
+	{
+		_isPawnIndexColorTaken[_index] = false;
+	}
 	DeletePlayers();
 	int _playerCount;
 	do
@@ -38,6 +43,32 @@ void Game::InitPlayers()
 	} while (!(_playerCount >= 2 && _playerCount <= 4));
 	const vector<vector<Card>>& _cardsPlayer = DistributeCards(_playerCount);
 	string _currentPlayerName;
+	for (int _index = 0; _index < _playerCount; _index++)
+	{
+		_currentPlayerName = 
+			GetLine("Quel est le nom du  joueur  n°" + to_string(_index + 1) +"?");
+		players.push_back(new Player(_currentPlayerName, ChoosePawn(_index, _isPawnIndexColorTaken), _cardsPlayer[_index]));
+		system("cls");
+	}
+}
+
+void Game::DisplayPawn(const vector<Object>& _pawns, int _pawnsCount, int _selector, const vector<string>& _separator, map<u_int, bool> _isPawnIndexColorTaken)
+{
+	for (int _index = 0; _index < _pawnsCount; _index++)
+	{
+		if (_selector == _index)
+			cout << BLINK_TEXT;
+		if (_isPawnIndexColorTaken[_index])
+		{
+			cout << GRAY << _pawns[_index].appearance << RESET " ";
+			continue;
+		}
+		cout << _pawns[_index].GetAppearance() << RESET " ";
+	}
+}
+
+Object Game::ChoosePawn(u_int _indexPlayer, map<u_int, bool>& _isPawnIndexColorTaken)
+{
 	const vector<Object>& _pawns =
 	{
 		Object('&', RED),
@@ -45,11 +76,31 @@ void Game::InitPlayers()
 		Object('&', BLUE),
 		Object('&', GREEN)
 	};
-	for (int _index = 0; _index < _playerCount; _index++)
+
+	int _pawnsCount = static_cast<int>(_pawns.size());
+	int _key;
+	int _selector = 0;
+	const vector<string>& _separator = {BLINK_TEXT, RESET};
+	while (true)
 	{
-		_currentPlayerName = 
-			GetLine("Quel est le nom du  joueur  n°" + to_string(_index + 1) +"?");
-		players.push_back(new Player(_currentPlayerName, _pawns[_index], _cardsPlayer[_index]));
+		DisplayPawn(_pawns, _pawnsCount, _selector, _separator, _isPawnIndexColorTaken);
+		_key = _getch();
+		if (_key == 75)
+		{
+			_selector = _selector > 0 ? _selector - 1 : _pawnsCount - 1;
+		}
+		else if (_key == 77)
+		{
+			_selector = _selector < _pawnsCount - 1 ? _selector + 1 : 0;
+		}
+		else if (_key == 13)
+		{
+			if (!_isPawnIndexColorTaken[_selector])
+			{
+				_isPawnIndexColorTaken[_selector] = true;
+				return _pawns[_selector];
+			}
+		}
 		system("cls");
 	}
 }
@@ -430,5 +481,6 @@ void Game::Launch()
 		_actionIndex = ChooseAction(_options);
 		system("cls");
 		DoAction(_actionIndex);
+		break; // TODO Remove
 	} while (_actionIndex != 2);
 }

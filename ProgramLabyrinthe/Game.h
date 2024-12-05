@@ -19,6 +19,8 @@ public:
 private:
 	void DeletePlayers();
 	void InitPlayers();
+	void DisplayPawn(const vector<Object>& _pawns, int _pawnsCount, int _selector, const vector<string>& _separator, map<u_int, bool> _isPawnIndexColorTaken);
+	Object ChoosePawn(u_int _indexPlayer, map<u_int, bool>& _isPawnIndexColorTaken);
 	void InitStaticTiles();
 	void InitStaticTilesTreasure();
 	void InitGrid(const u_int& _gridSize = 7);

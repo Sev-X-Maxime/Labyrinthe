@@ -2,7 +2,7 @@
 #include "Tile.h"
 #include <DisplaySystem.h>
 using namespace Console;
-#define SEPARATOR BLACK_INTENSE_TEXT "#" RESET
+#define SEPARATOR BLACK_INTENSE_TEXT BLUE "#" RESET
 #define SEPARATOR_IN_STREAM _stream << SEPARATOR
 #define SEPARATOR_LINE for (u_int _index = 0; _index < _size * 3 * 2; _index++) \
 				{\
