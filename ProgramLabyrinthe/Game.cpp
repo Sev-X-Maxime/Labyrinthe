@@ -69,6 +69,8 @@ Object Game::ChoosePawn(map<u_int, bool>& _isPawnIndexColorTaken)
 	const vector<string>& _separator = { BLINK_TEXT, RESET };
 	while (true)
 	{
+		SetCursorPosition(0, 2, false);
+		cout << "Choisi ton pion : ";
 		DisplayPawn(_pawns, _pawnsCount, _selector, _separator, _isPawnIndexColorTaken);
 		_key = _getch();
 		if (_key == 75)
@@ -86,8 +88,15 @@ Object Game::ChoosePawn(map<u_int, bool>& _isPawnIndexColorTaken)
 				_isPawnIndexColorTaken[_selector] = true;
 				return _pawns[_selector];
 			}
+			else
+			{
+				SetCursorPosition(0, 5, false);
+				cout << RED << "Ce pion est déjà pris !" << RESET;
+				continue;
+			}
 		}
-		system("cls");
+		RESET_SCREEN_LINE(5)
+		/*system("cls");*/
 	}
 }
 
@@ -302,6 +311,7 @@ int Game::ChooseAction(const vector<string>& _options)
 	int _selector = 0;
 	while (true)
 	{
+		SetCursorPosition(0, 0, false);
 		int _index = 0;
 		for (; _index < _sizeOption; _index++)
 		{
@@ -326,7 +336,8 @@ int Game::ChooseAction(const vector<string>& _options)
 		{
 			return _selector;
 		}
-		system("cls");
+		RESET_SCREEN_LINE(5)
+		//system("cls");
 	}
 }
 
@@ -335,14 +346,17 @@ void Game::DoAction(const u_int& _indexAction)
 	switch (_indexAction)
 	{
 	case 0:
+		system("cls");
 		Start();
 		break;
 
 	case 1:
+		system("cls");
 		Option();
 		break;
 
 	case 2:
+		return;
 	default:
 		break;
 	}
@@ -399,6 +413,7 @@ void Game::Display(const vector<pair<string, vector<u_int>>>& _options,const u_i
 	const pair<u_int, u_int>& _selector, 
 	const bool _hasQuitOptions)
 {
+	SetCursorPosition(0, 0, false);
 	u_int _sizeCurrentOption;
 	for (u_int _row = 0; _row < _sizeOptions + _hasQuitOptions; _row++)
 	{
@@ -434,6 +449,7 @@ void Game::Display(const vector<pair<string, vector<u_int>>>& _options,const u_i
 
 void Game::DisplayPawn(const vector<Object>& _pawns, int _pawnsCount, int _selector, const vector<string>& _separator, map<u_int, bool> _isPawnIndexColorTaken)
 {
+	SetCursorPosition(0, 3, false);
 	for (int _index = 0; _index < _pawnsCount; _index++)
 	{
 		if (_selector == _index)
@@ -494,7 +510,7 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 			if(_selector.first == _sizeOptions) return make_pair("Quitter", make_pair(0,0));
 			return make_pair(_options[_selector.first].first,_selector);
 		}
-		system("cls");
+		//system("cls");
 	}
 }
 
@@ -522,18 +538,31 @@ void Game::Option()
 
 void Game::Start()
 {
+	if (options["Nombre de joueurs"][currentOptions["Nombre de joueurs"]] <
+		options["Nombre d'IA"][currentOptions["Nombre d'IA"]])
+	{
+		SetCursorPosition(0, 5, false);
+		cout << RED << "Tu ne peux pas avoir plus d'IA que le nombre de joueur dans la partie !!" << RESET;
+		return;
+	}
 	InitPlayers();
 	InitGrid();
 	PlacePawnInSpawn();
 	bool _isFinish;
-	do
+	while(true)
 	{
-
+		SetCursorPosition(47, 5);
+		cout << GREEN << "Placement de la tuile..." << RESET;
 		PlacementTile();
+		SetCursorPosition(47, 5);
+		cout << players[currentPlayerIndex]->GetPawn().color
+			<<"Deplacement du pion...  " << RESET;
 		MovementPlayer(players[currentPlayerIndex]);
+		UpdateIfOnGoodCase();
 		_isFinish = IsOver();
+		if (IsOver()) return;
 		++currentPlayerIndex %= static_cast<u_int>(players.size());
-	} while (!_isFinish);
+	}
 	system("cls");
 	Display();
 	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
@@ -647,13 +676,13 @@ void Game::MovementPlayer(Player* _currentPlayer)
 
 void Game::Launch()
 {
-	vector<string> _options = { "Play", "Option", "Leave" };
+	vector<string> _options = { "Jouer", "Option", "Quitter" };
 	u_int _actionIndex;
 	do
 	{
 		SetCursorPosition(0, 0, false);
 		_actionIndex = ChooseAction(_options);
-		system("cls");
+		//system("cls");
 		DoAction(_actionIndex);
 	} while (_actionIndex != 2);
 }

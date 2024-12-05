@@ -2,6 +2,12 @@
 #include "Grid.h"
 #include "UnderMacro.h"
 #define TAB "   "
+#define RESET_SCREEN_LINE(_x) for (u_int _index = 0; _index < 100; _index++)\
+{\
+	SetCursorPosition(_index, _x, false);\
+	cout << " ";\
+}
+
 class Game
 {
 	vector<Player*> players;

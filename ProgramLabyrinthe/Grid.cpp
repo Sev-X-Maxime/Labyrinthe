@@ -38,7 +38,9 @@ Tile Grid::PlaceTile(Tile _tile)
 
 Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& _direction)
 {
-	vector<Player*> _playersInCurrenTile;
+	vector<Player*> _playersInReturnTile , _playersInCurrentTile;
+	pair<u_int, u_int> _newCoordinates;
+	const u_int& _size = GetSize();
 	Tile _returnTile;
 	switch (_direction)
 	{
@@ -57,13 +59,32 @@ Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& 
 	default:
 		break;
 	}
+	_playersInReturnTile = _returnTile.GetPlayersInTile();
+	if (_playersInReturnTile.size() > 0)
+	{
+		for (Player* _currentPlayerInReturnTile : _playersInReturnTile)
+		{
+			_returnTile.RemovePlayer(_currentPlayerInReturnTile);
+			if (_direction == MDT_RIGHT)
+				_newCoordinates = make_pair(_position, _size - 1);
+			else if (_direction == MDT_LEFT)
+				_newCoordinates = make_pair(_position, 0);
+			else if (_direction == MDT_DOWN)
+				_newCoordinates = make_pair(_size - 1, _position);
+			else if (_direction == MDT_UP)
+				_newCoordinates = make_pair(0, _position);
+			_currentPlayerInReturnTile->SetPosition(_newCoordinates);
+			AddPlayerInTile(_newCoordinates, _currentPlayerInReturnTile);
+		}
+	}
+	
 	if (_direction == MDT_RIGHT || _direction == MDT_LEFT)
 	{
-		for (u_int _index = 0; _index < 7; _index++)
+		for (u_int _index = 0; _index < _size; _index++)
 		{
-			_playersInCurrenTile = tiles[_position][_index].GetPlayersInTile();
-			if (_playersInCurrenTile.size() <= 0) continue;
-			for (Player* _currentPlayerInTile : _playersInCurrenTile)
+			_playersInCurrentTile = tiles[_position][_index].GetPlayersInTile();
+			if (_playersInCurrentTile.size() <= 0) continue;
+			for (Player* _currentPlayerInTile : _playersInCurrentTile)
 			{
 				_currentPlayerInTile->SetPosition(make_pair(_position, _index));
 			}
@@ -71,13 +92,13 @@ Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& 
 	}
 	else if (_direction == MDT_UP || _direction == MDT_DOWN)
 	{
-		for (u_int _index = 0; _index < 7; _index++)
+		for (u_int _index = 0; _index < _size; _index++)
 		{
-			_playersInCurrenTile = tiles[_index][_position].GetPlayersInTile();
-			if (_playersInCurrenTile.size() <= 0) continue;
-			for (Player* _currentPlayerInTile : _playersInCurrenTile)
+			_playersInCurrentTile = tiles[_index][_position].GetPlayersInTile();
+			if (_playersInCurrentTile.size() <= 0) continue;
+			for (Player* _currentPlayerInTile : _playersInCurrentTile)
 			{
-				_currentPlayerInTile->SetPosition(make_pair(_position, _index));
+				_currentPlayerInTile->SetPosition(make_pair(_index, _position));
 			}
 		}
 	}
@@ -116,7 +137,7 @@ Tile Grid::PlaceAtTop(Tile _tile, const u_int& _position)
 Tile Grid::PlaceAtBotom(Tile _tile, const u_int& _position)
 {
 	u_int _size = static_cast<u_int>(tiles.size());
-	Tile _lastTile = tiles[_size - 1][_position];
+	Tile _lastTile = tiles[0][_position];
 	for (u_int _index = 0; _index < _size - 1; _index++)
 	{
 		tiles[_index][_position] = tiles[_index + 1][_position];

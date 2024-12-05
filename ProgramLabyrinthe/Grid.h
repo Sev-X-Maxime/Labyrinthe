@@ -37,7 +37,7 @@ public:
 	inline Tile GetTile(pair<u_int, u_int> _position) const
 	{
 		return tiles[_position.first][_position.second];
-	}
+ 	}
 	inline void AddPlayerInTile(pair<u_int, u_int> _position, Player* _player)
 	{
 		tiles[_position.first][_position.second].AddPlayer(_player);
@@ -45,6 +45,10 @@ public:
 	inline void RemovePlayerInTile(pair<u_int, u_int> _position, Player* _player)
 	{
 		tiles[_position.first][_position.second].RemovePlayer(_player);
+	}
+	inline u_int GetSize() const
+	{
+		return static_cast<u_int>(tiles.size());
 	}
 public:
 	Grid();
