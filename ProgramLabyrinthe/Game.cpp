@@ -217,6 +217,8 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 }
 
 
+
+
 int Game::ChooseAction(const vector<string>& _options)
 {
 	int _sizeOption = static_cast<int>(_options.size());
@@ -269,22 +271,7 @@ void Game::DoAction(const u_int& _indexAction)
 		break;
 	}
 }
-void Game::Option()
-{
-	vector<pair<string, vector<u_int>>> _options;
-	for (const pair<string, vector<u_int>>& _currentOptions : options)
-	{
-		_options.push_back(_currentOptions);
-	}
-	pair<string, pair<u_int, u_int>> _actionIndex;
-	do
-	{
-		_actionIndex = OptionAction(_options, true, _actionIndex.second);
-		system("cls");
-		if (_actionIndex.first == "Quitter") break;
-		DoOptionAction(_actionIndex);
-	} while (true);
-}
+
 pair<string, pair<u_int, u_int>> Game::OptionAction(const vector<pair<string, vector<u_int>>>& _options,
 	const bool _hasQuitOptions, const pair<u_int,u_int>& _selector)
 {
@@ -293,29 +280,10 @@ pair<string, pair<u_int, u_int>> Game::OptionAction(const vector<pair<string, ve
 		Selector(_selector, _options, _sizeOptions, _hasQuitOptions);
 	return _returnValue;
 }
+
 void Game::DoOptionAction(const pair<string,pair<u_int, u_int>>& _actionIndex)
 {
 	currentOptions[_actionIndex.first] = _actionIndex.second.second;
-}
-
-void Game::Start()
-{
-	InitPlayers();
-	InitGrid();
-	u_int playerCount = static_cast<u_int>(players.size());
-	currentTile = grid.PlaceTile(currentTile, 0, MDT_LEFT);
-	currentTile = grid.PlaceTile(currentTile, 0, MDT_RIGHT);
-	/*do
-	{
-	} while (!IsOver());*/
-	currentTile = grid.PlaceTile(currentTile, 6, MDT_UP);
-	currentTile = grid.PlaceTile(currentTile, 6, MDT_DOWN);
-	Display();
-}
-
-bool Game::IsOver()
-{
-	return false;
 }
 
 void Game::Display()
@@ -410,6 +378,46 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 		}
 		system("cls");
 	}
+}
+
+
+
+
+void Game::Option()
+{
+	vector<pair<string, vector<u_int>>> _options;
+	for (const pair<string, vector<u_int>>& _currentOptions : options)
+	{
+		_options.push_back(_currentOptions);
+	}
+	pair<string, pair<u_int, u_int>> _actionIndex;
+	do
+	{
+		_actionIndex = OptionAction(_options, true, _actionIndex.second);
+		system("cls");
+		if (_actionIndex.first == "Quitter") break;
+		DoOptionAction(_actionIndex);
+	} while (true);
+}
+
+void Game::Start()
+{
+	InitPlayers();
+	InitGrid();
+	u_int playerCount = static_cast<u_int>(players.size());
+	currentTile = grid.PlaceTile(currentTile, 0, MDT_LEFT);
+	currentTile = grid.PlaceTile(currentTile, 0, MDT_RIGHT);
+	/*do
+	{
+	} while (!IsOver());*/
+	currentTile = grid.PlaceTile(currentTile, 6, MDT_UP);
+	currentTile = grid.PlaceTile(currentTile, 6, MDT_DOWN);
+	Display();
+}
+
+bool Game::IsOver()
+{
+	return false;
 }
 
 void Game::Launch()
