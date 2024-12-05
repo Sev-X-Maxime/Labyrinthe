@@ -1,7 +1,7 @@
 #pragma once
 #include "Grid.h"
 #include "UnderMacro.h"
-
+#define TAB "   "
 class Game
 {
 	vector<Player*> players;

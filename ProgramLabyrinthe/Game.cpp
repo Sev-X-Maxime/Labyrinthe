@@ -121,10 +121,11 @@ void Game::InitStaticTilesTreasure()
 void Game::InitGrid(const u_int& _gridSize)
 {
 	grid = Grid(_gridSize);
-	vector<vector<Tile>> _tiles = grid.GetTiles();
+	vector<vector<Tile>> _tiles = vector<vector<Tile>>();
 	Tile _currentTile;
 	for (u_int _rowIndex = 0; _rowIndex < _gridSize; _rowIndex++)
 	{
+		_tiles.push_back(vector<Tile>());
 		for (u_int _columnIndex = 0; _columnIndex < _gridSize; _columnIndex++)
 		{
 			if (_rowIndex % 2 == 0 && _columnIndex % 2 == 0)
@@ -284,7 +285,20 @@ void Game::DoOptionAction(const pair<string,pair<u_int, u_int>>& _actionIndex)
 void Game::Display()
 {
 	SetCursorPosition(0, 0, false);
-	cout << grid << endl;
+	cout << grid << endl << endl;
+	const Card& _currentCard = players[currentPlayerIndex]->GetCurrentCard();
+	const u_int& _cardSize = _currentCard.GetSize();
+	const u_int& _middleIndex = _cardSize / 2;
+	u_int _currentTileIndex = 0;
+	for (u_int _index = 0; _index < _cardSize; _index++)
+	{
+		cout << _currentCard.ToStringLine(_index);
+		if (_currentTileIndex < 3)
+		{
+			cout << currentTile.ToStringLine(_currentTileIndex++);
+		}
+		cout << endl;
+	}
 }
 
 void Game::Display(const vector<pair<string, vector<u_int>>>& _options,const u_int& _sizeOptions,
@@ -399,8 +413,10 @@ void Game::Start()
 {
 	InitPlayers();
 	InitGrid();
-	u_int playerCount = static_cast<u_int>(players.size());
-	Display();
+	while (true)
+	{
+		PlacementTile();
+	}
 	system("pause");
 }
 
@@ -411,7 +427,31 @@ bool Game::IsOver()
 
 void Game::PlacementTile()
 {
-
+	while (true)
+	{
+		Display();
+		int _key = _getch();
+		if (_key == 72) // ↑
+			grid.SelectorMove(MDT_UP);
+		else if (_key == 75) // gauche
+			grid.SelectorMove(MDT_LEFT);
+		else if (_key == 77) // droite
+			grid.SelectorMove(MDT_RIGHT);
+		else if (_key == 80) // ↓
+			grid.SelectorMove(MDT_DOWN);
+		else if (_key == 115) // ↓
+			currentTile.Rotate(RT_LEFT);
+		else if (_key == 116) // ↓
+			currentTile.Rotate(RT_RIGHT);
+		else if (_key == 13) // Enter
+		{
+			currentTile = grid.PlaceTile(currentTile);
+			Display();
+			system("pause");
+			return;
+		}
+		//system("cls");
+	}
 }
 
 void Game::Launch()
