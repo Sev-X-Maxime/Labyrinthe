@@ -29,6 +29,10 @@ public:
 		if (!HasCard()) throw exception("No card left !");
 		cards.erase(cards.begin());
 	}
+	inline u_int GetCardLeft() const
+	{
+		return static_cast<u_int>(cards.size());
+	}
 
 public:
 	Player() = default;

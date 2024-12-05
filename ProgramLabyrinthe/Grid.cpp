@@ -132,7 +132,7 @@ void Grid::SelectorMove(const MyDirectionType& _direction)
 			if (_direction == MDT_UP)
 				if (arrowSelector == 3)
 					_changerValue = -3;
-				else if (arrowSelector == 4 || 
+				else if (arrowSelector == 4 ||
 					(arrowSelector >= 3 && arrowSelector <= 8))
 					_changerValue = -2;
 				else
@@ -146,4 +146,3 @@ void Grid::SelectorMove(const MyDirectionType& _direction)
 	arrowSelector += _changerValue;
 }
 
-	

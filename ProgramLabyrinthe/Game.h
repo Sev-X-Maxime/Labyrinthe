@@ -42,6 +42,8 @@ private:
 	void Start();
 	bool IsOver();
 	void PlacementTile();
+
+	void MovementPlayer();
 public:
 	void Launch();
 };

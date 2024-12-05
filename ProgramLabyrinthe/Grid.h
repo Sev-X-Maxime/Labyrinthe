@@ -2,7 +2,7 @@
 #include "Tile.h"
 #include <DisplaySystem.h>
 using namespace Console;
-#define SEPARATOR BLACK_INTENSE_TEXT "#" RESET
+#define SEPARATOR BLUE "#" RESET
 #define SEPARATOR_IN_STREAM _stream << SEPARATOR
 class Grid
 {
@@ -34,17 +34,24 @@ public:
 	{
 		tiles[_position.first][_position.second].SetTreasure(_treasure);
 	}
-	inline Tile GetTile(pair<u_int,u_int> _position) const
+	inline Tile GetTile(pair<u_int, u_int> _position) const
 	{
 		return tiles[_position.first][_position.second];
 	}
-	
+	inline void AddPlayerInTile(pair<u_int, u_int> _position, Player _player)
+	{
+		tiles[_position.first][_position.second].AddPlayer(_player);
+	}
+	inline void RemovePlayerInTile(pair<u_int, u_int> _position, Player _player)
+	{
+		tiles[_position.first][_position.second].RemovePlayer(_player);
+	}
 public:
 	Grid(const u_int& _size = 7);
 private:
 	void InitArrowsSelector();
 public:
-	void PlaceTile(Tile _tile);
+	Tile PlaceTile(Tile _tile);
 	Tile PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& _direction);
 	Tile PlaceAtRight(Tile _tile, const u_int& _position);
 	Tile PlaceAtLeft(Tile _tile, const u_int& _position);
@@ -67,8 +74,9 @@ public:
 			if (_index % 12 == 9)
 			{
 				if (_grid.arrowSelector == _curentArrow)
-					_stream << BLINK_TEXT;
-				_stream << YELLOW "V" RESET;
+					_stream << BG_WHITE BLACK_INTENSE_TEXT BLINK_TEXT "V" RESET;
+				else
+					_stream << YELLOW "V" RESET;
 				++_curentArrow;
 			}
 			else
@@ -91,29 +99,31 @@ public:
 				&& _row % 3 == 1)
 			{
 				if (_grid.arrowSelector == _curentArrow)
-					_stream << BLINK_TEXT;
-				_stream << YELLOW ">" RESET;
+					_stream << BG_WHITE BLACK_INTENSE_TEXT BLINK_TEXT ">" RESET;
+				else
+					_stream << YELLOW ">" RESET;
 				++_curentArrow;
 			}
 			else
 				SEPARATOR_IN_STREAM;
 			for (u_int _column = 0; _column < _size; _column++)
 			{
-				_stream << _grid.tiles[_row/3][_column].ToStringLine(_row %3);
-				
-				if (_column == (_size - 1) 
-					&& (_row / 3) % 2 == 1 
+				_stream << _grid.tiles[_row / 3][_column].ToStringLine(_row % 3);
+
+				if (_column == (_size - 1)
+					&& (_row / 3) % 2 == 1
 					&& _row % 3 == 1)
 				{
 					if (_grid.arrowSelector == _curentArrow)
-						_stream << BLINK_TEXT;
-					_stream << YELLOW "<" RESET;
+						_stream << BG_WHITE BLACK_INTENSE_TEXT BLINK_TEXT "<" RESET;
+					else
+						_stream << YELLOW "<" RESET;
 					++_curentArrow;
 					continue;
 				}
 				SEPARATOR_IN_STREAM;
 			}
-			_stream <<endl;
+			_stream << endl;
 		}
 
 		for (u_int _index = 0; _index < _size * 3 * 2; _index++)
@@ -121,8 +131,9 @@ public:
 			if (_index % 12 == 9)
 			{
 				if (_grid.arrowSelector == _curentArrow)
-					_stream << BLINK_TEXT;
-				_stream << YELLOW "A" RESET;
+					_stream << BG_WHITE BLACK_INTENSE_TEXT BLINK_TEXT "A" RESET;
+				else
+					_stream << YELLOW "A" RESET;
 				++_curentArrow;
 			}
 			else
@@ -132,4 +143,3 @@ public:
 		return _stream;
 	}
 };
-
