@@ -239,14 +239,14 @@ void Game::InitCards()
 
 void Game::PlacePawnInSpawn()
 {
-	const u_int& playersCount = static_cast<u_int>(players.size());
+	const u_int& _playersCount = static_cast<u_int>(players.size());
 	for (u_int _row = 0; _row < 7; _row++)
 	{
 		for (u_int _column = 0; _column < 7; _column++)
 		{
 			if (grid.GetTile(make_pair(_row, _column)).GetTreasure().appearance == '@')
 			{
-				for (u_int _index = 0; _index < playersCount; _index++)
+				for (u_int _index = 0; _index < _playersCount; _index++)
 				{
 					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_RED
 						&& players[_index]->GetPawn().color == RED)
