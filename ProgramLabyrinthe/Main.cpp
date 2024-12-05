@@ -9,15 +9,14 @@ using namespace Tools;
 int main()
 {
     Config();
-	/*Game _game;
-	_game.Launch();*/
-
-	for (u_int _index = 0; _index < 20; ++_index)
+	Game _game;
+	_game.Launch();/*
+	int _key;
+	do
 	{
-		if (_index == MDT_RIGHT)
-		{
-			cout << "trouver : " << _index << endl;
-		}
-	}
+		_key = _getch();
+		system("cls");
+		cout << "Key :" << _key << endl;
+	}while (_key != 13);*/
 	return EXIT_SUCCESS;
 }

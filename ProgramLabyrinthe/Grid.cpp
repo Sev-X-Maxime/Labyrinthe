@@ -2,41 +2,38 @@
 
 Grid::Grid(const u_int& _size)
 {
-	for (u_int _index = 0; _index < _size; _index++)
-	{
-		tiles.push_back(vector<Tile>());
-	}
 	arrowSelector = 0;
 	InitArrowsSelector();
 }
 
 void Grid::InitArrowsSelector()
 {
-	pushableCoordinates[0] = make_pair(1, 1);
-	pushableCoordinates[1] = make_pair(1, 3);
-	pushableCoordinates[2] = make_pair(1, 5);
-	pushableCoordinates[3] = make_pair(0, 0);
-	pushableCoordinates[4] = make_pair(0, 6);
-	pushableCoordinates[5] = make_pair(2, 0);
-	pushableCoordinates[6] = make_pair(2, 6);
-	pushableCoordinates[7] = make_pair(4, 0);
-	pushableCoordinates[8] = make_pair(4, 6);
+	pushableCoordinates[0] = make_pair(0, 1);
+	pushableCoordinates[1] = make_pair(0, 3);
+	pushableCoordinates[2] = make_pair(0, 5);
+	pushableCoordinates[3] = make_pair(1, 0);
+	pushableCoordinates[4] = make_pair(1, 6);
+	pushableCoordinates[5] = make_pair(3, 0);
+	pushableCoordinates[6] = make_pair(3, 6);
+	pushableCoordinates[7] = make_pair(5, 0);
+	pushableCoordinates[8] = make_pair(5, 6);
 	pushableCoordinates[9] = make_pair(6, 1);
 	pushableCoordinates[10] = make_pair(6, 3);
 	pushableCoordinates[11] = make_pair(6, 5);
 }
 
-void Grid::PlaceTile(Tile _tile)
+Tile Grid::PlaceTile(Tile _tile)
 {
 	const pair<u_int, u_int>& _currentPlaceCoordinates = GetPushCoordinates();
 	if (_currentPlaceCoordinates.second == 0)
-		PlaceTile(_tile, _currentPlaceCoordinates.second, MDT_LEFT);
+		return PlaceTile(_tile, _currentPlaceCoordinates.first, MDT_LEFT);
 	else if (_currentPlaceCoordinates.second == 6)
-		PlaceTile(_tile, _currentPlaceCoordinates.second, MDT_RIGHT);
-	else if (_currentPlaceCoordinates.first == 1)
-		PlaceTile(_tile, _currentPlaceCoordinates.first, MDT_UP);
+		return PlaceTile(_tile, _currentPlaceCoordinates.first, MDT_RIGHT);
+	else if (_currentPlaceCoordinates.first == 0)
+		return PlaceTile(_tile, _currentPlaceCoordinates.second, MDT_UP);
 	else if (_currentPlaceCoordinates.first == 6)
-		PlaceTile(_tile, _currentPlaceCoordinates.first, MDT_DOWN);
+		return PlaceTile(_tile, _currentPlaceCoordinates.second, MDT_DOWN);
+	throw exception("Invalid Coordinates to placement");
 }
 
 Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& _direction)
@@ -101,7 +98,7 @@ Tile Grid::PlaceAtBotom(Tile _tile, const u_int& _position)
 
 void Grid::SelectorMove(const MyDirectionType& _direction)
 {
-	int _changerValue;
+	int _changerValue = 0;
 	if (_direction == MDT_RIGHT || _direction == MDT_LEFT)
 	{
 		if (arrowSelector >= 3 && arrowSelector <= 8)
@@ -135,7 +132,8 @@ void Grid::SelectorMove(const MyDirectionType& _direction)
 			if (_direction == MDT_UP)
 				if (arrowSelector == 3)
 					_changerValue = -3;
-				else if (arrowSelector == 4)
+				else if (arrowSelector == 4 || 
+					(arrowSelector >= 3 && arrowSelector <= 8))
 					_changerValue = -2;
 				else
 					_changerValue = 1;

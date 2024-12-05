@@ -11,7 +11,11 @@ struct Card
 	{
 		treasure = _treasure;
 	}
-	
+	inline u_int GetSize() const
+	{
+		FileStream _file = FileStream("CardAspect.txt");
+		return static_cast<u_int>(_file.ComputeLineOfFile());
+	}
 	string ToStringLine(const u_int& _lineIndex, const bool _returnLineDisplayable = true) const
 	{
 		FileStream _file = FileStream("CardAspect.txt");
