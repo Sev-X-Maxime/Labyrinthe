@@ -37,9 +37,9 @@ public:
 		{
 			for (u_int _columnIndex = 0; _columnIndex < _size; _columnIndex++)
 			{
-				if (!playersInCase.empty() && (_rowIndex == 1 && _columnIndex == 1))
+				if (playersInCase.size() > 0 && (_rowIndex == 1 && _columnIndex == 1))
 				{
-					_text += BLINK_TEXT + playersInCase[0].GetPawn().GetAppearance() + RESET;
+					_text += RESET BLINK_TEXT + playersInCase[0].GetPawn().GetAppearance() + RESET;
 					rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
 				}
 				else
@@ -59,9 +59,9 @@ public:
 		for (u_int _index = 0; _index < _size; _index++)
 		{
 			_currentAppearance = cases[_lineIndex][_index].GetAppearance();
-			if (!playersInCase.empty() && (_lineIndex == 1 && _index == 1))
+			if (playersInCase.size() > 0 && (_lineIndex == 1 && _index == 1))
 			{
-				_text += BLINK_TEXT + playersInCase[0].GetPawn().GetAppearance() + RESET;
+				_text += RESET  BLINK_TEXT + playersInCase[0].GetPawn().GetAppearance() + RESET;
 				rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
 				continue;
 			}
