@@ -61,8 +61,9 @@ public:
 			_currentAppearance = cases[_lineIndex][_index].GetAppearance();
 			if (playersInCase.size() > 0 && (_lineIndex == 1 && _index == 1))
 			{
-				_text += RESET  BLINK_TEXT + playersInCase[0].GetPawn().GetAppearance() + RESET;
+				_text += RESET BOLD_TEXT + playersInCase[0].GetPawn().GetAppearance() + RESET;
 				rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
+				_text += " ";
 				continue;
 			}
 			else

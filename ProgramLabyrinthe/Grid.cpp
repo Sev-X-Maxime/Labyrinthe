@@ -1,6 +1,6 @@
 #include "Grid.h"
 
-Grid::Grid(const u_int& _size)
+Grid::Grid()
 {
 	arrowSelector = 0;
 	InitArrowsSelector();

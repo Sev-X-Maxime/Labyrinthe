@@ -164,7 +164,7 @@ void Game::InitStaticTilesTreasure()
 
 void Game::InitGrid(const u_int& _gridSize)
 {
-	grid = Grid(_gridSize);
+	grid = Grid();
 	vector<vector<Tile>> _tiles = vector<vector<Tile>>();
 	Tile _currentTile;
 	for (u_int _rowIndex = 0; _rowIndex < _gridSize; _rowIndex++)
@@ -180,7 +180,7 @@ void Game::InitGrid(const u_int& _gridSize)
 		}
 	}
 	grid.SetTiles(_tiles);
-	u_int _indexTreasure = 13;
+	u_int _indexTreasure = 12;
 	int _randomIndexX, _randomIndexY;
 	const u_int& _treasuresCount = static_cast<u_int>(treasures.size());
 	pair<u_int, u_int> _currentRandomCoordinates;
@@ -202,30 +202,30 @@ void Game::InitTreasures()
 	treasures = vector<Object>();
 	treasures =
 	{
-		Object('A',RED),
-		Object('B',RED),
-		Object('C',RED),
-		Object('D',RED),
-		Object('E',RED),
-		Object('F',RED),
-		Object('G',RED),
-		Object('H',RED),
-		Object('I',RED),
-		Object('J',RED),
-		Object('K',RED),
-		Object('L',RED),
-		Object('M',RED),
-		Object('N',RED),
-		Object('O',RED),
-		Object('P',RED),
-		Object('Q',RED),
-		Object('R',RED),
-		Object('S',RED),
-		Object('T',RED),
-		Object('U',RED),
-		Object('V',RED),
-		Object('W',RED),
-		Object('X',RED),
+		Object('S',LIME),
+		Object('B',PINK),
+		Object('M',PURPLE_BASE),
+		Object('T',YELLOW_INTENSE_TEXT),
+		Object('Z',MAGENTA_INTENSE_TEXT),
+		Object('R',BLACK_INTENSE_TEXT),
+		Object('I',LIGHT_BLUE),
+		Object('P',ORANGE),
+		Object('~',BLUE_INTENSE_TEXT),
+		Object('§',GREEN),
+		Object('%',CYAN),
+		Object('+',LIME),
+		Object('(',LIGHT_BLUE),
+		Object('à',CYAN_BASE),
+		Object('0',GREEN_INTENSE_TEXT),
+		Object('6',CYAN_INTENSE_TEXT),
+		Object('9',DARK_ORANGE),
+		Object('µ',DARK_YELLOW),
+		Object('$',MAGENTA),
+		Object(']',CYAN),
+		Object('c',PINK),
+		Object('b',PURPLE_BASE),
+		Object('d',BLUE_INTENSE_TEXT),
+		Object('r',MAGENTA_INTENSE_TEXT),
 	};
 }
 
@@ -240,36 +240,30 @@ void Game::InitCards()
 void Game::PlacePawnInSpawn()
 {
 	const u_int& _playersCount = static_cast<u_int>(players.size());
+	Tile _currentTile;
+	pair<u_int, u_int> _currentCoordinates;
+	Player* _currentPlayer;
 	for (u_int _row = 0; _row < 7; _row++)
 	{
 		for (u_int _column = 0; _column < 7; _column++)
 		{
-			if (grid.GetTile(make_pair(_row, _column)).GetTreasure().appearance == '@')
+			_currentCoordinates = make_pair(_row, _column);
+			_currentTile = grid.GetTile(_currentCoordinates);
+			if (_currentTile.GetTreasure().appearance == '@')
 			{
 				for (u_int _index = 0; _index < _playersCount; _index++)
 				{
-					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_RED
-						&& players[_index]->GetPawn().color == RED)
+					_currentPlayer = players[_index];
+					if((_currentTile.GetTreasure().color == HIDDEN_TEXT BG_RED
+						&& _currentPlayer->GetPawn().color == RED)
+						||(_currentTile.GetTreasure().color == HIDDEN_TEXT BG_YELLOW
+						&& _currentPlayer->GetPawn().color == YELLOW) 
+						||(_currentTile.GetTreasure().color == HIDDEN_TEXT BG_GREEN
+						&& _currentPlayer->GetPawn().color == GREEN) 
+						|| (_currentTile.GetTreasure().color == HIDDEN_TEXT BG_BLUE
+						&& _currentPlayer->GetPawn().color == BLUE))
 					{
-						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
-						break;
-					}
-					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_YELLOW
-						&& players[_index]->GetPawn().color == YELLOW)
-					{
-						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
-						break;
-					}
-					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_GREEN
-						&& players[_index]->GetPawn().color == GREEN)
-					{
-						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
-						break;
-					}
-					if (grid.GetTile(make_pair(_row, _column)).GetTreasure().color == HIDDEN_TEXT BG_BLUE
-						&& players[_index]->GetPawn().color == BLUE)
-					{
-						grid.GetTile(make_pair(_row, _column)).AddPlayer(*players[_index]);
+						grid.AddPlayerInTile(_currentCoordinates, *_currentPlayer);
 						break;
 					}
 				}
@@ -492,6 +486,11 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 
 
 
+
+void Game::MouvementPlayer()
+{
+}
+
 void Game::Option()
 {
 	vector<pair<string, vector<u_int>>> _options;
@@ -514,11 +513,17 @@ void Game::Start()
 	InitPlayers();
 	InitGrid();
 	PlacePawnInSpawn();
-	while (true)
+	bool _isFinish;
+	do
 	{
-		PlacementTile();
-	}
 
+		PlacementTile();
+		MouvementPlayer();
+		_isFinish = IsOver();
+		++currentPlayerIndex %= static_cast<u_int>(players.size());
+	} while (_isFinish);
+	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
+	Display();
 	system("pause");
 }
 

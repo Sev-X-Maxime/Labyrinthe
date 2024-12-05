@@ -2,7 +2,7 @@
 #include "Tile.h"
 #include <DisplaySystem.h>
 using namespace Console;
-#define SEPARATOR BLACK_INTENSE_TEXT "#" RESET
+#define SEPARATOR BLUE "#" RESET
 #define SEPARATOR_IN_STREAM _stream << SEPARATOR
 class Grid
 {
@@ -47,7 +47,7 @@ public:
 		tiles[_position.first][_position.second].RemovePlayer(_player);
 	}
 public:
-	Grid(const u_int& _size = 7);
+	Grid();
 private:
 	void InitArrowsSelector();
 public:
