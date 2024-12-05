@@ -1,7 +1,7 @@
 #pragma once
 enum MyDirectionType
 {
-	MDT_RIGHT,
+	MDT_RIGHT, 
 	MDT_LEFT,
 	MDT_UP,
 	MDT_DOWN,

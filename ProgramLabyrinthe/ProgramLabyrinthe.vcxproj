@@ -165,6 +165,7 @@
     <ClInclude Include="Prog1Lib\Random.h" />
     <ClInclude Include="Prog1Lib\SaveManager.h" />
     <ClInclude Include="Prog1Lib\UserInteract.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="UnderMacro.h" />
   </ItemGroup>
@@ -173,6 +174,12 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="Prog1Lib\Prog1Lib.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ProgramLabyrinthe.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="LabyrintheIcon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
