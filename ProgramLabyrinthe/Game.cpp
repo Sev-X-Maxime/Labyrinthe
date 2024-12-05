@@ -263,9 +263,7 @@ void Game::DoAction(u_int _indexAction)
 	switch (_indexAction)
 	{
 	case 0:
-		InitPlayers();
-		InitGrid();
-		Display();
+		Start();
 		break;
 
 	case 1:
@@ -298,6 +296,26 @@ pair<u_int, u_int> Game::OptionAction(vector<vector<string>> _options, vector<st
 }
 void Game::DoOptionAction(pair<u_int, u_int> _actionIndex)
 {
+}
+
+void Game::Start()
+{
+	InitPlayers();
+	InitGrid();
+	u_int playerCount = static_cast<u_int>(players.size());
+	currentTile = grid.PlaceTile(currentTile, 0, MDT_LEFT);
+	currentTile = grid.PlaceTile(currentTile, 0, MDT_RIGHT);
+	/*do
+	{
+	} while (!IsOver());*/
+	currentTile = grid.PlaceTile(currentTile, 6, MDT_UP);
+	currentTile = grid.PlaceTile(currentTile, 6, MDT_DOWN);
+	Display();
+}
+
+bool Game::IsOver()
+{
+	return false;
 }
 
 void Game::Display()

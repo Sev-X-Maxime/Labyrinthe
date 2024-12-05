@@ -6,6 +6,7 @@ class Game
 {
 	vector<Player*> players;
 	Grid grid;
+	Tile currentTile;
 	map<pair<u_int, u_int>, Tile> staticTiles;
 	vector<Object> treasures;
 	vector<Card> cards;
@@ -27,6 +28,8 @@ private:
 	void Option();
 	pair<u_int, u_int> OptionAction(vector<vector<string>> _options, vector<string> _texts);
 	void DoOptionAction(pair<u_int, u_int> _actionIndex);
+	void Start();
+	bool IsOver();
 
 public:
 	void Display();
