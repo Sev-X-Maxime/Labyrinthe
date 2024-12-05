@@ -38,20 +38,13 @@ public:
 	{
 		return tiles[_position.first][_position.second];
 	}
-	inline void AddPlayerInTile(pair<u_int, u_int> _position, Player _player)
-	{
-		tiles[_position.first][_position.second].AddPlayer(_player);
-	}
-	inline void RemovePlayerInTile(pair<u_int, u_int> _position, Player _player)
-	{
-		tiles[_position.first][_position.second].RemovePlayer(_player);
-	}
+	
 public:
 	Grid(const u_int& _size = 7);
 private:
 	void InitArrowsSelector();
 public:
-	Tile PlaceTile(Tile _tile);
+	void PlaceTile(Tile _tile);
 	Tile PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& _direction);
 	Tile PlaceAtRight(Tile _tile, const u_int& _position);
 	Tile PlaceAtLeft(Tile _tile, const u_int& _position);
@@ -74,9 +67,8 @@ public:
 			if (_index % 12 == 9)
 			{
 				if (_grid.arrowSelector == _curentArrow)
-					_stream << RED_INTENSE_TEXT BLINK_TEXT "V" RESET;
-				else
-					_stream << YELLOW "V" RESET;
+					_stream << BLINK_TEXT;
+				_stream << YELLOW "V" RESET;
 				++_curentArrow;
 			}
 			else
@@ -99,9 +91,8 @@ public:
 				&& _row % 3 == 1)
 			{
 				if (_grid.arrowSelector == _curentArrow)
-					_stream << RED_INTENSE_TEXT BLINK_TEXT ">" RESET;
-				else
-					_stream << YELLOW ">" RESET;
+					_stream << BLINK_TEXT;
+				_stream << YELLOW ">" RESET;
 				++_curentArrow;
 			}
 			else
@@ -115,9 +106,8 @@ public:
 					&& _row % 3 == 1)
 				{
 					if (_grid.arrowSelector == _curentArrow)
-						_stream << RED_INTENSE_TEXT BLINK_TEXT "<" RESET;
-					else
-						_stream << YELLOW "<" RESET;
+						_stream << BLINK_TEXT;
+					_stream << YELLOW "<" RESET;
 					++_curentArrow;
 					continue;
 				}
@@ -131,9 +121,8 @@ public:
 			if (_index % 12 == 9)
 			{
 				if (_grid.arrowSelector == _curentArrow)
-					_stream << RED_INTENSE_TEXT BLINK_TEXT "A" RESET;
-				else
-					_stream << YELLOW "A" RESET;
+					_stream << BLINK_TEXT;
+				_stream << YELLOW "A" RESET;
 				++_curentArrow;
 			}
 			else
