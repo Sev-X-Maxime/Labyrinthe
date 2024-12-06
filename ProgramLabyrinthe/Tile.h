@@ -44,8 +44,6 @@ public:
 				}
 				else
 					_text += cases[_rowIndex][_columnIndex].GetAppearance();
-				if (_columnIndex < _size - 1)
-					_text += " ";
 			}
 			_text += "\n";
 		}
@@ -63,19 +61,10 @@ public:
 			{
 				_text += RESET BOLD_TEXT + playersInCase[0]->GetPawn().GetAppearance() + RESET;
 				rotate(playersInCase.begin(), playersInCase.begin() + 1, playersInCase.end());
-				_text += " ";
 				continue;
 			}
-			else
+			
 			_text += _currentAppearance;
-			if (_index < _size - 1)
-			{
-				_midAppearance = cases[_lineIndex][1].GetAppearance();
-				if (_lineIndex != 1)
-				_text += _midAppearance;
-				else
-				_text += " ";
-			}
 		}
 		return _text;
 	}

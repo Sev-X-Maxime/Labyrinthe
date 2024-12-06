@@ -37,7 +37,7 @@ void Tile::InitCases(const u_int& _size)
 			cases[_rowIndex].push_back(Object());
 		}
 	}
-	cases[1][1] = Object(' ',"");
+	cases[1][1] = Object("  ", "");
 	UpdateVectorWithDirections();
 }
 
@@ -56,7 +56,7 @@ void Tile::UpdateVectorWithDirections()
 		_coordinatesDirection =
 			_directionCoordinates[_currentDirection.first];
 		cases[_coordinatesDirection.first][_coordinatesDirection.second] =
-			 _currentDirection.second ? Object(' ',"") : Object();
+			 _currentDirection.second ? Object("  ", "") : Object();
 	}
 }
 

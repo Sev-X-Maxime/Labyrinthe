@@ -4,7 +4,7 @@
 #pragma comment(lib, "winmm.lib")
 #include <Windows.h>
 using namespace Console;
-#define SEPARATOR BLUE "#" RESET
+#define SEPARATOR BLUE "\xF0\x9F\x9F\xA6" RESET
 #define SEPARATOR_IN_STREAM _stream << SEPARATOR
 class Grid
 {
@@ -75,14 +75,14 @@ public:
 	{
 		const u_int _size = static_cast<u_int>(_grid.tiles.size());
 		u_int _curentArrow = 0;
-		for (u_int _index = 0; _index < _size * 2 * 3; _index++)
+		for (u_int _index = 0; _index < _size * 4; _index++)
 		{
-			if (_index % 12 == 9)
+			if (_index % 8 == 6)
 			{
 				if (_grid.arrowSelector == _curentArrow)
-					_stream << BG_WHITE BLACK_INTENSE_TEXT BLINK_TEXT "V" RESET;
+					_stream << "\xF0\x9F\x91\x87";
 				else
-					_stream << YELLOW "V" RESET;
+					_stream << ORANGE "\xE2\x8F\xAC" RESET;
 				++_curentArrow;
 			}
 			else
@@ -94,7 +94,7 @@ public:
 		{
 			if (_row > 0 && _row % 3 == 0)
 			{
-				for (u_int _index = 0; _index < _size * 3 * 2; _index++)
+				for (u_int _index = 0; _index < _size * 4; _index++)
 				{
 					SEPARATOR_IN_STREAM;
 				}
@@ -105,9 +105,9 @@ public:
 				&& _row % 3 == 1)
 			{
 				if (_grid.arrowSelector == _curentArrow)
-					_stream << BG_WHITE BLACK_INTENSE_TEXT BLINK_TEXT ">" RESET;
+					_stream << "\xF0\x9F\x91\x89";
 				else
-					_stream << YELLOW ">" RESET;
+					_stream << ORANGE "\xE2\x8F\xA9" RESET;
 				++_curentArrow;
 			}
 			else
@@ -121,9 +121,9 @@ public:
 					&& _row % 3 == 1)
 				{
 					if (_grid.arrowSelector == _curentArrow)
-						_stream << BG_WHITE BLACK_INTENSE_TEXT BLINK_TEXT "<" RESET;
+						_stream << "\xF0\x9F\x91\x88";
 					else
-						_stream << YELLOW "<" RESET;
+						_stream << ORANGE "\xE2\x8F\xAA" RESET;
 					++_curentArrow;
 					continue;
 				}
@@ -132,14 +132,14 @@ public:
 			_stream << endl;
 		}
 
-		for (u_int _index = 0; _index < _size * 3 * 2; _index++)
+		for (u_int _index = 0; _index < _size * 4; _index++)
 		{
-			if (_index % 12 == 9)
+			if (_index % 8 == 6)
 			{
 				if (_grid.arrowSelector == _curentArrow)
-					_stream << BG_WHITE BLACK_INTENSE_TEXT BLINK_TEXT "A" RESET;
+					_stream << "\xF0\x9F\x91\x86" RESET;
 				else
-					_stream << YELLOW "A" RESET;
+					_stream << ORANGE "\xE2\x8F\xAB" RESET;
 				++_curentArrow;
 			}
 			else

@@ -102,6 +102,7 @@ Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& 
 			}
 		}
 	}
+	if (options["Sounds"][currentOptions["Sounds"]])
 	PlaySound(TEXT("Sounds/WallMove.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	return _returnTile;
 }
