@@ -1,6 +1,17 @@
 #pragma once
 #include "Grid.h"
 #include "UnderMacro.h"
+#include "structPathFinding.h"
+#include <fstream>
+#include <vector>
+#include <queue>
+#include <cmath>
+#include <unordered_set>
+#include <stack>
+#include <algorithm>
+#include <climits> 
+#include <cmath> 
+#include <random>
 #define TAB "   "
 #define RESET_SCREEN_LINE(_x) for (u_int _index = 0; _index < 100; _index++)\
 {\
@@ -10,7 +21,7 @@
 
 class Game
 {
-	vector<Player*> players;
+	vector<Entity*> players;
 	Grid grid;
 	map<pair<u_int, u_int>, Tile> staticTiles;
 	vector<Object> treasures;
@@ -28,6 +39,7 @@ private:
 	void DeletePlayers();
 	void InitPlayers();
 	Object ChoosePawn(map<u_int, bool>& _isPawnIndexColorTaken);
+	Object ChoosePawnComputer(map<u_int, bool>& _isPawnIndexColorTaken);
 	void InitStaticTiles();
 	void InitStaticTilesTreasure();
 	void InitGrid(const u_int& _gridSize = 7);
@@ -48,9 +60,15 @@ private:
 	void Play();
 	bool IsOver();
 	void PlacementTile();
-
+	void PlacementTileComputer();
 	void UpdateIfOnGoodCase();
 	void MovementPlayer(Player* _currentPlayer);
+	void MovementComputer(Computer* _currentPlayer);
+
+
+	double Distance(const pair<int, int>& _p1, const pair<int, int>& _p2);
+	void ShortestWay(const Grid& _grid, const Node& _goal, const Node& _start);
+	void MoveToGoal(Grid _grid, Node* _goal);
 public:
 	void Launch();
 };

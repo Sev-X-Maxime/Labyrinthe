@@ -1,8 +1,5 @@
 #include "Player.h"
 
-Player::Player(const string& _name, const Object& _pawn, const vector<Card>& _cards)
+Player::Player(const string& _name, const Object& _pawn, const vector<Card>& _cards) : Entity(_name, _pawn, _cards)
 {
-	name = _name;
-	pawn = _pawn;
-	cards = _cards;
 }

@@ -38,7 +38,7 @@ Tile Grid::PlaceTile(Tile _tile)
 
 Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& _direction)
 {
-	vector<Player*> _playersInReturnTile , _playersInCurrentTile;
+	vector<Entity*> _playersInReturnTile , _playersInCurrentTile;
 	pair<u_int, u_int> _newCoordinates;
 	const u_int& _size = GetSize();
 	Tile _returnTile;
@@ -62,7 +62,7 @@ Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& 
 	_playersInReturnTile = _returnTile.GetPlayersInTile();
 	if (_playersInReturnTile.size() > 0)
 	{
-		for (Player* _currentPlayerInReturnTile : _playersInReturnTile)
+		for (Entity* _currentPlayerInReturnTile : _playersInReturnTile)
 		{
 			_returnTile.RemovePlayer(_currentPlayerInReturnTile);
 			if (_direction == MDT_RIGHT)
@@ -84,7 +84,7 @@ Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& 
 		{
 			_playersInCurrentTile = tiles[_position][_index].GetPlayersInTile();
 			if (_playersInCurrentTile.size() <= 0) continue;
-			for (Player* _currentPlayerInTile : _playersInCurrentTile)
+			for (Entity* _currentPlayerInTile : _playersInCurrentTile)
 			{
 				_currentPlayerInTile->SetPosition(make_pair(_position, _index));
 			}
@@ -96,7 +96,7 @@ Tile Grid::PlaceTile(Tile _tile, const u_int& _position, const MyDirectionType& 
 		{
 			_playersInCurrentTile = tiles[_index][_position].GetPlayersInTile();
 			if (_playersInCurrentTile.size() <= 0) continue;
-			for (Player* _currentPlayerInTile : _playersInCurrentTile)
+			for (Entity* _currentPlayerInTile : _playersInCurrentTile)
 			{
 				_currentPlayerInTile->SetPosition(make_pair(_index, _position));
 			}

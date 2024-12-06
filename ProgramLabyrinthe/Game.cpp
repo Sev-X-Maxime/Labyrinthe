@@ -24,7 +24,7 @@ void Game::DeletePlayers()
 		delete players[_index];
 	}
 	players.clear();
-	players = vector<Player*>();
+	players = vector<Entity*>();
 }
 
 void Game::InitPlayers()
@@ -36,13 +36,20 @@ void Game::InitPlayers()
 	}
 	DeletePlayers();
 	const int _playerCount = options["Nombre de joueurs"][currentOptions["Nombre de joueurs"]];
+	const int _cumputerCount = options["Nombre d'IA"][currentOptions["Nombre d'IA"]];
 	const vector<vector<Card>>& _cardsPlayer = DistributeCards(_playerCount);
 	string _currentPlayerName;
-	for (int _index = 0; _index < _playerCount; _index++)
+	for (int _index = 0; _index < _playerCount - _cumputerCount; _index++)
 	{
 		_currentPlayerName =
 			GetLine("Quel est le nom du joueur n°" + to_string(_index + 1) + "?");
 		players.push_back(new Player(_currentPlayerName, ChoosePawn(_isPawnIndexColorTaken), _cardsPlayer[_index]));
+		system("cls");
+	}
+	for (int _index = 0; _index < _cumputerCount; _index++)
+	{
+		_currentPlayerName = "Computer" + to_string(_index + 1);
+		players.push_back(new Computer(_currentPlayerName, ChoosePawnComputer(_isPawnIndexColorTaken), _cardsPlayer[_index]));
 		system("cls");
 	}
 }
@@ -96,6 +103,25 @@ Object Game::ChoosePawn(map<u_int, bool>& _isPawnIndexColorTaken)
 	}
 }
 
+Object Game::ChoosePawnComputer(map<u_int, bool>& _isPawnIndexColorTaken)
+{
+	const vector<Object>& _pawns =
+	{
+		Object('&', RED),
+		Object('&', YELLOW),
+		Object('&', BLUE),
+		Object('&', GREEN)
+	};
+	u_int _pawnsCount = static_cast<u_int>(_pawns.size());
+	for (u_int _index = 0; _index < _pawnsCount; _index++)
+	{
+		if (!_isPawnIndexColorTaken[_index])
+		{
+			return _pawns[_index];
+		}
+	}
+	throw exception("Plus de pion disponible !");
+}
 
 
 void Game::InitStaticTiles()
@@ -247,7 +273,7 @@ void Game::PlacePawnInSpawn()
 	const u_int& _playersCount = static_cast<u_int>(players.size());
 	Tile _currentTile;
 	pair<u_int, u_int> _currentCoordinates;
-	Player* _currentPlayer;
+	Entity* _currentPlayer;
 	for (u_int _row = 0; _row < 7; _row++)
 	{
 		for (u_int _column = 0; _column < 7; _column++)
@@ -296,8 +322,6 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 	}
 	return _playersCards;
 }
-
-
 
 
 int Game::ChooseAction(const vector<string>& _options)
@@ -515,10 +539,6 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 }
 
 
-
-
-
-
 void Game::Option()
 {
 	vector<pair<string, vector<u_int>>> _options;
@@ -559,11 +579,27 @@ void Game::Play()
 	{
 		SetCursorPosition(47, 5);
 		cout << GREEN << "Placement de la tuile..." << RESET;
-		PlacementTile();
+		Player* _player = dynamic_cast<Player*>(players[currentPlayerIndex]);
+		if (_player)
+		{
+			PlacementTile();
+		}
+		else
+		{
+			PlacementTileComputer();
+		}
 		SetCursorPosition(47, 5);
 		cout << players[currentPlayerIndex]->GetPawn().color
 			<<"Deplacement du pion...  " << RESET;
-		MovementPlayer(players[currentPlayerIndex]);
+		if (_player)
+		{
+			MovementPlayer(_player);
+		}
+		else
+		{
+			Computer* _computer = dynamic_cast<Computer*>(players[currentPlayerIndex]);
+			MovementComputer(_computer);
+		}
 		UpdateIfOnGoodCase();
 		_isFinish = IsOver();
 		if (IsOver()) break;
@@ -579,7 +615,7 @@ void Game::Play()
 
 bool Game::IsOver()
 {
-	Player* _currentPlayer = players[currentPlayerIndex];
+	Entity* _currentPlayer = players[currentPlayerIndex];
 	string _currentColor = grid.GetTile(_currentPlayer->GetPosition()).GetTreasure().color;
 	return (!_currentPlayer->HasCard()
 		&& ((_currentPlayer->GetPawn().color == RED
@@ -619,9 +655,43 @@ void Game::PlacementTile()
 	}
 }
 
+void Game::PlacementTileComputer()
+{
+	u_int _actionCount = RandomInt(0, 10);
+	u_int _actionIndex;
+	for (u_int _index = 0; _index < _actionCount; _index++)
+	{
+		_actionIndex = RandomInt(0, 5);
+		switch (_actionIndex)
+		{
+		case 0:
+			grid.SelectorMove(MDT_UP);
+			continue;
+		case 1:
+			grid.SelectorMove(MDT_LEFT);
+			continue;
+		case 2:
+			grid.SelectorMove(MDT_RIGHT);
+			continue;
+		case 3:
+			grid.SelectorMove(MDT_DOWN);
+			continue;
+		case 4:
+			currentTile.Rotate(RT_LEFT);
+			continue;
+		case 5:
+			currentTile.Rotate(RT_RIGHT);
+			continue;
+		default:
+			break;
+		}
+	}
+	currentTile = grid.PlaceTile(currentTile);
+}
+
 void Game::UpdateIfOnGoodCase()
 {
-	Player* _currentPlayer = players[currentPlayerIndex];
+	Entity* _currentPlayer = players[currentPlayerIndex];
 	const pair<u_int,u_int>& _coordinates = _currentPlayer->GetPosition();
 	if (_currentPlayer->HasCard() && grid.GetTile(_coordinates) == _currentPlayer->GetCurrentCard())
 	{
@@ -684,6 +754,176 @@ void Game::MovementPlayer(Player* _currentPlayer)
 		if (_newPosition != _position)
 			PlaySound(TEXT("Sounds/PawnMove.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	}
+}
+
+void Game::MovementComputer(Computer* _currentPlayer)
+{
+	u_int _actionCount = RandomInt(0, 10);
+	u_int _actionIndex;
+
+	const pair<u_int, u_int>& _position = _currentPlayer->GetPosition();
+	pair<u_int, u_int> _newPosition = _position;
+	pair<u_int, u_int> _tempPosition = _position;
+	map<MyDirectionType, bool> _open = grid.GetTile(_position).GetDirectionsOpen();
+	map<MyDirectionType, bool> _open1;
+	for (u_int _index = 0; _index < _actionCount; _index++)
+	{
+		_actionIndex = RandomInt(0, 3);
+		if (_actionIndex == 0) // ↑
+		{
+			if (_tempPosition.first-- == 0)
+				continue;
+			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
+			if (_open[MDT_UP] && _open1[MDT_DOWN])
+				--_newPosition.first;
+		}
+		else if (_actionIndex == 1) // gauche
+		{
+			if (_tempPosition.second-- == 0)
+				continue;
+			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
+			if (_open[MDT_LEFT] && _open1[MDT_RIGHT])
+				--_newPosition.second;
+		}
+		else if (_actionIndex == 2) // droite
+		{
+			if (_tempPosition.second++ == grid.GetTiles().size() - 1)
+				continue;
+			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
+			if (_open[MDT_RIGHT] && _open1[MDT_LEFT])
+				++_newPosition.second;
+		}
+		else if (_actionIndex == 3) // ↓
+		{
+			if (_tempPosition.first++ == grid.GetTiles().size() - 1)
+				continue;
+			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
+			if (_open[MDT_DOWN] && _open1[MDT_UP])
+				++_newPosition.first;
+		}
+		_currentPlayer->SetPosition(_newPosition);
+		grid.RemovePlayerInTile(_position, _currentPlayer);
+		grid.AddPlayerInTile(_newPosition, _currentPlayer);
+		if (_newPosition != _position)
+			PlaySound(TEXT("Sounds/PawnMove.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		else
+			_tempPosition = _position;
+	}
+}
+
+
+double Game::Distance(const pair<int, int>& _p1, const pair<int, int>& _p2)
+{
+	return sqrt((_p1.first - _p2.first) * (_p1.first - _p2.first) +
+		(_p1.second - _p2.second) * (_p1.second - _p2.second));
+}
+
+void Game::ShortestWay(const Grid& _grid, const Node& _goal, const Node& _start)
+{
+	unordered_set<Node, HashNode> _closedList;
+	priority_queue<Node, vector<Node>, ComparByHeuristic> _openList;
+	const pair<u_int, u_int>& _position = make_pair(_start.x, _start.y);
+	pair<u_int, u_int> _tempPosition = _position;
+
+	_openList.push(_start);
+	while (!_openList.empty())
+	{
+		map<MyDirectionType, bool> _open = grid.GetTile(make_pair(_start.x, _start.y)).GetDirectionsOpen();
+		map<MyDirectionType, bool> _open1;
+		vector<pair<int, int>> _directions = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} };
+		map<pair<int, int>, MyDirectionType > _directionsLink;
+		_directionsLink[_directions[0]] = MDT_RIGHT;
+		_directionsLink[_directions[1]] = MDT_DOWN;
+		_directionsLink[_directions[2]] = MDT_LEFT;
+		_directionsLink[_directions[3]] = MDT_UP;
+		map<MyDirectionType, MyDirectionType> _opposedDirections;
+		_opposedDirections[MDT_RIGHT] = MDT_LEFT;
+		_opposedDirections[MDT_DOWN] = MDT_UP;
+		_opposedDirections[MDT_UP] = MDT_DOWN;
+		_opposedDirections[MDT_LEFT] = MDT_RIGHT;
+
+		Node _u = _openList.top();
+		_openList.pop();
+
+		if (_u.x == _goal.x && _u.y == _goal.y)
+		{
+			MoveToGoal(_grid, &_u);
+			return;
+		}
+
+		_closedList.insert(_u);
+		pair<int, int> _nextDirection;
+		map<MyDirectionType, bool> _directionsOpen = grid.GetTile(_position).GetDirectionsOpen();
+		map<MyDirectionType, bool> _directionsOpen1;
+		for (const pair<int, int>& _dir : _directions)
+		{
+			int _nx = _u.x + _dir.first;
+			int _ny = _u.y + _dir.second;
+			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
+			// Vérifier les limites et les obstacles
+			_nextDirection = make_pair(_nx, _ny);
+			if (_nx >= 0 && _ny >= 0 && _nx < _grid.GetSize() && _ny < _grid.GetSize())
+			{
+				_directionsOpen1 = _grid.GetTile(_nextDirection).GetDirectionsOpen();
+				if (!(_directionsOpen1[_opposedDirections[_directionsLink[_dir]]] && _directionsOpen[_directionsLink[_dir]])) continue;
+				Node _neighbour(_nx, _ny, _u.cost + 1, 0, new Node(_u));
+
+				_neighbour.heuristic = _neighbour.cost + Distance({ _neighbour.x, _neighbour.y }, { _goal.x, _goal.y });
+
+				bool _isInClosedList = _closedList.find(_neighbour) != _closedList.end();
+				if (!_isInClosedList)
+				{
+					_openList.push(_neighbour);
+				}
+			}
+		}
+	}
+
+	cerr << "Erreur : Aucun chemin trouvé.\n";
+}
+
+void Game::MoveToGoal(Grid _grid, Node* _goal)
+{
+	stack<Node*> _way;
+	Node* _current = _goal;
+	while (_current != nullptr)
+	{
+		_way.push(_current);
+		_current = _current->parent;
+	}
+
+	// Identifier la position de la sortie (notée 'S')
+	Node* _exitNode = nullptr;
+	for (int _i = 0; _i < _grid.GetSize(); ++_i)
+	{
+		for (int _j = 0; _j < _grid[_i].size(); ++_j)
+		{
+			if (_grid.GetTile(make_pair(_i, _j)).GetTreasure() == ) // Trouver la sortie
+			{
+				_exitNode = new Node(_i, _j, 0, 0);  // Créer un Node pour la sortie
+				break;
+			}
+		}
+		if (_exitNode != nullptr) break;
+	}
+
+	// Calculer la distance maximale (distance du nœud le plus éloigné)
+	vector<Node*> _path;
+	while (!_way.empty())
+	{
+		Node* _n = _way.top();
+		_way.pop();
+		if (_graph[_n->x][_n->y] == ' ')
+		{
+			_graph[_n->x][_n->y] = '*'; // Marquer les chemins dans le graphe
+			_path.push_back(_n);  // Ajouter au chemin
+		}
+	}
+
+	// La taille du chemin
+	int _pathLength = static_cast<int>(_path.size());
+	int _colorIndex = 0;
+
 }
 
 void Game::Launch()

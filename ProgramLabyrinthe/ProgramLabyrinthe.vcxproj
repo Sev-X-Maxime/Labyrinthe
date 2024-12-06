@@ -140,6 +140,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Computer.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -149,7 +151,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Card.h" />
+    <ClInclude Include="Computer.h" />
     <ClInclude Include="DirectionType.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Object.h" />
@@ -166,6 +170,7 @@
     <ClInclude Include="Prog1Lib\SaveManager.h" />
     <ClInclude Include="Prog1Lib\UserInteract.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="StructPathFinding.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="UnderMacro.h" />
   </ItemGroup>

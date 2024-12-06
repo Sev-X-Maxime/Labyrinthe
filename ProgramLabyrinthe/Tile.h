@@ -1,6 +1,7 @@
 #pragma once
 #include "DirectionType.h"
 #include "Player.h"
+#include "Computer.h"
 #include "Random.h"
 #include <set>
 #include <map>
@@ -9,7 +10,7 @@
 class Tile
 {
 	vector<vector<Object>> cases;
-	vector<Player*> playersInCase;
+	vector<Entity*> playersInCase;
 	map<MyDirectionType, bool> directionsOpen;
 	bool fixed;
 private:
@@ -95,7 +96,7 @@ public:
 	{
 		return directionsOpen;
 	}
-	inline vector<Player*> GetPlayersInTile() const
+	inline vector<Entity*> GetPlayersInTile() const
 	{
 		return playersInCase;
 	}
@@ -111,8 +112,8 @@ private:
 
 public:
 	void Rotate(const RotateType& _rotateType);
-	void AddPlayer(Player* _player);
-	void RemovePlayer(Player* _player);
+	void AddPlayer(Entity* _player);
+	void RemovePlayer(Entity* _player);
 
 public:
 	friend inline ostream& operator << (ostream& _stream, Tile _tile)

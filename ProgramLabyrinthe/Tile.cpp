@@ -12,14 +12,14 @@ Tile::Tile()
 		}
 	} while (!GoodCountDirectionsOpen());
 
-	playersInCase = vector<Player*>();
+	playersInCase = vector<Entity*>();
 	fixed = false;
 	InitCases();
 }
 
 Tile::Tile(const map<MyDirectionType, bool>& _directionsOpen, const bool _isFixed, const u_int& _size)
 {
-	playersInCase = vector<Player*>();
+	playersInCase = vector<Entity*>();
 	directionsOpen = _directionsOpen;
 	fixed = _isFixed;
 	InitCases(_size);
@@ -88,12 +88,12 @@ void Tile::Rotate(const RotateType& _rotateType)
 	UpdateVectorWithDirections();
 }
 
-void Tile::AddPlayer(Player* _player)
+void Tile::AddPlayer(Entity* _player)
 {
 	playersInCase.push_back(_player);
 }
 
-void Tile::RemovePlayer(Player* _player)
+void Tile::RemovePlayer(Entity* _player)
 {
 	u_int _indexPlayer = 0;
 	const u_int& _nbPlayersInCase = static_cast<u_int>(playersInCase.size());
