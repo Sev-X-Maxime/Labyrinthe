@@ -124,4 +124,3 @@ public:
 		return GetTreasure() == _card.treasure;
 	}
 };
-

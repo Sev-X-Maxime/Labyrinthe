@@ -564,8 +564,7 @@ void Game::Start()
 		++currentPlayerIndex %= static_cast<u_int>(players.size());
 	}
 	system("cls");
-	Display();
-	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
+	cout << RESET << players[currentPlayerIndex]->GetName() << DisplayRanbow(" a gagner la partie !") << endl;
 	system("pause");
 }
 
