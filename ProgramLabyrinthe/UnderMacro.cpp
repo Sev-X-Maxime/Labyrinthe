@@ -19,3 +19,37 @@ string GetLine(const string& _question)
 
 	return _line;
 }
+
+void DisplayRanbow(const string& _text)
+{
+	const vector<string>& _everyColor =
+	{
+		WHITE,
+		DARK_RED,
+		RED ,
+		DARK_ORANGE ,
+		ORANGE,
+		DARK_YELLOW,
+		YELLOW,
+		LIME,
+		GREEN,
+		BLUE,
+		LIGHT_BLUE,
+		CYAN,
+		PINK,
+		MAGENTA,
+		PURPLE,
+		BROWN,
+	};
+	u_int _colorCount = static_cast<u_int>(_everyColor.size() - 1);
+	u_int _indexColor = 0;
+	while (!_kbhit())
+	{
+		for (char _currentChar : _text)
+		{
+			cout << _everyColor[_indexColor] << _currentChar;
+			_indexColor = _indexColor > _colorCount ? 0 : _indexColor++;
+		}
+
+	}
+}

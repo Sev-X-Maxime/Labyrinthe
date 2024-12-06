@@ -288,7 +288,7 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 	}
 	const int _cardSize = static_cast<int>(_cardsToDistrib.size());
 	int _randomIndex;
-	for (int _index = _cardSize - 1; _index >= 0 ; _index--)
+	for (int _index = /*_cardSize - 1*/ 2; _index >= 0 ; _index--)
 	{
 		_randomIndex = RandomInt(0, _index);
 		_playersCards[_index % _playerCount].push_back(_cardsToDistrib[_randomIndex]);
@@ -511,7 +511,6 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 			if(_selector.first == _sizeOptions) return make_pair("Quitter", make_pair(0,0));
 			return make_pair(_options[_selector.first].first,_selector);
 		}
-		//system("cls");
 	}
 }
 
@@ -532,9 +531,14 @@ void Game::Option()
 	{
 		_actionIndex = OptionAction(_options, true, _actionIndex.second);
 		system("cls");
-		if (_actionIndex.first == "Quitter") break;
+		if (_actionIndex.first == "Quitter")
+		{
+			PlaySound(TEXT("Sounds/Leave.wav"), NULL, SND_FILENAME | SND_ASYNC);
+			break;
+		}
 		DoOptionAction(_actionIndex);
 	} while (true);
+
 }
 
 void Game::Play()
@@ -562,13 +566,15 @@ void Game::Play()
 		MovementPlayer(players[currentPlayerIndex]);
 		UpdateIfOnGoodCase();
 		_isFinish = IsOver();
-		if (IsOver()) return;
+		if (IsOver()) break;
 		++currentPlayerIndex %= static_cast<u_int>(players.size());
 	}
 	system("cls");
+	PlaySound(TEXT("Sounds/Finish.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
 	system("pause");
-	RESET_SCREEN_LINE(0)
+	RESET_SCREEN_LINE(0);
+	RESET_SCREEN_LINE(1);
 }
 
 bool Game::IsOver()
@@ -691,4 +697,6 @@ void Game::Launch()
 		//system("cls");
 		DoAction(_actionIndex);
 	} while (_actionIndex != 2);
+	PlaySound(TEXT("Sounds/Leave.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	Sleep(1000);
 }
