@@ -327,10 +327,10 @@ int Game::ChooseAction(const vector<string>& _options)
 		{
 			if (_selector == _index)
 			{
-				cout << _currentSelector.first << _options[_index] << _currentSelector.second << endl;
+				cout << " " << _currentSelector.first << _options[_index] << _currentSelector.second << " " << endl;
 				continue;
 			}
-			cout << WHITE_INTENSE_TEXT << _options[_index] << RESET << endl;
+			cout << "  " << WHITE_INTENSE_TEXT << _options[_index] << " " << RESET << endl;
 		}
 		cout << endl;
 		_key = _getch();
@@ -472,16 +472,16 @@ void Game::Display(const vector<pair<string, vector<u_int>>>& _options,const u_i
 			if (_selector.first == _row && _selector.second == _column)
 			{
 				cout << _currentSelector.first << _options[_row].second[_column]
-					 << _currentSelector.second << " " << RESET;
+					 << _currentSelector.second << RESET;
 				continue;
 			}
 			else if (currentOptions[_options[_row].first] == _column)
 			{
-				cout << PINK << _currentSelector.first << _options[_row].second[_column]
-					 << PINK << _currentSelector.second << " " RESET;
+				cout << PINK << "[" << RESET << _options[_row].second[_column]
+					 << PINK << "]" << RESET;
 				continue;
 			}
-			cout << " " << _options[_row].second[_column] << "  ";
+			cout << " " << _options[_row].second[_column] << " ";
 		}
 		cout << endl << endl;
 	}
@@ -582,10 +582,15 @@ void Game::Option()
 		_options.emplace(_options.begin(), _soundOption);
 		_actionIndex = ChooseAction(_options);
 		_options.erase(_options.begin());
-		if (_actionIndex == 2) break;
+		if (_actionIndex == 2)
+		{
+			if (options["Sounds"][currentOptions["Sounds"]])
+				PlaySound(TEXT("Sounds/Leave.wav"), NULL, SND_FILENAME | SND_ASYNC);
+			break;
+		}
 		DoOptionMenuAction(_actionIndex);
 	} while (true);
-
+	system("cls");
 }
 
 
@@ -601,9 +606,15 @@ void Game::OptionsPlayer()
 	{
 		_actionIndex = OptionAction(_options, true, _actionIndex.second);
 		/*system("cls");*/
-		if (_actionIndex.first == "Quitter") break;
+		if (_actionIndex.first == "Quitter")
+		{
+			if (options["Sounds"][currentOptions["Sounds"]])
+				PlaySound(TEXT("Sounds/Leave.wav"), NULL, SND_FILENAME | SND_ASYNC);
+			break;
+		}
 		DoOptionAction(_actionIndex);
 	} while (true);
+	system("cls");
 }
 
 void Game::Play()
@@ -634,6 +645,8 @@ void Game::Play()
 		++currentPlayerIndex %= static_cast<u_int>(players.size());
 	}
 	system("cls");
+	if (options["Sounds"][currentOptions["Sounds"]])
+		PlaySound(TEXT("Sounds/Finish.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
 	system("pause");
 	RESET_SCREEN_LINE(0)
@@ -643,7 +656,7 @@ bool Game::IsOver()
 {
 	Player* _currentPlayer = players[currentPlayerIndex];
 	string _currentColor = grid.GetTile(_currentPlayer->GetPosition()).GetTreasure().color;
-	return (_currentPlayer->GetPawn().color == _currentColor);
+	return (!_currentPlayer->HasCard() && _currentPlayer->GetPawn().color == _currentColor);
 }
 
 void Game::PlacementTile()
@@ -669,6 +682,8 @@ void Game::PlacementTile()
 		else if (_key == 13) // Enter
 		{
 			currentTile = grid.PlaceTile(currentTile);
+			if (options["Sounds"][currentOptions["Sounds"]])
+				PlaySound(TEXT("Sounds/WallMove.wav"), NULL, SND_FILENAME | SND_ASYNC);
 			return;
 		}
 		//system("cls");
@@ -756,4 +771,5 @@ void Game::Launch()
 		//system("cls");
 		DoAction(_actionIndex);
 	} while (_actionIndex != 2);
+	PlaySound(TEXT("Sounds/Leave.wav"), NULL, SND_FILENAME | SND_SYNC);
 }
