@@ -378,17 +378,11 @@ void Game::Display()
 	SetCursorPosition(0, 0, false);
 	cout << grid << endl;
 
-	const Card& _currentCard = players[currentPlayerIndex]->GetCurrentCard();
 	u_int _currentTileIndex = 0;
 	SetCursorPosition(47, 2);
-	cout << WHITE_INTENSE_TEXT << "C'est à " << players[currentPlayerIndex]->GetName() << " de jouer !" << endl;
+	cout << WHITE_INTENSE_TEXT << "C'est à " << players[currentPlayerIndex]->GetName() << " (" << players[currentPlayerIndex]->GetPawn().GetAppearance() << ")" << " de jouer !" << endl;
 	SetCursorPosition(47, 3);
 	cout << "Et il te reste " << players[currentPlayerIndex]->GetCardLeft() << " objets à trouver !";
-	for (u_int _index = 0; _index < 15; _index++)
-	{
-		SetCursorPosition(47, 8 + _index);
-		cout << _currentCard.ToStringLine(_index) << endl;
-	}
 	SetCursorPosition(53, 24);
 	for (u_int _index = 0; _index < 7; _index++)
 	{
@@ -403,6 +397,15 @@ void Game::Display()
 	for (u_int _index = 0; _index < 7; _index++)
 	{
 		cout << GRAY << "#";
+	}
+	if (players[currentPlayerIndex]->HasCard())
+	{
+		const Card& _currentCard = players[currentPlayerIndex]->GetCurrentCard();
+		for (u_int _index = 0; _index < 15; _index++)
+		{
+			SetCursorPosition(47, 8 + _index);
+			cout << _currentCard.ToStringLine(_index) << endl;
+		}
 	}
 }
 
@@ -563,14 +566,24 @@ void Game::Play()
 		++currentPlayerIndex %= static_cast<u_int>(players.size());
 	}
 	system("cls");
-	Display();
 	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
 	system("pause");
+	RESET_SCREEN_LINE(0)
 }
 
 bool Game::IsOver()
 {
-	return false;
+	Player* _currentPlayer = players[currentPlayerIndex];
+	string _currentColor = grid.GetTile(_currentPlayer->GetPosition()).GetTreasure().color;
+	return (!_currentPlayer->HasCard()
+		&& ((_currentPlayer->GetPawn().color == RED
+			&& _currentColor == HIDDEN_TEXT BG_RED)
+			|| _currentPlayer->GetPawn().color == YELLOW
+			&& _currentColor == HIDDEN_TEXT BG_YELLOW
+			|| _currentPlayer->GetPawn().color == GREEN
+			&& _currentColor == HIDDEN_TEXT BG_GREEN
+			|| _currentPlayer->GetPawn().color == BLUE
+			&& _currentColor == HIDDEN_TEXT BG_BLUE));
 }
 
 void Game::PlacementTile()
