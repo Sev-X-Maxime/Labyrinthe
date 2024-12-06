@@ -38,13 +38,6 @@ void Game::InitPlayers()
 	const int _playerCount = options["Nombre de joueurs"][currentOptions["Nombre de joueurs"]];
 	const vector<vector<Card>>& _cardsPlayer = DistributeCards(_playerCount);
 	string _currentPlayerName;
-	const vector<Object>& _pawns =
-	{
-		Object('&', RED),
-		Object('&', YELLOW),
-		Object('&', BLUE),
-		Object('&', GREEN)
-	};
 	for (int _index = 0; _index < _playerCount; _index++)
 	{
 		_currentPlayerName =
@@ -73,16 +66,19 @@ Object Game::ChoosePawn(map<u_int, bool>& _isPawnIndexColorTaken)
 		cout << "Choisi ton pion : ";
 		DisplayPawn(_pawns, _pawnsCount, _selector, _separator, _isPawnIndexColorTaken);
 		_key = _getch();
-		if (_key == 75)
+		if (_key == 75 || _key == 113 || _key == 81)
 		{
 			_selector = _selector > 0 ? _selector - 1 : _pawnsCount - 1;
+			PlaySound(TEXT("Sounds/TransitionMenu.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		}
-		else if (_key == 77)
+		else if (_key == 77 || _key == 100 || _key == 68)
 		{
 			_selector = _selector < _pawnsCount - 1 ? _selector + 1 : 0;
+			PlaySound(TEXT("Sounds/TransitionMenu.wav"), NULL, SND_FILENAME | SND_ASYNC);
 		}
 		else if (_key == 13)
 		{
+			PlaySound(TEXT("Sounds/Clic.wav"), NULL, SND_FILENAME | SND_ASYNC);
 			if (!_isPawnIndexColorTaken[_selector])
 			{
 				_isPawnIndexColorTaken[_selector] = true;
@@ -292,7 +288,7 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 	}
 	const int _cardSize = static_cast<int>(_cardsToDistrib.size());
 	int _randomIndex;
-	for (int _index = /*_cardSize - 1*/ 2; _index >= 0 ; _index--)
+	for (int _index = _cardSize - 1; _index >= 0 ; _index--)
 	{
 		_randomIndex = RandomInt(0, _index);
 		_playersCards[_index % _playerCount].push_back(_cardsToDistrib[_randomIndex]);
@@ -334,6 +330,7 @@ int Game::ChooseAction(const vector<string>& _options)
 		}
 		else if (_key == 13) // Enter
 		{
+			PlaySound(TEXT("Sounds/Clic.wav"), NULL, SND_FILENAME | SND_ASYNC);
 			return _selector;
 		}
 		RESET_SCREEN_LINE(5)
@@ -347,7 +344,7 @@ void Game::DoAction(const u_int& _indexAction)
 	{
 	case 0:
 		system("cls");
-		Start();
+		Play();
 		break;
 
 	case 1:
@@ -380,6 +377,7 @@ void Game::Display()
 {
 	SetCursorPosition(0, 0, false);
 	cout << grid << endl;
+
 	u_int _currentTileIndex = 0;
 	SetCursorPosition(47, 2);
 	cout << WHITE_INTENSE_TEXT << "C'est à " << players[currentPlayerIndex]->GetName() << " (" << players[currentPlayerIndex]->GetPawn().GetAppearance() << ")" << " de jouer !" << endl;
@@ -509,6 +507,7 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 		}
 		else if (_key == 13) // Enter
 		{
+			PlaySound(TEXT("Sounds/Clic.wav"), NULL, SND_FILENAME | SND_ASYNC);
 			if(_selector.first == _sizeOptions) return make_pair("Quitter", make_pair(0,0));
 			return make_pair(_options[_selector.first].first,_selector);
 		}
@@ -538,7 +537,7 @@ void Game::Option()
 	} while (true);
 }
 
-void Game::Start()
+void Game::Play()
 {
 	if (options["Nombre de joueurs"][currentOptions["Nombre de joueurs"]] <
 		options["Nombre d'IA"][currentOptions["Nombre d'IA"]])
@@ -547,9 +546,11 @@ void Game::Start()
 		cout << RED << "Tu ne peux pas avoir plus d'IA que le nombre de joueur dans la partie !!" << RESET;
 		return;
 	}
+	PlaySound(TEXT("Sounds/StartGame.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	InitPlayers();
 	InitGrid();
 	PlacePawnInSpawn();
+	bool _isFinish;
 	while(true)
 	{
 		SetCursorPosition(47, 5);
@@ -560,12 +561,14 @@ void Game::Start()
 			<<"Deplacement du pion...  " << RESET;
 		MovementPlayer(players[currentPlayerIndex]);
 		UpdateIfOnGoodCase();
-		if (IsOver()) break;
+		_isFinish = IsOver();
+		if (IsOver()) return;
 		++currentPlayerIndex %= static_cast<u_int>(players.size());
 	}
 	system("cls");
-	cout << RESET << players[currentPlayerIndex]->GetName() << DisplayRanbow(" a gagner la partie !") << endl;
+	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
 	system("pause");
+	RESET_SCREEN_LINE(0)
 }
 
 bool Game::IsOver()
@@ -595,7 +598,7 @@ void Game::PlacementTile()
 			grid.SelectorMove(MDT_LEFT);
 		else if (_key == 77 || _key == 100 || _key == 68) // droite
 			grid.SelectorMove(MDT_RIGHT);
-		else if (_key == 80 || _key == 115 || _key == 83) // ↓
+		else if (_key == 80 /*|| _key == 115*/ || _key == 83) // ↓
 			grid.SelectorMove(MDT_DOWN);
 		else if (_key == 115 || _key == 17) // 
 			currentTile.Rotate(RT_LEFT);
@@ -617,6 +620,7 @@ void Game::UpdateIfOnGoodCase()
 	if (_currentPlayer->HasCard() && grid.GetTile(_coordinates) == _currentPlayer->GetCurrentCard())
 	{
 		_currentPlayer->NextCard();
+		PlaySound(TEXT("Sounds/FindTreasure.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	}
 }
 
@@ -632,42 +636,34 @@ void Game::MovementPlayer(Player* _currentPlayer)
 		pair<u_int, u_int> _tempPosition = _position;
 		map<MyDirectionType, bool> _open = grid.GetTile(_position).GetDirectionsOpen();
 		map<MyDirectionType, bool> _open1;
-		if (_key == 72) // ↑
+		if (_key == 72 || _key == 122 || _key == 90) // ↑
 		{
 			if (_tempPosition.first-- == 0)
-			{
 				continue;
-			}
 			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
 			if (_open[MDT_UP] && _open1[MDT_DOWN])
 				--_newPosition.first;
 		}
-		else if (_key == 75) // gauche
+		else if (_key == 75 || _key == 113 || _key == 81) // gauche
 		{
 			if (_tempPosition.second-- == 0)
-			{
 				continue;
-			}
 			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
 			if (_open[MDT_LEFT] && _open1[MDT_RIGHT])
 				--_newPosition.second;
 		}
-		else if (_key == 77) // droite
+		else if (_key == 77 || _key == 100 || _key == 68) // droite
 		{
 			if (_tempPosition.second++ == grid.GetTiles().size() - 1)
-			{
 				continue;
-			}
 			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
 			if (_open[MDT_RIGHT] && _open1[MDT_LEFT])
 				++_newPosition.second;
 		}
-		else if (_key == 80) // ↓
+		else if (_key == 80 || _key == 115 || _key == 83) // ↓
 		{
 			if (_tempPosition.first++ == grid.GetTiles().size() - 1)
-			{
 				continue;
-			}
 			_open1 = grid.GetTile(_tempPosition).GetDirectionsOpen();
 			if (_open[MDT_DOWN] && _open1[MDT_UP])
 				++_newPosition.first;
@@ -679,6 +675,8 @@ void Game::MovementPlayer(Player* _currentPlayer)
 		_currentPlayer->SetPosition(_newPosition);
 		grid.RemovePlayerInTile(_position, _currentPlayer);
 		grid.AddPlayerInTile(_newPosition, _currentPlayer);
+		if (_newPosition != _position)
+			PlaySound(TEXT("Sounds/PawnMove.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	}
 }
 

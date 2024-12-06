@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Tile.h"
 #include <DisplaySystem.h>
+#pragma comment(lib, "winmm.lib")
+#include <Windows.h>
 using namespace Console;
 #define SEPARATOR BLUE "#" RESET
 #define SEPARATOR_IN_STREAM _stream << SEPARATOR
