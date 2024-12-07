@@ -45,6 +45,9 @@ private:
 	void Display(const vector<pair<string, vector<u_int>>>& _options,const u_int& _sizeOptions, const pair<u_int, u_int>& _selector, const bool _hasQuitOptions = true);
 	void DisplayPawn(const vector<Object>& _pawns, int _pawnsCount, int _selector, const vector<string>& _separator, map<u_int, bool> _isPawnIndexColorTaken);
 	pair<string, pair<u_int, u_int>> Selector(pair<u_int, u_int> _selector, const vector<pair<string, vector<u_int>>>& _options,const u_int& _sizeOptions, const bool _hasQuitOptions = true);
+	void DisplayRules();
+	void DisplayControls();
+
 	void Option();
 	void OptionsPlayer();
 	void Play();

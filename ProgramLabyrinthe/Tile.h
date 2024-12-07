@@ -49,7 +49,7 @@ public:
 		}
 		return _text + RESET;
 	}
-	inline string ToStringLine(const u_int& _lineIndex)
+	inline string ToStringLine(const u_int& _lineIndex) 
 	{
 		string _text, _currentAppearance, _midAppearance;
 		const u_int& _size = static_cast<u_int>(cases[_lineIndex].size());

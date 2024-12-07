@@ -1,4 +1,12 @@
 ﻿#include "Game.h"
+#define RESET_TO_WHITE RESET WHITE_INTENSE_TEXT
+#define KEY_COLOR RED_INTENSE_TEXT
+
+#define ARROW_UP "\xE2\xAC\x86"
+#define ARROW_DOWN "\xE2\xAC\x87"
+#define ARROW_LEFT "\xE2\xAC\x85"
+#define ARROW_RIGHT "\xE2\x9E\x99"
+#define ENTER_KEY "\xE2\x8F\x8E"
 
 Game::Game()
 {
@@ -10,7 +18,6 @@ Game::Game()
 	options["Sounds"] = { 1,0 };
 	currentOptions["Nombre d'IA"] = 0;
 	currentOptions["Sounds"] = 0;
-	currentOptions["Selector"] = 0;
 	currentOptions["Nombre de joueurs"] = 0;
 	selectors =
 	{
@@ -327,10 +334,10 @@ int Game::ChooseAction(const vector<string>& _options)
 		{
 			if (_selector == _index)
 			{
-				cout << " " << _currentSelector.first << _options[_index] << _currentSelector.second << " " << endl;
+				cout << " " << BOLD_TEXT BLINK_TEXT WHITE_INTENSE_TEXT << _options[_index] << RESET << endl;
 				continue;
 			}
-			cout << "  " << WHITE_INTENSE_TEXT << _options[_index] << " " << RESET << endl;
+			cout << WHITE_INTENSE_TEXT << _options[_index] << " " << RESET << endl;
 		}
 		cout << endl;
 		_key = _getch();
@@ -397,15 +404,23 @@ void Game::DoOptionMenuAction(const int _actionIndex)
 	switch (_actionIndex)
 	{
 	case 0:
+		system("cls");
+		DisplayRules();
+		system("cls");
+	case 1:
+		system("cls");
+		DisplayControls();
+		system("cls");
+	case 2:
 		++currentOptions["Sounds"] %= options["Sounds"].size();
 		break;
 
-	case 1:
+	case 3:
 		system("cls");
 		OptionsPlayer();
 		break;
 
-	case 2:
+	case 4:
 		return;
 	default:
 		break;
@@ -454,13 +469,12 @@ void Game::Display(const vector<pair<string, vector<u_int>>>& _options,const u_i
 {
 	SetCursorPosition(0, 0, false);
 	u_int _sizeCurrentOption;
-	const pair<string, string>& _currentSelector = selectors[currentOptions["Selector"]];
 	for (u_int _row = 0; _row < _sizeOptions + _hasQuitOptions; _row++)
 	{
 		if (_row == _sizeOptions)
 		{
 			if (_selector.first == _row)
-			cout << _currentSelector.first << "Quitter" << _currentSelector.second  << " " << RESET;
+			cout << WHITE_INTENSE_TEXT "[" RESET << "Quitter" << WHITE_INTENSE_TEXT "]" RESET << RESET;
 			else
 			cout << " " << "Quitter" << "  ";
 			continue;
@@ -471,17 +485,17 @@ void Game::Display(const vector<pair<string, vector<u_int>>>& _options,const u_i
 		{
 			if (_selector.first == _row && _selector.second == _column)
 			{
-				cout << _currentSelector.first << _options[_row].second[_column]
-					 << _currentSelector.second << RESET;
+				cout << WHITE_INTENSE_TEXT "[" RESET << _options[_row].second[_column]
+					<< WHITE_INTENSE_TEXT "] " RESET << RESET;
 				continue;
 			}
 			else if (currentOptions[_options[_row].first] == _column)
 			{
 				cout << PINK << "[" << RESET << _options[_row].second[_column]
-					 << PINK << "]" << RESET;
+					 << PINK << "] " << RESET;
 				continue;
 			}
-			cout << " " << _options[_row].second[_column] << " ";
+			cout << " " << _options[_row].second[_column] << "  ";
 		}
 		cout << endl << endl;
 	}
@@ -567,22 +581,58 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 
 
 
+void Game::DisplayRules()
+{
+	SetCursorPosition(0, 0, false);
+
+}
+
+void Game::DisplayControls()
+{
+	SetCursorPosition(0, 0, false);
+	cout << DIM_TEXT WHITE_INTENSE_TEXT << "Placement de la tuile dans la grille : " << endl
+			<< RESET_TO_WHITE UNDERLINE_TEXT << "Sur les selecteurs du verticaux : " << endl
+			 << RESET_TO_WHITE << "Aller au selecteur opposer : " << KEY_COLOR ARROW_UP << RESET_TO_WHITE "ou " KEY_COLOR ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR "Z" << RESET_TO_WHITE " ou " KEY_COLOR "S" << endl
+			 << RESET_TO_WHITE << "Aller aux selecteurs du horizontaux : " << KEY_COLOR ARROW_LEFT << RESET_TO_WHITE "ou " KEY_COLOR ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR"Q" << RESET_TO_WHITE " ou " KEY_COLOR"D" << RESET_TO_WHITE " selon a l'extremite " << endl
+			<< RESET_TO_WHITE UNDERLINE_TEXT << "Sur les selecteurs du horizontaux : " << endl
+			 << RESET_TO_WHITE << "Aller au selecteur opposer : " << KEY_COLOR ARROW_LEFT RESET_TO_WHITE "ou " KEY_COLOR ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR "Q" << RESET_TO_WHITE " ou " KEY_COLOR "D" << endl
+			 << RESET_TO_WHITE << "Aller aux selecteurs du verticaux : " << KEY_COLOR ARROW_UP << RESET_TO_WHITE "ou " KEY_COLOR ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR"Z" << RESET_TO_WHITE " ou " KEY_COLOR"S" << RESET_TO_WHITE " selon a l'extremite " << endl
+		<< RESET_TO_WHITE UNDERLINE_TEXT << "Action de la tuile dans la main : " << endl
+			 << RESET_TO_WHITE << "Tourner vers la gaucher : " << KEY_COLOR "Ctrl" RESET_TO_WHITE"+" ARROW_LEFT << RESET_TO_WHITE " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE"+" KEY_COLOR "s" << RESET_TO_WHITE << " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE"+" KEY_COLOR"S" << endl
+			 << RESET_TO_WHITE << "Tourner vers la droite : " << KEY_COLOR "Ctrl" RESET_TO_WHITE"+" ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE"+" KEY_COLOR "s" << RESET_TO_WHITE << " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE"+"  KEY_COLOR"S" << endl
+			 << RESET_TO_WHITE << "Placer la tuile : " << ENTER_KEY << endl
+		 << DIM_TEXT WHITE_INTENSE_TEXT << "Deplacement du pion dans la grille : " << endl
+			<< RESET_TO_WHITE << "Aller en haut : " << ARROW_UP << RESET_TO_WHITE " ou " KEY_COLOR"z" << RESET_TO_WHITE" ou " KEY_COLOR"Z" << endl
+			<< RESET_TO_WHITE << "Aller a gauche : " << ARROW_LEFT << RESET_TO_WHITE " ou " KEY_COLOR"q" << RESET_TO_WHITE" ou " KEY_COLOR"Q" << endl
+			<< RESET_TO_WHITE << "Aller en bas : " << ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR"s" << RESET_TO_WHITE" ou " KEY_COLOR"S" << endl
+			<< RESET_TO_WHITE << "Aller a droite : " << ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR"d" << RESET_TO_WHITE " ou " KEY_COLOR"D" << endl
+			<< RESET_TO_WHITE << "Valider le placement : " << KEY_COLOR ENTER_KEY << endl
+		 << DIM_TEXT WHITE_INTENSE_TEXT << "Dans les menus : " << endl
+			<< RESET_TO_WHITE << "Aller en haut : " << ARROW_UP << RESET_TO_WHITE " ou " KEY_COLOR"z" << RESET_TO_WHITE" ou " KEY_COLOR"Z" << endl
+			<< RESET_TO_WHITE << "Aller a gauche : " << ARROW_LEFT << RESET_TO_WHITE " ou " KEY_COLOR"q" << RESET_TO_WHITE" ou " KEY_COLOR"Q" << endl
+			<< RESET_TO_WHITE << "Aller en bas : " << ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR"s" << RESET_TO_WHITE" ou " KEY_COLOR"S" << endl
+			<< RESET_TO_WHITE << "Aller a droite : " << ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR"d" << RESET_TO_WHITE " ou " KEY_COLOR"D" << endl
+			<< RESET_TO_WHITE << "Valider : " << KEY_COLOR ENTER_KEY << endl
+		<< DIM_TEXT WHITE_INTENSE_TEXT << "Autres : " << endl
+		 << RESET_TO_WHITE << "Couper le song : " << RED_INTENSE_TEXT "Ctrl" RESET_TO_WHITE"+" "x" << RESET_TO_WHITE " ou " RED_INTENSE_TEXT"Ctrl" RESET_TO_WHITE"+" RED_INTENSE_TEXT"X" << endl;
+	system("pause");
+}
+
 
 void Game::Option()
 {
 	vector<string> _options;
-	_options.push_back("Option de Joueurs");
+	_options.push_back("Les regles");
+	_options.push_back("Les commandes");
+	_options.push_back("Les option de Joueurs");
 	_options.push_back("Quitter");
 	int _actionIndex;
-	string _soundOption;
 	do
 	{
-		_soundOption = "|I";
-		_soundOption += options["Sounds"][currentOptions["Sounds"]] ? "\xF0\x9F\x94\x8A" : "\xF0\x9F\x94\x87";
-		_options.emplace(_options.begin(), _soundOption);
+		_options.emplace(_options.begin() + 2, options["Sounds"][currentOptions["Sounds"]] ? "\xF0\x9F\x94\x8A" : "\xF0\x9F\x94\x87");
 		_actionIndex = ChooseAction(_options);
-		_options.erase(_options.begin());
-		if (_actionIndex == 2)
+		_options.erase(_options.begin() + 2);
+		if (_actionIndex == 4)
 		{
 			if (options["Sounds"][currentOptions["Sounds"]])
 				PlaySound(TEXT("Sounds/Leave.wav"), NULL, SND_FILENAME | SND_ASYNC);
@@ -593,12 +643,12 @@ void Game::Option()
 	system("cls");
 }
 
-
 void Game::OptionsPlayer()
 {
 	vector<pair<string, vector<u_int>>> _options;
 	for (const pair<string, vector<u_int>>& _currentOptions : options)
 	{
+		if (_currentOptions.first == "Sounds") continue;
 		_options.push_back(_currentOptions);
 	}
 	pair<string, pair<u_int, u_int>> _actionIndex;
@@ -646,7 +696,7 @@ void Game::Play()
 	}
 	system("cls");
 	if (options["Sounds"][currentOptions["Sounds"]])
-		PlaySound(TEXT("Sounds/Finish.wav"), NULL, SND_FILENAME | SND_ASYNC);
+		PlaySound(TEXT("Sounds/Finish.wav"), NULL, SND_FILENAME | SND_SYNC);
 	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
 	system("pause");
 	RESET_SCREEN_LINE(0)
@@ -665,11 +715,11 @@ void Game::PlacementTile()
 	{
 		Display();
 		int _key = _getch();
-		if (_key == 72 || _key == 122 || _key == 90) // ↑
+		if (_key == 72 /*|| _key == 122*/ || _key == 90) // ↑
 			grid.SelectorMove(MDT_UP);
-		else if (_key == 75 || _key == 113 || _key == 81) // gauche
+		else if (_key == 75 /*|| _key == 113*/ || _key == 81) // gauche
 			grid.SelectorMove(MDT_LEFT);
-		else if (_key == 77 || _key == 100 || _key == 68) // droite
+		else if (_key == 77 /*|| _key == 100*/ || _key == 68) // droite
 			grid.SelectorMove(MDT_RIGHT);
 		else if (_key == 80 /*|| _key == 115*/ || _key == 83) // ↓
 			grid.SelectorMove(MDT_DOWN);
@@ -771,5 +821,6 @@ void Game::Launch()
 		//system("cls");
 		DoAction(_actionIndex);
 	} while (_actionIndex != 2);
+	if (options["Sounds"][currentOptions["Sounds"]])
 	PlaySound(TEXT("Sounds/Leave.wav"), NULL, SND_FILENAME | SND_SYNC);
 }
