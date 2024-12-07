@@ -35,7 +35,7 @@ private:
 	void InitCards();
 	void PlacePawnInSpawn();
 	vector<vector<Card>> DistributeCards(const int _playerCount);
-	int ChooseAction(const vector<string>& _options);
+	int ChooseAction(const vector<string>& _options, const int _selectorBase = 0);
 	void DoAction(const u_int& _indexAction);
 	pair<string, pair<u_int, u_int>> OptionAction(const vector<pair<string, vector<u_int>>>& _options,
 		const bool _hasQuitOptions = true, const pair<u_int, u_int>& _selector = make_pair(0,0));

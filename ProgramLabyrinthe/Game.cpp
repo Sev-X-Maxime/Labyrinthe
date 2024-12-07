@@ -310,7 +310,7 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 	}
 	const int _cardSize = static_cast<int>(_cardsToDistrib.size());
 	int _randomIndex;
-	for (int _index = _cardSize - 1; _index >= 0 ; _index--)
+	for (int _index =/* _cardSize - 1*/2; _index >= 0 ; _index--)
 	{
 		_randomIndex = RandomInt(0, _index);
 		_playersCards[_index % _playerCount].push_back(_cardsToDistrib[_randomIndex]);
@@ -321,11 +321,11 @@ vector<vector<Card>> Game::DistributeCards(const int _playerCount)
 
 
 
-int Game::ChooseAction(const vector<string>& _options)
+int Game::ChooseAction(const vector<string>& _options, const int _selectorBase)
 {
 	int _sizeOption = static_cast<int>(_options.size());
 	int _key;
-	int _selector = 0;
+	int _selector = _selectorBase;
 	const pair<string, string>& _currentSelector = selectors[currentOptions["Selector"]];
 	while (true)
 	{
@@ -407,10 +407,12 @@ void Game::DoOptionMenuAction(const int _actionIndex)
 		system("cls");
 		DisplayRules();
 		system("cls");
+		break;
 	case 1:
 		system("cls");
 		DisplayControls();
 		system("cls");
+		break;
 	case 2:
 		++currentOptions["Sounds"] %= options["Sounds"].size();
 		break;
@@ -584,37 +586,57 @@ pair<string, pair<u_int, u_int>> Game::Selector(pair<u_int, u_int> _selector,
 void Game::DisplayRules()
 {
 	SetCursorPosition(0, 0, false);
-
+	cout << BOLD_TEXT << YELLOW << "********** BIENVENUE DANS LE JEU : LE LABYRINTHE **********" << RESET << endl
+			<< endl
+			<< CYAN << ITALIC_TEXT << "Objectif du jeu :" << RESET << endl
+			<< WHITE_INTENSE_TEXT << "- Deplacez-vous dans le labyrinthe et collectez les tresors avant vos adversaires." << RESET << endl
+			<< endl
+			<< GREEN << ITALIC_TEXT << "Règles principales :" << RESET << endl
+			<< WHITE_INTENSE_TEXT << "1. A chaque tour, insérez une tuile pour modifier le labyrinthe." << RESET << endl
+			<< WHITE_INTENSE_TEXT << "2. Deplacez votre pion sur le plateau pour atteindre vos objectifs." << RESET << endl
+			<< WHITE_INTENSE_TEXT << "3. Le joueur qui récupère tous ses tresors en premier et retourne à sa case de depart remporte la partie." << RESET << endl
+			<< endl
+			<< PURPLE << ITALIC_TEXT << "Conseils :" << RESET << endl
+			<< WHITE_INTENSE_TEXT << "- Utilisez le labyrinthe a votre avantage pour bloquer vos adversaires." << RESET << endl
+			<< WHITE_INTENSE_TEXT << "- Planifiez vos deplacements pour maximiser vos chances de victoire." << RESET << endl
+			<< endl
+			<< BOLD_TEXT << RED << "********** AMUSEZ-VOUS BIEN ! **********"
+			<< RESET << endl << endl;
+	system("pause");
 }
 
 void Game::DisplayControls()
 {
 	SetCursorPosition(0, 0, false);
-	cout << DIM_TEXT WHITE_INTENSE_TEXT << "Placement de la tuile dans la grille : " << endl
-			<< RESET_TO_WHITE UNDERLINE_TEXT << "Sur les selecteurs du verticaux : " << endl
-			 << RESET_TO_WHITE << "Aller au selecteur opposer : " << KEY_COLOR ARROW_UP << RESET_TO_WHITE "ou " KEY_COLOR ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR "Z" << RESET_TO_WHITE " ou " KEY_COLOR "S" << endl
-			 << RESET_TO_WHITE << "Aller aux selecteurs du horizontaux : " << KEY_COLOR ARROW_LEFT << RESET_TO_WHITE "ou " KEY_COLOR ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR"Q" << RESET_TO_WHITE " ou " KEY_COLOR"D" << RESET_TO_WHITE " selon a l'extremite " << endl
-			<< RESET_TO_WHITE UNDERLINE_TEXT << "Sur les selecteurs du horizontaux : " << endl
-			 << RESET_TO_WHITE << "Aller au selecteur opposer : " << KEY_COLOR ARROW_LEFT RESET_TO_WHITE "ou " KEY_COLOR ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR "Q" << RESET_TO_WHITE " ou " KEY_COLOR "D" << endl
-			 << RESET_TO_WHITE << "Aller aux selecteurs du verticaux : " << KEY_COLOR ARROW_UP << RESET_TO_WHITE "ou " KEY_COLOR ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR"Z" << RESET_TO_WHITE " ou " KEY_COLOR"S" << RESET_TO_WHITE " selon a l'extremite " << endl
-		<< RESET_TO_WHITE UNDERLINE_TEXT << "Action de la tuile dans la main : " << endl
-			 << RESET_TO_WHITE << "Tourner vers la gaucher : " << KEY_COLOR "Ctrl" RESET_TO_WHITE"+" ARROW_LEFT << RESET_TO_WHITE " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE"+" KEY_COLOR "s" << RESET_TO_WHITE << " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE"+" KEY_COLOR"S" << endl
-			 << RESET_TO_WHITE << "Tourner vers la droite : " << KEY_COLOR "Ctrl" RESET_TO_WHITE"+" ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE"+" KEY_COLOR "s" << RESET_TO_WHITE << " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE"+"  KEY_COLOR"S" << endl
-			 << RESET_TO_WHITE << "Placer la tuile : " << ENTER_KEY << endl
-		 << DIM_TEXT WHITE_INTENSE_TEXT << "Deplacement du pion dans la grille : " << endl
-			<< RESET_TO_WHITE << "Aller en haut : " << ARROW_UP << RESET_TO_WHITE " ou " KEY_COLOR"z" << RESET_TO_WHITE" ou " KEY_COLOR"Z" << endl
-			<< RESET_TO_WHITE << "Aller a gauche : " << ARROW_LEFT << RESET_TO_WHITE " ou " KEY_COLOR"q" << RESET_TO_WHITE" ou " KEY_COLOR"Q" << endl
-			<< RESET_TO_WHITE << "Aller en bas : " << ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR"s" << RESET_TO_WHITE" ou " KEY_COLOR"S" << endl
-			<< RESET_TO_WHITE << "Aller a droite : " << ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR"d" << RESET_TO_WHITE " ou " KEY_COLOR"D" << endl
-			<< RESET_TO_WHITE << "Valider le placement : " << KEY_COLOR ENTER_KEY << endl
-		 << DIM_TEXT WHITE_INTENSE_TEXT << "Dans les menus : " << endl
-			<< RESET_TO_WHITE << "Aller en haut : " << ARROW_UP << RESET_TO_WHITE " ou " KEY_COLOR"z" << RESET_TO_WHITE" ou " KEY_COLOR"Z" << endl
-			<< RESET_TO_WHITE << "Aller a gauche : " << ARROW_LEFT << RESET_TO_WHITE " ou " KEY_COLOR"q" << RESET_TO_WHITE" ou " KEY_COLOR"Q" << endl
-			<< RESET_TO_WHITE << "Aller en bas : " << ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR"s" << RESET_TO_WHITE" ou " KEY_COLOR"S" << endl
-			<< RESET_TO_WHITE << "Aller a droite : " << ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR"d" << RESET_TO_WHITE " ou " KEY_COLOR"D" << endl
+	cout << DIM_TEXT WHITE_INTENSE_TEXT << "Dans les menus : " << endl
+			<< RESET_TO_WHITE << "Aller en haut : " << KEY_COLOR ARROW_UP << RESET_TO_WHITE " ou " KEY_COLOR"z" << RESET_TO_WHITE" ou " KEY_COLOR"Z" << endl
+			<< RESET_TO_WHITE << "Aller a gauche : " << KEY_COLOR ARROW_LEFT << RESET_TO_WHITE " ou " KEY_COLOR"q" << RESET_TO_WHITE" ou " KEY_COLOR"Q" << endl
+			<< RESET_TO_WHITE << "Aller en bas : " << KEY_COLOR ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR"s" << RESET_TO_WHITE" ou " KEY_COLOR"S" << endl
+			<< RESET_TO_WHITE << "Aller a droite : " << KEY_COLOR ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR"d" << RESET_TO_WHITE " ou " KEY_COLOR"D" << endl
 			<< RESET_TO_WHITE << "Valider : " << KEY_COLOR ENTER_KEY << endl
+			<< endl
+		 << DIM_TEXT WHITE_INTENSE_TEXT << "Placement de la tuile dans la grille : " << endl
+			<< RESET_TO_WHITE UNDERLINE_TEXT << "Sur les selecteurs du verticaux : " << endl
+			 << RESET_TO_WHITE << "Aller au selecteur opposer : " << KEY_COLOR ARROW_UP << RESET_TO_WHITE " ou " KEY_COLOR ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR "Z" << RESET_TO_WHITE " ou " KEY_COLOR "S" << endl
+			 << RESET_TO_WHITE << "Aller aux selecteurs du horizontaux : " << KEY_COLOR ARROW_LEFT << RESET_TO_WHITE " ou " KEY_COLOR ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR"Q" << RESET_TO_WHITE " ou " KEY_COLOR"D" << RESET_TO_WHITE " selon l'extremite " << endl
+			<< RESET_TO_WHITE UNDERLINE_TEXT << "Sur les selecteurs du horizontaux : " << endl
+			 << RESET_TO_WHITE << "Aller au selecteur opposer : " << KEY_COLOR ARROW_LEFT RESET_TO_WHITE " ou " KEY_COLOR ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR "Q" << RESET_TO_WHITE " ou " KEY_COLOR "D" << endl
+			 << RESET_TO_WHITE << "Aller aux selecteurs du verticaux : " << KEY_COLOR ARROW_UP << RESET_TO_WHITE " ou " KEY_COLOR ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR"Z" << RESET_TO_WHITE " ou " KEY_COLOR"S" << RESET_TO_WHITE " selon l'extremite " << endl
+		<< RESET_TO_WHITE UNDERLINE_TEXT << "Action de la tuile dans la main : " << endl
+			 << RESET_TO_WHITE << "Tourner vers la gaucher : " << KEY_COLOR "Ctrl" RESET_TO_WHITE" + " KEY_COLOR ARROW_LEFT << RESET_TO_WHITE " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE" + " KEY_COLOR "s" << RESET_TO_WHITE << " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE" + " KEY_COLOR"S" << endl
+			 << RESET_TO_WHITE << "Tourner vers la droite : " << KEY_COLOR "Ctrl" RESET_TO_WHITE" + " KEY_COLOR ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE" + " KEY_COLOR "s" << RESET_TO_WHITE << " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE" + "  KEY_COLOR"S" << endl
+			 << RESET_TO_WHITE << "Placer la tuile : " << KEY_COLOR ENTER_KEY << endl
+			 << endl
+		<< DIM_TEXT WHITE_INTENSE_TEXT << "Deplacement du pion dans la grille : " << endl
+			<< RESET_TO_WHITE << "Aller en haut : " << KEY_COLOR ARROW_UP << RESET_TO_WHITE " ou " KEY_COLOR"z" << RESET_TO_WHITE" ou " KEY_COLOR"Z" << endl
+			<< RESET_TO_WHITE << "Aller a gauche : " << KEY_COLOR ARROW_LEFT << RESET_TO_WHITE " ou " KEY_COLOR"q" << RESET_TO_WHITE" ou " KEY_COLOR"Q" << endl
+			<< RESET_TO_WHITE << "Aller en bas : " << KEY_COLOR ARROW_DOWN << RESET_TO_WHITE " ou " KEY_COLOR"s" << RESET_TO_WHITE" ou " KEY_COLOR"S" << endl
+			<< RESET_TO_WHITE << "Aller a droite : " << KEY_COLOR  ARROW_RIGHT << RESET_TO_WHITE " ou " KEY_COLOR"d" << RESET_TO_WHITE " ou " KEY_COLOR"D" << endl
+			<< RESET_TO_WHITE << "Valider le placement : " << KEY_COLOR ENTER_KEY << endl
+			<< endl
 		<< DIM_TEXT WHITE_INTENSE_TEXT << "Autres : " << endl
-		 << RESET_TO_WHITE << "Couper le song : " << RED_INTENSE_TEXT "Ctrl" RESET_TO_WHITE"+" "x" << RESET_TO_WHITE " ou " RED_INTENSE_TEXT"Ctrl" RESET_TO_WHITE"+" RED_INTENSE_TEXT"X" << endl;
+		 << RESET_TO_WHITE << "Couper le song : " << KEY_COLOR "Ctrl" RESET_TO_WHITE" + " KEY_COLOR "x" << RESET_TO_WHITE " ou " KEY_COLOR "Ctrl" RESET_TO_WHITE" + " KEY_COLOR "X" << endl
+	<< endl << RESET;
 	system("pause");
 }
 
@@ -626,11 +648,11 @@ void Game::Option()
 	_options.push_back("Les commandes");
 	_options.push_back("Les option de Joueurs");
 	_options.push_back("Quitter");
-	int _actionIndex;
+	int _actionIndex = 0;
 	do
 	{
 		_options.emplace(_options.begin() + 2, options["Sounds"][currentOptions["Sounds"]] ? "\xF0\x9F\x94\x8A" : "\xF0\x9F\x94\x87");
-		_actionIndex = ChooseAction(_options);
+		_actionIndex = ChooseAction(_options, _actionIndex);
 		_options.erase(_options.begin() + 2);
 		if (_actionIndex == 4)
 		{
@@ -676,6 +698,13 @@ void Game::Play()
 		cout << RED << "Tu ne peux pas avoir plus d'IA que le nombre de joueur dans la partie !!" << RESET;
 		return;
 	}
+	//TODO REMOVE QUAND IA
+	if (options["Nombre d'IA"][currentOptions["Nombre d'IA"]] > 0)
+	{
+		SetCursorPosition(0, 5, false);
+		cout << RED << "Fonctionalite d'IA pas encore implementer (en cours de dev) !!" << RESET;
+		return;
+	}
 	if (options["Sounds"][currentOptions["Sounds"]])
 	PlaySound(TEXT("Sounds/StartGame.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	InitPlayers();
@@ -697,9 +726,9 @@ void Game::Play()
 	system("cls");
 	if (options["Sounds"][currentOptions["Sounds"]])
 		PlaySound(TEXT("Sounds/Finish.wav"), NULL, SND_FILENAME | SND_SYNC);
-	cout << players[currentPlayerIndex]->GetName() << "a gagner la partie !" << endl;
+	cout << players[currentPlayerIndex]->GetName() << " (" << players[currentPlayerIndex]->GetPawn().GetAppearance() << WHITE_INTENSE_TEXT << ")" << " a gagner la partie !" << endl;
 	system("pause");
-	RESET_SCREEN_LINE(0)
+	system("cls");
 }
 
 bool Game::IsOver()
@@ -813,11 +842,11 @@ void Game::MovementPlayer(Player* _currentPlayer)
 void Game::Launch()
 {
 	vector<string> _options = { "Jouer", "Option", "Quitter" };
-	u_int _actionIndex;
+	int _actionIndex = 0;
 	do
 	{
 		SetCursorPosition(0, 0, false);
-		_actionIndex = ChooseAction(_options);
+		_actionIndex = ChooseAction(_options, _actionIndex);
 		//system("cls");
 		DoAction(_actionIndex);
 	} while (_actionIndex != 2);
